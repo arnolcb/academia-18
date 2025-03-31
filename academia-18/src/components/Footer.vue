@@ -4,7 +4,7 @@
       <div class="footer-container">
         <div class="footer-left">
           <div class="logo-section">
-            <img src="C:\Users\Arnol\Documents\Code\Academia18-v1\academia-18\src\assets\img\Logo_A18_v1.png" alt="Academia 18" class="footer-logo" />
+            <img src="@/assets/img/Logo_A18_v1.png" alt="Academia 18" class="footer-logo" />
             <div class="contact-wrapper">
               <p class="contact-info">
                 Si deseas conocer información de nuestros ciclos o servicios, comunícate a nuestro número.
