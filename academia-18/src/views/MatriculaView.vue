@@ -19,7 +19,15 @@
       </div>
       <div class="form-group">
         <div class="floating-input">
-          <input type="text" id="documento" v-model="formData.documento" required />
+          <input
+  type="text"
+  id="documento"
+  v-model="formData.documento"
+  maxlength="8"
+  pattern="^\d{8}$"
+  required
+  @input="formData.documento = formData.documento.replace(/\D/g, '').slice(0, 8)"
+/>
           <label for="documento" :class="{ 'active': formData.documento }">Documento</label>
         </div>
       </div>
@@ -31,14 +39,16 @@
       </div>
       <div class="form-group">
         <div class="floating-input">
-          <input type="tel" id="celular" v-model="formData.celular" required />
+          <input
+  type="tel"
+  id="celular"
+  v-model="formData.celular"
+  maxlength="9"
+  pattern="^\d{9}$"
+  required
+  @input="formData.celular = formData.celular.replace(/\D/g, '').slice(0, 9)"
+/>
           <label for="celular" :class="{ 'active': formData.celular }">Número de celular</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="floating-input">
-          <input type="text" id="ciclo" v-model="formData.ciclo" required />
-          <label for="ciclo" :class="{ 'active': formData.ciclo }">Ciclo a Matricular</label>
         </div>
       </div>
       <div class="form-group">
@@ -46,13 +56,26 @@
           <select id="modalidad" v-model="formData.modalidad" required>
             <option value="" disabled selected></option>
             <option value="Beca 18">Beca 18</option>
-            <option value="Beca docente">Beca docente</option>
-            <option value="UNMSM">UNMSM</option>
-            <option value="PUCP">PUCP</option>
+            <option value="Beca Hijo de docente">Beca Hijo de docente</option>
+            <option value="COAR">COAR</option>
+            <option value="Reforzamiento">Reforzamiento</option>
+            <option value="Nivelación">Nivelación</option>
+            <option value="Otros">Otros</option>
           </select>
           <label for="modalidad" :class="{ 'active': formData.modalidad }">Modalidad</label>
         </div>
       </div>
+      <div class="form-group">
+        <div class="floating-input floating-select">
+          <select id="horario" v-model="formData.horario" required>
+            <option value="" disabled selected></option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noche">Noche</option>
+          </select>
+          <label for="modalidad" :class="{ 'active': formData.horario }">Horario</label>
+        </div>
+      </div>
+
       <div class="form-group submit-group">
         <button type="submit" class="submit-btn">
           <span>Enviar</span>
@@ -80,7 +103,7 @@ const formData = ref({
 });
 
 const handleSubmit = async () => {
-  const url = "https://script.google.com/macros/s/AKfycbxV86ICcOcEip0JoyDcxDCv9Baj299STdc8rkIGC6P2u8EmNGT_2VoFcFzJtNv60L7N/exec";
+  const url = "https://script.google.com/macros/s/AKfycbyJN6porNIq_x_uT8G4yhi8FHKcE9Gjp0bVK-radl6Lh-T3uPUBnKQ84lV1wOM9AhVZ/exec";
 
   const params = new URLSearchParams();
   for (const key in formData.value) {
