@@ -1,99 +1,318 @@
-<script setup>
-import { RouterLink } from 'vue-router'
-</script>
-
 <template>
-  <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container hero-content">
-        <div class="text-content">
-          <h1 class="title">Ciclo VERANO</h1>
+  <div class="home-view">
+    <!-- Banner principal -->
+    <section class="main-banner">
+      <div class="banner-content">
+        <div class="banner-text">
+          <h1>Ciclo<span class="destacado"> VERANO</span></h1>
           <p class="subtitle">Prepárate con nosotros para el futuro.</p>
-          <RouterLink to="/matriculate" class="cta-button">Matricúlate ya</RouterLink>
+          <router-link to="/matriculate" class="enrollment-btn">Matricúlate ya!</router-link>
         </div>
-        <div class="image-container">
+        <div class="banner-image">
           <img src="@/assets/img/CICLOVERANO.webp" alt="Estudiante Ciclo Verano" class="student-image" />
         </div>
       </div>
     </section>
 
-    <!-- Detalles del Curso -->
-    <section class="course-details">
-      <div class="container grid">
-        <!-- Información -->
-        <div class="info-box">
-          <ul class="info-list">
-            <li class="info-header"><strong>Dirigido a estudiantes que se encuentran cursando los últimos años de secundaria y deseen postular a <span class="beca-text">Beca 18</span> o iniciar su preparación pre-universitaria</strong></li>
-            <li><strong>Inicio:</strong> 31 de marzo de 2025</li>
-            <li><strong>Fin:</strong> 5 de marzo de 2025</li>
-            <li><strong>Modalidad:</strong> Virtual</li>
-            <li><strong>Turnos: Lunes a Viernes</strong>
-              <ul class="horarios-list">
-                <li><span class="horario-icon morning"></span>Mañana: 8:00 a.m. - 1:00 p.m.</li>
-                <li><span class="horario-icon afternoon"></span>Tarde: 2:00 p.m. - 7:00 p.m.</li>
-                <li><span class="horario-icon night"></span>Noche: 5:00 p.m. - 10:00 p.m.</li>
-              </ul>
-            </li>
-            <li class="more-info"><a href="#">Más información</a></li>
-          </ul>
-        </div>
-        
-        <!-- Video -->
-        <div class="video-box">
-          <div class="video-wrapper">
-            <iframe
-              src="https://www.youtube.com/embed/EXAMPLE"
-              class="video"
-              title="Video de preparación académica"
-              allowfullscreen
-            ></iframe>
-            <div class="play-button">
-              <span class="play-icon"></span>
+    <!-- Información del ciclo y video -->
+    <section class="cycle-content">
+      <div class="container">
+        <div class="content-grid">
+          <!-- Columna de información -->
+          <div class="info-column">
+            <p class="info-intro">
+              <strong>Dirigido a estudiantes que se encuentran cursando los últimos años de secundaria y deseen postular a <span class="beca-text">Beca 18</span> o iniciar su preparación pre-universitaria</strong>
+            </p>
+            
+            <div class="info-details">
+              <div class="info-group">
+                <div class="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div class="info-text">
+                  <span>Inicio</span>
+                  <strong>2 de enero de 2025</strong>
+                </div>
+              </div>
+              
+              <div class="info-group">
+                <div class="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div class="info-text">
+                  <span>Fin de ciclo</span>
+                  <strong>28 de marzo de 2025</strong>
+                </div>
+              </div>
+              
+              <div class="info-group">
+                <div class="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="info-text">
+                  <span>Modalidad</span>
+                  <strong>Presencial/Virtual</strong>
+                </div>
+              </div>
+              
+              <div class="info-group">
+                <div class="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div class="info-text">
+                  <span>Horarios</span>
+                  <div class="horarios-list">
+                    <div class="horario-item">
+                      <span class="horario-icon morning"></span>
+                      <span>Mañana → 8:00 a.m a 1:00 p.m</span>
+                    </div>
+                    <div class="horario-item">
+                      <span class="horario-icon afternoon"></span>
+                      <span>Tarde → 2:00 p.m a 7:00 p.m</span>
+                    </div>
+                    <div class="horario-item">
+                      <span class="horario-icon night"></span>
+                      <span>Noche → 5:00 p.m a 10:00 p.m</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="more-info">
+              <a href="#">Más Información</a>
+            </div>
+          </div>
+          
+          <!-- Columna de video -->
+          <div class="video-column">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/EXAMPLE"
+                class="video-frame"
+                title="Video de presentación de la academia"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+              <div class="play-button">
+                <span class="play-icon"></span>
+              </div>
+            </div>
+            <div class="video-info">
+              <h3>GEOMETRÍA</h3>
+              <p>Prof. Victor Tello</p>
             </div>
           </div>
         </div>
       </div>
     </section>
-  </main>
+
+    <!-- Cursos Carrusel -->
+    <section class="courses-section">
+      <div class="container">
+        <h2 class="section-title">
+          <span class="title-text">Cursos</span>
+        </h2>
+        
+        <div class="carousel-container">
+          <button class="carousel-button prev" @click="slidePrev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          
+          <div class="carousel-track" ref="carouselTrack">
+            <div class="course-card" v-for="(course, index) in courses" :key="index">
+              <div class="course-image">
+                <img src="@/assets/img/Logo_A18_v1.png" alt="Academia 18" class="academy-logo" />
+              </div>
+              <div class="course-info">
+                <h3>{{ course.title }}</h3>
+                <p>{{ course.description }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <button class="carousel-button next" @click="slideNext">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="carousel-dots">
+          <button 
+            v-for="(_, index) in Math.ceil(courses.length / itemsPerView)" 
+            :key="index" 
+            class="dot" 
+            :class="{ active: currentPage === index }"
+            @click="goToPage(index)"
+          ></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="testimonials-section">
+      <div class="container">
+        <h2 class="section-title">
+          <span class="title-text">Testimonios</span>
+        </h2>
+        
+        <div class="testimonial-container">
+          <div class="testimonial-image">
+            <img src="@/assets/img/estudiante-testimonio.png" alt="Testimonio de estudiante" />
+          </div>
+          <div class="testimonial-content">
+            <p>"La academia me ayudó enormemente en mi preparación para Beca 18. Los profesores son excelentes y explican de manera clara y didáctica. Gracias a su apoyo, logré obtener un puntaje sobresaliente en el examen de admisión."</p>
+            <div class="testimonial-author">
+              <strong>María Fernández</strong>
+              <span>Ingresante a Universidad Nacional de Ingeniería</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+
+// Datos de cursos
+const courses = ref([
+  { title: 'RAZ. MATEMÁTICO', description: 'Álgebra y Aritmética' },
+  { title: 'RAZ. MATEMÁTICO', description: 'Álgebra y Geometría' },
+  { title: 'RAZ. MATEMÁTICO', description: 'Geometría y Trigonometría' },
+  { title: 'LENGUAJE', description: 'Comprensión lectora' },
+  { title: 'FÍSICA', description: 'Cinemática y Dinámica' },
+  { title: 'QUÍMICA', description: 'Química orgánica e inorgánica' }
+]);
+
+// Configuración del carrusel
+const carouselTrack = ref(null);
+const currentIndex = ref(0);
+const itemsPerView = ref(3);
+const currentPage = ref(0);
+
+// Calcular items por vista según el ancho de la pantalla
+onMounted(() => {
+  updateItemsPerView();
+  window.addEventListener('resize', updateItemsPerView);
+});
+
+const updateItemsPerView = () => {
+  if (window.innerWidth >= 1200) {
+    itemsPerView.value = 3;
+  } else if (window.innerWidth >= 768) {
+    itemsPerView.value = 2;
+  } else {
+    itemsPerView.value = 1;
+  }
+  // Actualizar la página actual si es necesario
+  if (currentIndex.value >= courses.value.length) {
+    currentIndex.value = Math.max(0, courses.value.length - itemsPerView.value);
+  }
+  currentPage.value = Math.floor(currentIndex.value / itemsPerView.value);
+};
+
+// Funciones de navegación del carrusel
+const slideNext = () => {
+  if (currentIndex.value + itemsPerView.value < courses.value.length) {
+    currentIndex.value += itemsPerView.value;
+    currentPage.value = Math.floor(currentIndex.value / itemsPerView.value);
+    updateCarouselPosition();
+  }
+};
+
+const slidePrev = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value = Math.max(0, currentIndex.value - itemsPerView.value);
+    currentPage.value = Math.floor(currentIndex.value / itemsPerView.value);
+    updateCarouselPosition();
+  }
+};
+
+const goToPage = (page) => {
+  currentPage.value = page;
+  currentIndex.value = page * itemsPerView.value;
+  updateCarouselPosition();
+};
+
+const updateCarouselPosition = () => {
+  const trackElement = carouselTrack.value;
+  if (trackElement) {
+    const cardWidth = trackElement.querySelector('.course-card').offsetWidth;
+    const gap = 16; // gap entre cards en px
+    trackElement.style.transform = `translateX(-${currentIndex.value * (cardWidth + gap)}px)`;
+  }
+};
+</script>
+
 <style scoped>
-/* Hero Section */
-.hero {
-  background-color: #0056b3; /* Azul principal, ajustado para coincidir con la imagen */
-  color: #ffffff;
-  padding: 3rem 0;
-  overflow: hidden;
-  position: relative;
+.home-view {
+  font-family: 'Poppins', 'Arial', sans-serif;
+  color: #333;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   width: 100%;
 }
 
-.hero-content {
+/* Banner principal */
+.main-banner {
+  background-color: #0052af;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+}
+
+.banner-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
-  position: relative;
-  z-index: 2;
 }
 
-.text-content {
-  max-width: 500px;
+.banner-text {
+  width: 50%;
+  padding: 2rem;
 }
 
-.title {
+.banner-text h1 {
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1.1;
-  letter-spacing: -0.5px;
+  color: white;
+}
+
+.destacado {
+  color: #8ffb8f;
+  display: block;
+  font-size: 4rem;
 }
 
 .subtitle {
@@ -102,103 +321,114 @@ import { RouterLink } from 'vue-router'
   font-weight: 400;
 }
 
-.cta-button {
+.enrollment-btn {
   background-color: white;
-  color: #0056b3;
-  padding: 0.8rem 2rem;
+  color: #0052af;
+  border: none;
   border-radius: 50px;
+  padding: 0.8rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   text-decoration: none;
   display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.cta-button:hover {
-  background-color: #f2f2f2;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.enrollment-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.image-container {
-  position: relative;
+.banner-image {
+  width: 45%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  position: relative;
 }
 
 .student-image {
   max-width: 100%;
-  height: auto;
-  border-radius: 0;
-  box-shadow: none;
-  z-index: 2;
+  max-height: 400px;
+  object-fit: contain;
 }
 
-/* Detalles del Curso */
-.course-details {
-  padding: 5rem 2rem;
-  background-color: #ffffff;
+/* Contenido: Información y Video */
+.cycle-content {
+  margin: 3rem 0;
 }
 
-.grid {
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Columna de información */
+.info-column {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.info-intro {
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.beca-text {
+  font-weight: bold;
+  color: #0052af;
+}
+
+.info-details {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
+  gap: 1.5rem;
+}
+
+.info-group {
+  display: flex;
   align-items: flex-start;
+  gap: 1rem;
 }
 
-.info-box,
-.video-box {
-  background: #ffffff;
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
+.info-icon {
+  color: #0052af;
+  margin-top: 3px;
 }
 
-.info-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 1rem;
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-text span {
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.info-text strong {
   color: #333;
+  font-weight: 600;
 }
 
-.info-list li {
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-}
-
-.info-header {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem !important;
-  line-height: 1.5 !important;
-}
-
-/* Estilo especial para Beca 18 */
-.beca-text {
-  font-family: 'Panton','bold';
-  font-weight: bold;
-  /*
-  
-  color: #0056b3;
-  position: relative;
-  display: inline-block;
-  */
-}
-
-/* Estilos para los iconos de horarios */
 .horarios-list {
-  list-style: none;
-  padding: 0.5rem 0 0.5rem 1rem;
-  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
-.horarios-list li {
+.horario-item {
   display: flex;
   align-items: center;
-  margin-bottom: 0.75rem;
   gap: 0.75rem;
 }
 
@@ -225,14 +455,15 @@ import { RouterLink } from 'vue-router'
 }
 
 .more-info {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  text-align: right;
 }
 
 .more-info a {
-  color: #0056b3;
-  font-weight: 600;
+  color: #0052af;
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  transition: color 0.3s;
 }
 
 .more-info a:hover {
@@ -240,16 +471,24 @@ import { RouterLink } from 'vue-router'
   text-decoration: underline;
 }
 
+/* Columna de video */
+.video-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .video-wrapper {
   position: relative;
   width: 100%;
   background-color: #000;
-  border-radius: 8px;
+  border-radius: 1rem;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.video {
+.video-frame {
   width: 100%;
   height: 100%;
   border: none;
@@ -273,6 +512,11 @@ import { RouterLink } from 'vue-router'
   align-items: center;
   cursor: pointer;
   z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.play-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
 .play-icon {
@@ -284,61 +528,280 @@ import { RouterLink } from 'vue-router'
   margin-left: 5px;
 }
 
+.video-info {
+  padding: 1rem;
+}
+
+.video-info h3 {
+  font-size: 1.5rem;
+  color: #0052af;
+  margin-bottom: 0.5rem;
+}
+
+.video-info p {
+  color: #555;
+  font-size: 1rem;
+}
+
+/* Sección de títulos estilizados */
+.section-title {
+  position: relative;
+  margin-bottom: 3rem;
+  text-align: center;
+  color: #0052af;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.title-text {
+  position: relative;
+  background-color: white;
+  padding: 0 1.5rem;
+  z-index: 1;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #0052af;
+  z-index: 0;
+}
+
+/* Carrusel de cursos */
+.courses-section {
+  margin: 5rem 0;
+}
+
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  width: 100%;
+  transition: transform 0.5s ease;
+}
+
+.course-card {
+  min-width: calc(33.333% - 0.667rem);
+  flex: 0 0 auto;
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.course-image {
+  background-color: #0052af;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.academy-logo {
+  width: 80px;
+  height: auto;
+}
+
+.course-info {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.course-info h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.course-info p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.carousel-button {
+  background-color: white;
+  border: 1px solid #eaeaea;
+  color: #0052af;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.carousel-button:hover {
+  background-color: #0052af;
+  color: white;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d1d1d1;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background-color: #0052af;
+  transform: scale(1.2);
+}
+
+/* Testimonios */
+.testimonials-section {
+  margin: 5rem 0;
+}
+
+.testimonial-container {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-image {
+  width: 30%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.testimonial-image img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.testimonial-content {
+  width: 70%;
+  padding: 2rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.testimonial-author {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-author strong {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.testimonial-author span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
 /* Responsive */
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .hero-content {
-    min-height: 360px;
-  }
-  
-  .video-wrapper {
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+@media (max-width: 1200px) {
+  .course-card {
+    min-width: calc(50% - 0.5rem);
   }
 }
 
-@media (max-width: 767px) {
-  .hero {
-    padding: 2rem 0;
+@media (max-width: 992px) {
+  .banner-text h1 {
+    font-size: 3rem;
   }
   
-  .hero-content {
-    flex-direction: column;
+  .destacado {
+    font-size: 3.5rem;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-banner {
+    padding: 1.5rem 1rem;
+  }
+  
+  .banner-content {
+    flex-direction: column-reverse;
+  }
+  
+  .banner-text, .banner-image {
+    width: 100%;
     text-align: center;
+    padding: 1rem 0;
   }
   
-  .title {
-    font-size: 2.5rem;
+  .course-card {
+    min-width: 100%;
   }
   
-  .student-image {
-    max-width: 250px;
-    margin-top: 1.5rem;
+  .testimonial-container {
+    flex-direction: column;
   }
   
-  .course-details {
-    padding: 3rem 1.5rem;
-  }
-  
-  .cta-button {
-    padding: 0.7rem 1.5rem;
+  .testimonial-image, .testimonial-content {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .title {
-    font-size: 2rem;
+  .banner-text h1 {
+    font-size: 2.5rem;
   }
   
-  .container {
-    padding: 0 1.5rem;
+  .destacado {
+    font-size: 2.8rem;
   }
   
-  .student-image {
-    max-width: 200px;
+  .enrollment-btn {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .carousel-button {
+    width: 35px;
+    height: 35px;
   }
 }
 </style>

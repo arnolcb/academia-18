@@ -79,10 +79,28 @@ const formData = ref({
   modalidad: ''
 });
 
-const handleSubmit = () => {
-  console.log('Datos del formulario:', formData.value);
-  alert('Formulario enviado correctamente');
+const handleSubmit = async () => {
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbzK1wfuHU4Hpc2t0leINmaNrDr4OuFhC-INcrBjWWbzbxuIBsUz_fJ-iDOo6LqdT-W2/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData.value)
+    });
+
+    const result = await response.json();
+
+    if (result.result === 'success') {
+      alert('🎉 Matrícula registrada con éxito. Revisa tu correo.');
+      Object.keys(formData.value).forEach(key => formData.value[key] = '');
+    } else {
+      alert('⚠️ ' + result.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert('❌ Error de red. Intenta nuevamente.');
+  }
 };
+
 </script>
 
 <style>
