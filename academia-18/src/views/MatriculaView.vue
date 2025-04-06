@@ -80,15 +80,21 @@ const formData = ref({
 });
 
 const handleSubmit = async () => {
-  try {
-    const response = await fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbxx05kjNaP6tbufedRoUQePxArVl98OUJv7i61hCJV9FTflIFRAmSB03KtG4KoJgww/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(formData.value)
-});
+  const url = "https://script.google.com/macros/s/AKfycbxV86ICcOcEip0JoyDcxDCv9Baj299STdc8rkIGC6P2u8EmNGT_2VoFcFzJtNv60L7N/exec";
 
+  const params = new URLSearchParams();
+  for (const key in formData.value) {
+    params.append(key, formData.value[key]);
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: params
+    });
 
     const result = await response.json();
     console.log("Respuesta:", result);
@@ -96,18 +102,9 @@ const handleSubmit = async () => {
   } catch (error) {
     console.error("Error al enviar datos:", error);
     alert("Ocurrió un error. Intenta nuevamente.");
-    formData.value = {
-  nombre: '',
-  apellido: '',
-  documento: '',
-  email: '',
-  celular: '',
-  ciclo: '',
-  modalidad: ''
-};
-
   }
 };
+
 
 
 </script>
