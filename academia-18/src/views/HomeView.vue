@@ -36,7 +36,7 @@
                 </div>
                 <div class="info-text">
                   <span>Inicio</span>
-                  <strong>2 de enero de 2025</strong>
+                  <strong>14 de abril de 2025</strong>
                 </div>
               </div>
               
@@ -49,7 +49,7 @@
                 </div>
                 <div class="info-text">
                   <span>Fin de ciclo</span>
-                  <strong>28 de marzo de 2025</strong>
+                  <strong>28 de noviembre de 2025</strong>
                 </div>
               </div>
               
@@ -61,7 +61,7 @@
                 </div>
                 <div class="info-text">
                   <span>Modalidad</span>
-                  <strong>Presencial/Virtual</strong>
+                  <strong>Virtual</strong>
                 </div>
               </div>
               
@@ -79,15 +79,12 @@
                   <div class="horarios-list">
                     <div class="horario-item">
                       <span class="horario-icon morning"></span>
-                      <span>Mañana → 8:00 a.m a 1:00 p.m</span>
-                    </div>
-                    <div class="horario-item">
-                      <span class="horario-icon afternoon"></span>
-                      <span>Tarde → 2:00 p.m a 7:00 p.m</span>
+
+                      <span>Tarde → 4:30 p.m a 6:00 p.m</span>
                     </div>
                     <div class="horario-item">
                       <span class="horario-icon night"></span>
-                      <span>Noche → 5:00 p.m a 10:00 p.m</span>
+                      <span>Noche → 6:45 p.m a 8:15 p.m</span>
                     </div>
                   </div>
                 </div>
