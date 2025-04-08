@@ -9,7 +9,7 @@
               <p class="contact-info">
                 Si deseas conocer información de nuestros ciclos o servicios, comunícate a nuestro número.
               </p>
-              <p class="phone-number">+51 999 999 999</p>
+              <p class="phone-number">916 963 262</p>
             </div>
           </div>
         </div>
