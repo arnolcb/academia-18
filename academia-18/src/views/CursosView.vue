@@ -92,7 +92,13 @@
       descripcion: 'Estudio de las relaciones entre ángulos y lados de triángulos. Abarca funciones trigonométricas, identidades, ecuaciones y aplicaciones en diversos campos como física, ingeniería y navegación.'
     },
     {
-      title: 'Física y Química',
+      title: 'Física',
+      icon: '/icons/physics-chemistry.svg',
+      videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_7',
+      descripcion: 'Curso integrado que aborda principios fundamentales de física (mecánica, termodinámica, electricidad) y química (estructura atómica, enlaces, reacciones). Enfocado en aplicaciones prácticas y preparación para estudios superiores.'
+    },
+    {
+      title: 'Química',
       icon: '/icons/physics-chemistry.svg',
       videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_7',
       descripcion: 'Curso integrado que aborda principios fundamentales de física (mecánica, termodinámica, electricidad) y química (estructura atómica, enlaces, reacciones). Enfocado en aplicaciones prácticas y preparación para estudios superiores.'
