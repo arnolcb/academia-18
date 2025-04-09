@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import MatriculaView from '@/views/MatriculaView.vue'
 import RendirTestView from '@/views/RendirTestView.vue'
 import AulavirtualView from '@/views/AulavirtualView.vue'
+import CursosView from '@/views/CursosView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/aula-virtual',
       name: 'aula-virtual',
       component: () => import('../views/AulavirtualView.vue')
+    },
+    {
+      path: '/cursos',
+      name: '/cursos',
+      component: () => import('../views/CursosView.vue')
     }
   ],
 })

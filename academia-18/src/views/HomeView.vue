@@ -165,7 +165,7 @@
       </div>
     </section>
 
-    <!-- Testimonios -->
+    <!-- Testimonios 
     <section class="testimonials-section">
       <div class="container">
         <h2 class="section-title">
@@ -185,7 +185,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section>-->
   </div>
 </template>
 
