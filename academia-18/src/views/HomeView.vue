@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="hero-image" data-aos="fade-left" data-aos-duration="1200">
-            <img src="@/assets/img/NuevoBanner.png" alt="Estudiantes Academia" />
+            <img src="@/assets/img/NuevoBanner-min.png" alt="Estudiantes Academia" />
           </div>
         </div>
       </div>
