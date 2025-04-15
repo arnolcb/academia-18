@@ -6,7 +6,7 @@
     <div class="login-container">
       <div class="image-container">
         <!-- Reemplazado el marcador de posición con una imagen real -->
-        <img src="@/assets/img/study.jpg" alt="Estudiantes en aula virtual" class="login-image" />
+        <img src="@/assets/img/study.jpeg" alt="Estudiantes en aula virtual" class="login-image" />
       </div>
       <div class="form-section">
         <h2 class="login-title">Aula Virtual</h2>
