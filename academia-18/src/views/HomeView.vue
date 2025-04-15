@@ -5,11 +5,11 @@
       <div class="container">
         <div class="hero-content">
           <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
-            <h1>Preparación <span class="accent-text">Preuniversitaria</span> de Excelencia</h1>
-            <p class="subtitle">Formamos estudiantes para conquistar su futuro académico con metodologías probadas y docentes especializados.</p>
+            <h1>Preparación <!--<span class="accent-text">Preuniversitaria</span>--> de Excelencia</h1>
+            <p class="subtitle">Formamos a los próximos Becarios y estudiantes universitarios con metodologías probadas y docentes especializados.</p>
             <div class="hero-buttons">
               <router-link to="/matriculate" class="btn-primary">Matricúlate Ya</router-link>
-              <a href="#video-section" class="btn-secondary">Ver Testimonios</a>
+              <a href="#video-section" class="btn-secondary">Ver Cursos</a>
             </div>
           </div>
           <div class="hero-image" data-aos="fade-left" data-aos-duration="1200">
@@ -17,17 +17,31 @@
           </div>
         </div>
       </div>
+      <!--
       <div class="shape-divider">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
           <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
         </svg>
-      </div>
+      </div>-->
     </section>
 
     <!-- Stats Section -->
     <section class="stats-section">
       <div class="container">
         <div class="stats-grid">
+          <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Material exclusivo y actualizado</div>
+            </div>
+          </div>
+          <!--
           <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
             <div class="stat-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -40,6 +54,7 @@
               <div class="stat-label">Tasa de Ingreso</div>
             </div>
           </div>
+          
           <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
             <div class="stat-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -54,18 +69,7 @@
               <div class="stat-label">Estudiantes</div>
             </div>
           </div>
-          <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
-            <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-              </svg>
-            </div>
-            <div class="stat-content">
-              <div class="stat-number">15+</div>
-              <div class="stat-label">Años de Experiencia</div>
-            </div>
-          </div>
+-->
           <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
             <div class="stat-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -87,7 +91,7 @@
       <div class="container">
         <div class="section-header" data-aos="fade-up">
           <h2 class="section-title">Ciclo <span class="accent-text">VERANO</span> 2025</h2>
-          <p class="section-subtitle">Prepárate con nosotros para alcanzar tu meta universitaria</p>
+          <p class="section-subtitle">Prepárate con nosotros para alcanzar tus metas</p>
         </div>
         
         <div class="ciclo-grid">
@@ -96,7 +100,7 @@
               <div class="info-badge">
                 <span>Dirigido a:</span>
               </div>
-              <p>Estudiantes que se encuentran cursando los últimos años de secundaria y deseen postular a <span class="highlight">Beca 18</span> o iniciar su preparación pre-universitaria.</p>
+              <p>Estudiantes que se encuentran cursando los últimos años de secundaria y deseen postular a <span class="highlight">COAR, Beca 18 y Beca Hijo de Docente</span> o quieran reforzar sus conocimientos y nivel académico.</p>
             </div>
             
             <div class="info-details">
@@ -111,7 +115,7 @@
                 </div>
                 <div>
                   <span>Inicio:</span>
-                  <strong>14 de abril de 2025</strong>
+                  <strong>21 de abril de 2025</strong>
                 </div>
               </div>
               
@@ -150,8 +154,8 @@
                 <div>
                   <span>Horarios:</span>
                   <div class="horario-options">
-                    <div class="horario-tag">Tarde → 4:30 p.m a 6:00 p.m</div>
-                    <div class="horario-tag">Noche → 6:45 p.m a 8:15 p.m</div>
+                    <div class="horario-tag">Grupo COAR → 6:30 p.m a 8:00 p.m</div>
+                    <div class="horario-tag">Grupo BECA18 y BHD → 8:00 p.m a 9:30 p.m</div>
                   </div>
                 </div>
               </div>
@@ -176,8 +180,8 @@
                   </svg>
                 </button>
                 <div class="video-caption">
-                  <h3>GEOMETRÍA</h3>
-                  <p>Prof. Victor Tello</p>
+                  <h3>Raz Matemático</h3>
+                  <p>Prof. Billy Verde</p>
                 </div>
               </div>
             </div>
@@ -221,7 +225,7 @@
       </div>
     </section>
     
-    <!-- Testimonios Section -->
+    <!-- Testimonios Section 
     <section class="testimonios-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -246,7 +250,7 @@
         </div>
       </div>
     </section>
-    
+    -->
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="container">

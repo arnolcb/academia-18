@@ -8,13 +8,13 @@
       <div class="form-group">
         <div class="floating-input">
           <input type="text" id="nombre" v-model="formData.nombre" required />
-          <label for="nombre" :class="{ 'active': formData.nombre }">Nombre Completo</label>
+          <label for="nombre" :class="{ 'active': formData.nombre }">Nombre</label>
         </div>
       </div>
       <div class="form-group">
         <div class="floating-input">
           <input type="text" id="apellido" v-model="formData.apellido" required />
-          <label for="apellido" :class="{ 'active': formData.apellido }">Apellido Completo</label>
+          <label for="apellido" :class="{ 'active': formData.apellido }">Apellido</label>
         </div>
       </div>
       <div class="form-group">
