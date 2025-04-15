@@ -8,47 +8,76 @@
       <div class="form-group">
         <div class="floating-input">
           <input type="text" id="nombre" v-model="formData.nombre" required />
-          <label for="nombre" :class="{ 'active': formData.nombre }">Nombre</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="floating-input">
-          <input type="text" id="apellido" v-model="formData.apellido" required />
-          <label for="apellido" :class="{ 'active': formData.apellido }">Apellido</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="floating-input">
-          <input
-  type="text"
-  id="documento"
-  v-model="formData.documento"
-  maxlength="8"
-  pattern="^\d{8}$"
-  required
-  @input="formData.documento = formData.documento.replace(/\D/g, '').slice(0, 8)"
-/>
-          <label for="documento" :class="{ 'active': formData.documento }">Documento</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="floating-input">
-          <input type="email" id="email" v-model="formData.email" required />
-          <label for="email" :class="{ 'active': formData.email }">Correo electrónico</label>
+          <label for="nombre" :class="{ active: formData.nombre }"
+            >Nombre</label
+          >
         </div>
       </div>
       <div class="form-group">
         <div class="floating-input">
           <input
-  type="tel"
-  id="celular"
-  v-model="formData.celular"
-  maxlength="9"
-  pattern="^\d{9}$"
-  required
-  @input="formData.celular = formData.celular.replace(/\D/g, '').slice(0, 9)"
-/>
-          <label for="celular" :class="{ 'active': formData.celular }">Número de celular</label>
+            type="text"
+            id="apellido"
+            v-model="formData.apellido"
+            required
+          />
+          <label for="apellido" :class="{ active: formData.apellido }"
+            >Apellido</label
+          >
+        </div>
+      </div>
+      <!-- Grado de estudio -->
+      <div class="form-group">
+        <div class="floating-input floating-select">
+          <select id="grado" v-model="formData.grado" required>
+            <option value="" disabled selected></option>
+            <option value="1° de secundaria">1° de secundaria</option>
+            <option value="2° de secundaria">2° de secundaria</option>
+            <option value="3° de secundaria">3° de secundaria</option>
+            <option value="4° de secundaria">4° de secundaria</option>
+            <option value="5° de secundaria">5° de secundaria</option>
+            <option value="Egresado de secundaria">
+              Egresado de secundaria
+            </option>
+          </select>
+          <label for="grado" :class="{ active: formData.grado }"
+            >Grado de estudio</label
+          >
+        </div>
+      </div>
+
+      <!-- Turno de estudio -->
+      <div class="form-group">
+        <div class="floating-input floating-select">
+          <select id="turno" v-model="formData.turno" required>
+            <option value="" disabled selected></option>
+            <option value="Mañana">Mañana</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noche">Noche</option>
+            <option value="No aplica">No aplica</option>
+          </select>
+          <label for="turno" :class="{ active: formData.turno }"
+            >Turno de estudio</label
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="floating-input">
+          <input
+            type="tel"
+            id="celular"
+            v-model="formData.celular"
+            maxlength="9"
+            pattern="^\d{9}$"
+            required
+            @input="
+              formData.celular = formData.celular.replace(/\D/g, '').slice(0, 9)
+            "
+          />
+          <label for="celular" :class="{ active: formData.celular }"
+            >Número de celular</label
+          >
         </div>
       </div>
       <div class="form-group">
@@ -62,24 +91,42 @@
             <option value="Nivelación">Nivelación</option>
             <option value="Otros">Otros</option>
           </select>
-          <label for="modalidad" :class="{ 'active': formData.modalidad }">Modalidad</label>
+          <label for="modalidad" :class="{ active: formData.modalidad }"
+            >Modalidad</label
+          >
         </div>
       </div>
       <div class="form-group">
         <div class="floating-input floating-select">
           <select id="horario" v-model="formData.horario" required>
             <option value="" disabled selected></option>
-            <option value="Tarde">Tarde</option>
-            <option value="Noche">Noche</option>
+            <option value="Tarde (6:30 p.m a 8:00 p.m)">
+              Tarde (6:30 p.m a 8:00 p.m)
+            </option>
+            <option value="Noche (8:00 p.m a 9:30 p.m)">
+              Noche (8:00 p.m a 9:30 p.m)
+            </option>
           </select>
-          <label for="modalidad" :class="{ 'active': formData.horario }">Horario</label>
+          <label for="modalidad" :class="{ active: formData.horario }"
+            >Horario a matricular</label
+          >
         </div>
       </div>
 
       <div class="form-group submit-group">
         <button type="submit" class="submit-btn">
           <span>Enviar</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
@@ -90,20 +137,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const formData = ref({
-  nombre: '',
-  apellido: '',
-  documento: '',
-  email: '',
-  celular: '',
-  ciclo: '',
-  modalidad: ''
+  nombre: "",
+  apellido: "",
+  grado: "",
+  turno: "",
+  celular: "",
+  ciclo: "",
+  modalidad: "",
+  horario: "",
 });
 
 const handleSubmit = async () => {
-  const url = "https://script.google.com/macros/s/AKfycbyJN6porNIq_x_uT8G4yhi8FHKcE9Gjp0bVK-radl6Lh-T3uPUBnKQ84lV1wOM9AhVZ/exec";
+  const url =
+    "https://script.google.com/macros/s/AKfycbyMKcaPobX9Z0o8e_L2xWOM7huyU7ad089vZnxydZHFM_yQdjzqc-bq49c65KpFE7XL/exec";
 
   const params = new URLSearchParams();
   for (const key in formData.value) {
@@ -114,22 +163,29 @@ const handleSubmit = async () => {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: params
+      body: params,
     });
 
     const result = await response.json();
     console.log("Respuesta:", result);
     alert("Formulario enviado correctamente");
+    formData.value = {
+      nombre: "",
+      apellido: "",
+      grado: "",
+      turno: "",
+      celular: "",
+      ciclo: "",
+      modalidad: "",
+      horario: "",
+    };
   } catch (error) {
     console.error("Error al enviar datos:", error);
     alert("Ocurrió un error. Intenta nuevamente.");
   }
 };
-
-
-
 </script>
 
 <style>
@@ -170,7 +226,8 @@ const handleSubmit = async () => {
   left: 0;
   right: 0;
   height: 200px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230052af15' fill-opacity='1' d='M0,224L60,208C120,192,240,160,360,149.3C480,139,600,149,720,176C840,203,960,245,1080,250.7C1200,256,1320,224,1380,208L1440,192L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3Cpath fill='%230052af10' fill-opacity='1' d='M0,160L60,170.7C120,181,240,203,360,192C480,181,600,139,720,117.3C840,96,960,96,1080,117.3C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3C/svg%3E") repeat-x;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230052af15' fill-opacity='1' d='M0,224L60,208C120,192,240,160,360,149.3C480,139,600,149,720,176C840,203,960,245,1080,250.7C1200,256,1320,224,1380,208L1440,192L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3Cpath fill='%230052af10' fill-opacity='1' d='M0,160L60,170.7C120,181,240,203,360,192C480,181,600,139,720,117.3C840,96,960,96,1080,117.3C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3C/svg%3E")
+    repeat-x;
   background-size: 1440px 320px;
   opacity: 0.8;
 }
@@ -312,21 +369,21 @@ const handleSubmit = async () => {
     padding: 2.5rem 1.5rem;
     margin: 1rem;
   }
-  
+
   .form-container {
     grid-template-columns: 1fr !important;
     gap: 1.2rem;
   }
-  
+
   .form-title {
     font-size: 1.8rem;
     margin-bottom: 2rem;
   }
-  
+
   .submit-btn {
     padding: 0.9rem;
   }
-  
+
   .submit-group {
     grid-column: 1 / -1;
   }
@@ -337,7 +394,7 @@ const handleSubmit = async () => {
     padding: 2rem 1rem;
     border-radius: 1rem;
   }
-  
+
   .form-title {
     font-size: 1.6rem;
     margin-bottom: 1.5rem;
