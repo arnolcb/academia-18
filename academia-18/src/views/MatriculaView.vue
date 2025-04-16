@@ -100,11 +100,11 @@
         <div class="floating-input floating-select">
           <select id="horario" v-model="formData.horario" required>
             <option value="" disabled selected></option>
-            <option value="Tarde (6:30 p.m a 8:00 p.m)">
-              Tarde (6:30 p.m a 8:00 p.m)
+            <option value="L-V (6:30 p.m a 8:00 p.m)">
+              L-V (6:30 p.m a 8:00 p.m)
             </option>
-            <option value="Noche (8:00 p.m a 9:30 p.m)">
-              Noche (8:00 p.m a 9:30 p.m)
+            <option value="L-V (8:00 p.m a 9:30 p.m)">
+              L-V (8:00 p.m a 9:30 p.m)
             </option>
           </select>
           <label for="modalidad" :class="{ active: formData.horario }"
