@@ -17,7 +17,7 @@
           <nav aria-label="Footer navigation">
             <ul class="footer-links">
               <li><RouterLink to="/">Inicio</RouterLink></li>
-              <li><RouterLink to="/matricula">Matrícula</RouterLink></li>
+              <li><RouterLink to="/matriculate">Matrícula</RouterLink></li>
               <li><RouterLink to="/aula-virtual">Aula Virtual</RouterLink></li>
               <li><RouterLink to="/cursos">Cursos</RouterLink></li>
               <li><RouterLink to="/rendir-test">Rendir Test</RouterLink></li>
