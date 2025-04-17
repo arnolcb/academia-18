@@ -26,6 +26,25 @@
           >
         </div>
       </div>
+      
+      <div class="form-group">
+        <div class="floating-input">
+          <input
+            type="tel"
+            id="celular"
+            v-model="formData.celular"
+            maxlength="9"
+            pattern="^\d{9}$"
+            required
+            @input="
+              formData.celular = formData.celular.replace(/\D/g, '').slice(0, 9)
+            "
+          />
+          <label for="celular" :class="{ active: formData.celular }"
+            >Número de celular</label
+          >
+        </div>
+      </div>
       <!-- Grado de estudio -->
       <div class="form-group">
         <div class="floating-input floating-select">
@@ -62,24 +81,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="floating-input">
-          <input
-            type="tel"
-            id="celular"
-            v-model="formData.celular"
-            maxlength="9"
-            pattern="^\d{9}$"
-            required
-            @input="
-              formData.celular = formData.celular.replace(/\D/g, '').slice(0, 9)
-            "
-          />
-          <label for="celular" :class="{ active: formData.celular }"
-            >Número de celular</label
-          >
-        </div>
-      </div>
       <div class="form-group">
         <div class="floating-input floating-select">
           <select id="modalidad" v-model="formData.modalidad" required>
