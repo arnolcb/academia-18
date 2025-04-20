@@ -136,11 +136,11 @@
         <div class="floating-input floating-select">
           <select id="horario" v-model="formData.horario" required>
             <option value="" disabled selected></option>
-            <option value="L-V (6:30 p.m a 8:00 p.m)">
-              L-V (6:30 p.m a 8:00 p.m)
+            <option value="COAR (6:30 p.m a 8:00 p.m)">
+              COAR (6:30 p.m a 8:00 p.m)
             </option>
-            <option value="L-V (8:00 p.m a 9:30 p.m)">
-              L-V (8:00 p.m a 9:30 p.m)
+            <option value="BECA 18 (8:00 p.m a 9:30 p.m)">
+              BECA 18 (8:00 p.m a 9:30 p.m)
             </option>
           </select>
           <label for="modalidad" :class="{ active: formData.horario }"
