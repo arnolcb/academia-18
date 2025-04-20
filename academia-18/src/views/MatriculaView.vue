@@ -45,6 +45,42 @@
           >
         </div>
       </div>
+
+<!-- Departamento -->
+<div class="form-group">
+  <div class="floating-input floating-select">
+    <select id="departamento" v-model="formData.departamento" required>
+      <option value="" disabled selected></option>
+      <option value="Amazonas">Amazonas</option>
+      <option value="Áncash">Áncash</option>
+      <option value="Apurímac">Apurímac</option>
+      <option value="Arequipa">Arequipa</option>
+      <option value="Ayacucho">Ayacucho</option>
+      <option value="Cajamarca">Cajamarca</option>
+      <option value="Callao">Callao</option>
+      <option value="Cusco">Cusco</option>
+      <option value="Huancavelica">Huancavelica</option>
+      <option value="Huánuco">Huánuco</option>
+      <option value="Ica">Ica</option>
+      <option value="Junín">Junín</option>
+      <option value="La Libertad">La Libertad</option>
+      <option value="Lambayeque">Lambayeque</option>
+      <option value="Lima">Lima</option>
+      <option value="Loreto">Loreto</option>
+      <option value="Madre de Dios">Madre de Dios</option>
+      <option value="Moquegua">Moquegua</option>
+      <option value="Pasco">Pasco</option>
+      <option value="Piura">Piura</option>
+      <option value="Puno">Puno</option>
+      <option value="San Martín">San Martín</option>
+      <option value="Tacna">Tacna</option>
+      <option value="Tumbes">Tumbes</option>
+      <option value="Ucayali">Ucayali</option>
+    </select>
+    <label for="departamento" :class="{ active: formData.departamento }">Departamento</label>
+  </div>
+</div>
+
       <!-- Grado de estudio -->
       <div class="form-group">
         <div class="floating-input floating-select">
@@ -56,11 +92,11 @@
             <option value="4° de secundaria">4° de secundaria</option>
             <option value="5° de secundaria">5° de secundaria</option>
             <option value="Egresado de secundaria">
-              Egresado de secundaria
+              Soy egresado de secundaria
             </option>
           </select>
           <label for="grado" :class="{ active: formData.grado }"
-            >Grado de estudio</label
+            >¿Qué grado estás cursando?</label
           >
         </div>
       </div>
@@ -72,11 +108,10 @@
             <option value="" disabled selected></option>
             <option value="Mañana">Mañana</option>
             <option value="Tarde">Tarde</option>
-            <option value="Noche">Noche</option>
             <option value="No aplica">No aplica</option>
           </select>
           <label for="turno" :class="{ active: formData.turno }"
-            >Turno de estudio</label
+            >¿En que turno estás estudiando?</label
           >
         </div>
       </div>
@@ -93,7 +128,7 @@
             <option value="Otros">Otros</option>
           </select>
           <label for="modalidad" :class="{ active: formData.modalidad }"
-            >Modalidad</label
+            >Modalidad a matricular</label
           >
         </div>
       </div>
@@ -146,6 +181,7 @@ const formData = ref({
   grado: "",
   turno: "",
   celular: "",
+  departamento: "",
   ciclo: "",
   modalidad: "",
   horario: "",
@@ -153,7 +189,7 @@ const formData = ref({
 
 const handleSubmit = async () => {
   const url =
-    "https://script.google.com/macros/s/AKfycbyMKcaPobX9Z0o8e_L2xWOM7huyU7ad089vZnxydZHFM_yQdjzqc-bq49c65KpFE7XL/exec";
+    "https://script.google.com/macros/s/AKfycbxcb2qc_Xl_ICbS1Iws8oCqlTkEC5EpWObu0yLDuAwbRK5bzK0h-mIhHuiWQf0mkYTr/exec";
 
   const params = new URLSearchParams();
   for (const key in formData.value) {
@@ -178,6 +214,7 @@ const handleSubmit = async () => {
       grado: "",
       turno: "",
       celular: "",
+      departamento: "",
       ciclo: "",
       modalidad: "",
       horario: "",
