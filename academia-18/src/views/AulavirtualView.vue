@@ -5,16 +5,21 @@
     </div>
     <div class="login-container">
       <div class="image-container">
-        <!-- Reemplazado el marcador de posición con una imagen real -->
         <img src="@/assets/img/study-min-min.jpeg" alt="Estudiantes en aula virtual" class="login-image" />
       </div>
       <div class="form-section">
         <h2 class="login-title">Aula Virtual</h2>
         <p class="login-subtitle">Accede a tus cursos y contenido educativo</p>
+        
+        <!-- Alert para mostrar errores -->
+        <div v-if="errorMessage" class="error-alert">
+          {{ errorMessage }}
+        </div>
+        
         <form @submit.prevent="handleLogin" class="login-form">
           <div class="form-group">
             <div class="floating-input">
-              <input type="text" id="usuario" v-model="loginData.usuario" required />
+              <input type="email" id="usuario" v-model="loginData.usuario" required />
               <label for="usuario" :class="{ 'active': loginData.usuario }">Usuario / Correo</label>
             </div>
           </div>
@@ -29,19 +34,19 @@
               <input type="checkbox" id="recordar" v-model="loginData.recordar" />
               <label for="recordar">Recordarme</label>
             </div>
-            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            <a href="#" @click.prevent="olvidarPassword" class="forgot-password">¿Olvidaste tu contraseña?</a>
           </div>
           <div class="submit-group">
-            <button type="submit" class="submit-btn">
-              <span>Ingresar</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button type="submit" class="submit-btn" :disabled="isLoading">
+              <span>{{ isLoading ? 'Cargando...' : 'Ingresar' }}</span>
+              <svg v-if="!isLoading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </button>
           </div>
           <div class="register-link">
-            <p>¿Aún no estás matriculado? <a href="/matriculate ">Matricúlate aquí</a></p>
+            <p> ¿No tienes cuenta? <a href="/registro-aula-virtual">Crea una ahora aquí</a></p>
           </div>
         </form>
       </div>
@@ -50,22 +55,86 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { authService } from '@/firebase';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
-const loginData = ref({
+const router = useRouter();
+const isLoading = ref(false);
+const errorMessage = ref('');
+
+const loginData = reactive({
   usuario: '',
   password: '',
   recordar: false
 });
 
-const handleLogin = () => {
-  console.log('Datos de inicio de sesión:', loginData.value);
-  // Aquí iría la lógica de autenticación
-  alert('Iniciando sesión...');
+const handleLogin = async () => {
+  isLoading.value = true;
+  errorMessage.value = '';
+  
+  try {
+    // Validación básica
+    if (!loginData.usuario || !loginData.password) {
+      errorMessage.value = 'Por favor, completa todos los campos';
+      isLoading.value = false;
+      return;
+    }
+    
+    // Intentar iniciar sesión
+    await authService.login(loginData.usuario, loginData.password, loginData.recordar);
+    
+    // Redireccionar al dashboard después del login exitoso
+    router.push('/dashboard');
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    
+    // Manejar diferentes tipos de errores
+    switch (error.code) {
+      case 'auth/user-not-found':
+        errorMessage.value = 'No existe una cuenta con este correo electrónico';
+        break;
+      case 'auth/wrong-password':
+        errorMessage.value = 'Contraseña incorrecta';
+        break;
+      case 'auth/invalid-email':
+        errorMessage.value = 'El correo electrónico no es válido';
+        break;
+      case 'auth/user-disabled':
+        errorMessage.value = 'Esta cuenta ha sido deshabilitada';
+        break;
+      default:
+        errorMessage.value = 'Error al iniciar sesión. Inténtalo de nuevo.';
+    }
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const olvidarPassword = async () => {
+  if (!loginData.usuario) {
+    errorMessage.value = 'Ingresa tu correo electrónico para restablecer la contraseña';
+    return;
+  }
+  
+  try {
+    isLoading.value = true;
+    const auth = getAuth();
+    await sendPasswordResetEmail(auth, loginData.usuario);
+    errorMessage.value = '';
+    alert('Se ha enviado un correo para restablecer tu contraseña');
+  } catch (error) {
+    console.error('Error al enviar correo de recuperación:', error);
+    errorMessage.value = 'No se pudo enviar el correo de recuperación';
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
 <style scoped>
+/* Mantener los estilos originales y añadir nuevos */
 .aulavirtual-login {
   padding: 3rem 2rem;
   background: #ffffff;
@@ -77,7 +146,18 @@ const handleLogin = () => {
   overflow: hidden;
 }
 
-/* Ondas en el fondo */
+/* Nuevo: Alerta de error */
+.error-alert {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  border-left: 4px solid #d32f2f;
+}
+
+/* Mantener el resto de los estilos originales... */
 .wave-container {
   position: absolute;
   top: 0;
@@ -257,6 +337,12 @@ const handleLogin = () => {
   box-shadow: 0 6px 15px rgba(0, 82, 175, 0.3);
 }
 
+.submit-btn:disabled {
+  background: #8cb8e8;
+  transform: none;
+  cursor: not-allowed;
+}
+
 .submit-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0, 82, 175, 0.2);
@@ -266,7 +352,7 @@ const handleLogin = () => {
   transition: transform 0.3s ease;
 }
 
-.submit-btn:hover svg {
+.submit-btn:hover:not(:disabled) svg {
   transform: translateX(4px);
 }
 
