@@ -85,7 +85,7 @@ onMounted(async () => {
       await fetchCursos();
     } else {
       // No hay usuario autenticado, redirigir al login
-      router.push('/login');
+      router.push('/aula-virtual');
     }
   });
 });
@@ -139,7 +139,7 @@ const navegarACurso = (cursoId) => {
 const logout = async () => {
   try {
     await authService.logout();
-    router.push('/login');
+    router.push('/aula-virtual');
   } catch (err) {
     console.error('Error al cerrar sesión:', err);
     alert('No se pudo cerrar sesión. Intenta de nuevo.');

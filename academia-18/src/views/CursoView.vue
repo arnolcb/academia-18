@@ -252,7 +252,7 @@ onMounted(async () => {
   // Verificar autenticación
   auth.onAuthStateChanged(async (user) => {
     if (!user) {
-      router.push('/login');
+      router.push('/aula-virtual');
       return;
     }
 
