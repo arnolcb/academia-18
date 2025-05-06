@@ -611,18 +611,27 @@ const enviarRespuestas = async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: none;
+  background-color: #d5deec;
   border: none;
-  color: #0052af;
+  color: #0B215C;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  padding: 0.5rem 0.8rem;
+  padding: 0.7rem 1.2rem; /* Padding aumentado */
   border-radius: 8px;
+  font-size: 1.1rem; /* Tamaño de texto aumentado */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .back-btn:hover {
-  background-color: rgba(0, 82, 175, 0.08);
+ background-color: rgba(0, 82, 175, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.back-btn svg {
+  width: 18px; /* Icono más grande */
+  height: 18px;
 }
 
 .curso-titulo {
@@ -1234,6 +1243,13 @@ const enviarRespuestas = async () => {
     width: 85%;
     padding: 0.7rem 1rem;
     bottom: 1rem;
+  }
+
+    .back-btn {
+    padding: 0.8rem 1.2rem; /* Aún más grande en móvil para facilitar el toque */
+    width: 100%; /* Ocupa todo el ancho disponible en móvil */
+    justify-content: center;
+    margin-bottom: 0.5rem;
   }
 
 }
