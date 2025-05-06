@@ -187,18 +187,18 @@
                   <h4>Instrucciones</h4>
                   <p>{{ recursoActivo.descripcion }}</p>
                   <div class="tarea-archivo">
-  <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-      <polyline points="14 2 14 8 20 8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-      <polyline points="10 9 9 9 8 9"></polyline>
-    </svg>
-    <span>Ver documento de tarea</span>
-  </button>
-</div>
+                    <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                      <span>Ver documento de tarea</span>
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Formulario de respuestas - Reestructurado -->
@@ -243,28 +243,28 @@
   </div>
 
   <!-- Componente Toast -->
-<div v-if="toast.visible" class="toast-container" :class="toast.type">
-  <div class="toast-message">
-    <svg v-if="toast.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-    </svg>
-    <svg v-if="toast.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="16" x2="12" y2="12"></line>
-      <line x1="12" y1="8" x2="12.01" y2="8"></line>
-    </svg>
-    <svg v-if="toast.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-      <polyline points="22 4 12 14.01 9 11.01"></polyline>
-    </svg>
-    <span>{{ toast.message }}</span>
+  <div v-if="toast.visible" class="toast-container" :class="toast.type">
+    <div class="toast-message">
+      <svg v-if="toast.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <svg v-if="toast.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      <svg v-if="toast.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>{{ toast.message }}</span>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup>
@@ -398,7 +398,7 @@ const handleDescargar = (recurso) => {
     showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
     return;
   }
-  
+
   // Si hay URL válida, abre en nueva pestaña
   window.open(recurso.archivoUrl, '_blank');
 };
@@ -443,7 +443,7 @@ const handleDescargarEnModal = (recurso) => {
     showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
     return;
   }
-  
+
   window.open(recurso.archivoUrl, '_blank');
 };
 
@@ -1157,6 +1157,7 @@ const enviarRespuestas = async () => {
     opacity: 0;
     transform: translate(-50%, 20px);
   }
+
   to {
     opacity: 0.95;
     transform: translate(-50%, 0);
@@ -1229,7 +1230,7 @@ const enviarRespuestas = async () => {
     max-height: 60vh;
   }
 
-    .toast-container {
+  .toast-container {
     width: 85%;
     padding: 0.7rem 1rem;
     bottom: 1rem;
