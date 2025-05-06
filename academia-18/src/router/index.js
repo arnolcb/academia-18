@@ -25,6 +25,21 @@ const requireAuth = (to, from, next) => {
   });
 };
 
+// Verificar si el usuario está autenticado para redireccionar desde login o registro
+const redirectIfAuthenticated = (to, from, next) => {
+  const auth = getAuth();
+  
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Si el usuario está autenticado, redirigir a dashboard
+      next("/dashboard");
+    } else {
+      // Si no está autenticado, permitir acceso a la página solicitada
+      next();
+    }
+  });
+};
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -55,6 +70,7 @@ const router = createRouter({
       path: "/aula-virtual",
       name: "aula-virtual",
       component: () => import("../views/AulavirtualView.vue"),
+      beforeEnter: redirectIfAuthenticated, // Usar el nuevo guard de navegación
     },
     {
       path: "/cursos",
@@ -66,6 +82,7 @@ const router = createRouter({
       path: "/registro-aula-virtual",
       name: "registro-aula-virtual",
       component: () => import("../views/Matricula2View.vue"),
+      beforeEnter: redirectIfAuthenticated, // Agregar también aquí
     },
     // Nuevas rutas agregadas
     {
@@ -85,12 +102,6 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "not-found",
       component: () => import("../views/NotFoundView.vue"),
-    },
-    //Agregar vistas demos de dashboard y cursos funcionales sin autenticación
-    {
-      path: "/test",
-      name: "test",
-      component: () => import("../views/TestView.vue"),
     }
   ],
 });
