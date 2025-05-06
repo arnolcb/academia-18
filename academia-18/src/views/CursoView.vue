@@ -778,13 +778,22 @@ const enviarRespuestas = async () => {
 .modal-container {
   position: relative;
   background-color: white;
-  width: 90%;
-  max-width: 900px;
+  width: 95%; /* Aumentado de 90% a 95% */
+  max-width: 1000px; /* Aumentado de 900px a 1000px */
   max-height: 90vh;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.clase-container .video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .modal-header {
@@ -819,6 +828,10 @@ const enviarRespuestas = async () => {
   margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
+  padding-top: 56.25%; /* Mantiene proporción 16:9 */
+  background-color: #000;
+  width: 100%;
 }
 
 .demo-video {
