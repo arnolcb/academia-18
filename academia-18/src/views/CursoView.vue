@@ -97,8 +97,8 @@
 
                     <!-- Botones de acción según el tipo -->
                     <div class="recurso-acciones">
-                      <a v-if="recurso.tipo === 'guia' || recurso.tipo === 'tarea'" :href="recurso.archivoUrl"
-                        target="_blank" class="accion-btn descargar-btn">
+                      <button v-if="recurso.tipo === 'guia' || recurso.tipo === 'tarea'"
+                        @click="handleDescargar(recurso)" class="accion-btn descargar-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -106,7 +106,7 @@
                           <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
                         <span>Descargar</span>
-                      </a>
+                      </button>
 
                       <button v-if="recurso.tipo === 'clase'" @click="abrirRecursoModal(recurso, 'clase')"
                         class="accion-btn ver-btn">
@@ -153,83 +153,87 @@
           </button>
         </div>
 
-<div v-if="modalVisible" class="recurso-modal">
-  <div class="modal-overlay" @click="cerrarModal"></div>
+        <div v-if="modalVisible" class="recurso-modal">
+          <div class="modal-overlay" @click="cerrarModal"></div>
 
-  <div class="modal-container">
-    <div class="modal-header">
-      <h3>{{ recursoActivo.titulo }}</h3>
-      <button @click="cerrarModal" class="cerrar-modal">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-
-    <div class="modal-content">
-      <!-- Contenido para clase (video) - Sin cambios -->
-      <div v-if="modalTipo === 'clase'" class="clase-container">
-        <div class="video-wrapper">
-          <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="clase-descripcion">
-          <h4>Descripción de la clase</h4>
-          <p>{{ recursoActivo.descripcion }}</p>
-        </div>
-      </div>
-
-      <!-- Contenido para tarea - Reestructurado -->
-      <div v-if="modalTipo === 'tarea'" class="tarea-container">
-        <!-- Instrucciones de la tarea -->
-        <div class="tarea-instrucciones">
-          <h4>Instrucciones</h4>
-          <p>{{ recursoActivo.descripcion }}</p>
-          <div class="tarea-archivo">
-            <a :href="recursoActivo.archivoUrl" target="_blank" class="archivo-link">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-              <span>Ver documento de tarea</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Formulario de respuestas - Reestructurado -->
-        <div class="formulario-tarea">
-          <h4>Respuestas</h4>
-          <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
-
-          <form @submit.prevent="enviarRespuestas" class="respuestas-form">
-            <div class="preguntas-container">
-              <div v-for="i in 10" :key="i" class="pregunta-item">
-                <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
-                <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text" placeholder="Tu respuesta"
-                  required />
-              </div>
-            </div>
-
-            <div class="submit-container">
-              <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
-                <span v-if="enviandoRespuestas">Enviando...</span>
-                <span v-else>Enviar respuestas</span>
+          <div class="modal-container">
+            <div class="modal-header">
+              <h3>{{ recursoActivo.titulo }}</h3>
+              <button @click="cerrarModal" class="cerrar-modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
             </div>
-          </form>
 
-          <!-- Resultado después de enviar -->
-          <div v-if="resultadoTarea" class="resultado-tarea">
-            <h4>Calificación</h4>
-            <div class="calificacion">
-              <div class="nota">{{ resultadoTarea.nota }}/10</div>
-              <div class="retroalimentacion">
-                <p>{{ resultadoTarea.mensaje }}</p>
+            <div class="modal-content">
+              <!-- Contenido para clase (video) - Sin cambios -->
+              <div v-if="modalTipo === 'clase'" class="clase-container">
+                <div class="video-wrapper">
+                  <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="clase-descripcion">
+                  <h4>Descripción de la clase</h4>
+                  <p>{{ recursoActivo.descripcion }}</p>
+                </div>
+              </div>
+
+              <!-- Contenido para tarea - Reestructurado -->
+              <div v-if="modalTipo === 'tarea'" class="tarea-container">
+                <!-- Instrucciones de la tarea -->
+                <div class="tarea-instrucciones">
+                  <h4>Instrucciones</h4>
+                  <p>{{ recursoActivo.descripcion }}</p>
+                  <div class="tarea-archivo">
+  <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <polyline points="14 2 14 8 20 8"></polyline>
+      <line x1="16" y1="13" x2="8" y2="13"></line>
+      <line x1="16" y1="17" x2="8" y2="17"></line>
+      <polyline points="10 9 9 9 8 9"></polyline>
+    </svg>
+    <span>Ver documento de tarea</span>
+  </button>
+</div>
+                </div>
+
+                <!-- Formulario de respuestas - Reestructurado -->
+                <div class="formulario-tarea">
+                  <h4>Respuestas</h4>
+                  <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+
+                  <form @submit.prevent="enviarRespuestas" class="respuestas-form">
+                    <div class="preguntas-container">
+                      <div v-for="i in 10" :key="i" class="pregunta-item">
+                        <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
+                        <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text" placeholder="Tu respuesta"
+                          required />
+                      </div>
+                    </div>
+
+                    <div class="submit-container">
+                      <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
+                        <span v-if="enviandoRespuestas">Enviando...</span>
+                        <span v-else>Enviar respuestas</span>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- Resultado después de enviar -->
+                  <div v-if="resultadoTarea" class="resultado-tarea">
+                    <h4>Calificación</h4>
+                    <div class="calificacion">
+                      <div class="nota">{{ resultadoTarea.nota }}/10</div>
+                      <div class="retroalimentacion">
+                        <p>{{ resultadoTarea.mensaje }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -237,10 +241,30 @@
       </div>
     </div>
   </div>
-</div>
-      </div>
-    </div>
+
+  <!-- Componente Toast -->
+<div v-if="toast.visible" class="toast-container" :class="toast.type">
+  <div class="toast-message">
+    <svg v-if="toast.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <svg v-if="toast.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <svg v-if="toast.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>{{ toast.message }}</span>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -368,6 +392,36 @@ const toggleSemana = (semanaId) => {
 const volverADashboard = () => {
   router.push('/dashboard');
 };
+const handleDescargar = (recurso) => {
+  // Validar si existe una URL de archivo
+  if (!recurso.archivoUrl || recurso.archivoUrl.trim() === '') {
+    showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
+    return;
+  }
+  
+  // Si hay URL válida, abre en nueva pestaña
+  window.open(recurso.archivoUrl, '_blank');
+};
+
+const toast = ref({
+  visible: false,
+  message: '',
+  type: 'info' // 'info', 'error', 'success'
+});
+
+// Función para mostrar toast
+const showToast = (message, type = 'info') => {
+  toast.value = {
+    visible: true,
+    message,
+    type
+  };
+
+  // Ocultar automáticamente después de 3 segundos
+  setTimeout(() => {
+    toast.value.visible = false;
+  }, 3000);
+};
 
 // Abrir modal de recurso
 const abrirRecursoModal = (recurso, tipo) => {
@@ -383,6 +437,16 @@ const abrirRecursoModal = (recurso, tipo) => {
   }
 };
 
+// Agregar función para manejo de archivos dentro del modal
+const handleDescargarEnModal = (recurso) => {
+  if (!recurso.archivoUrl || recurso.archivoUrl.trim() === '') {
+    showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
+    return;
+  }
+  
+  window.open(recurso.archivoUrl, '_blank');
+};
+
 // Cerrar modal
 const cerrarModal = () => {
   modalVisible.value = false;
@@ -390,6 +454,7 @@ const cerrarModal = () => {
   respuestas.value = Array(10).fill('');
   resultadoTarea.value = null;
 };
+
 
 // Cargar respuesta previa de tarea
 const cargarRespuestaPrevia = async (recursoId) => {
@@ -513,6 +578,8 @@ const enviarRespuestas = async () => {
     enviandoRespuestas.value = false;
   }
 };
+
+
 </script>
 
 <style scoped>
@@ -1035,6 +1102,67 @@ const enviarRespuestas = async () => {
   background-color: #003c8f;
 }
 
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.8rem 1.5rem;
+  min-width: 250px;
+  max-width: 80%;
+  animation: fadeIn 0.3s;
+  opacity: 0.95;
+}
+
+.toast-container.error {
+  border-left: 4px solid #f44336;
+}
+
+.toast-container.info {
+  border-left: 4px solid #2196f3;
+}
+
+.toast-container.success {
+  border-left: 4px solid #4caf50;
+}
+
+.toast-message {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.toast-message svg {
+  flex-shrink: 0;
+}
+
+.toast-container.error svg {
+  color: #f44336;
+}
+
+.toast-container.info svg {
+  color: #2196f3;
+}
+
+.toast-container.success svg {
+  color: #4caf50;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 0.95;
+    transform: translate(-50%, 0);
+  }
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .curso-content {
@@ -1100,5 +1228,12 @@ const enviarRespuestas = async () => {
     overflow-y: auto;
     max-height: 60vh;
   }
+
+    .toast-container {
+    width: 85%;
+    padding: 0.7rem 1rem;
+    bottom: 1rem;
+  }
+
 }
 </style>
