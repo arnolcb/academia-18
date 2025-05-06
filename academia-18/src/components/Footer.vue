@@ -20,9 +20,9 @@
               <li><RouterLink to="/matriculate">Matrícula</RouterLink></li>
               <li><RouterLink to="/aula-virtual">Aula Virtual</RouterLink></li>
               <li><RouterLink to="/cursos">Cursos</RouterLink></li>
-              <li><RouterLink to="/rendir-test">Rendir Test</RouterLink></li>
+                <!-- <li><RouterLink to="/rendir-test">Rendir Test</RouterLink></li> -->
               <li><RouterLink to="/sobre-nosotros">Sobre Nosotros</RouterLink></li>
-              <li><RouterLink to="/libro-reclamaciones">Libro de reclamaciones</RouterLink></li>
+              <!--<li><RouterLink to="/libro-reclamaciones">Libro de reclamaciones</RouterLink></li>-->
             </ul>
           </nav>
         </div>
