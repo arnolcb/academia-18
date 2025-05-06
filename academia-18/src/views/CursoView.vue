@@ -153,70 +153,91 @@
           </button>
         </div>
 
-        <div class="modal-content">
-          <!-- Contenido para clase (video) -->
-          <div v-if="modalTipo === 'clase'" class="clase-container">
-            <div class="video-wrapper">
-              <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <div class="clase-descripcion">
-              <h4>Descripción de la clase</h4>
-              <p>{{ recursoActivo.descripcion }}</p>
-            </div>
-          </div>
+<div v-if="modalVisible" class="recurso-modal">
+  <div class="modal-overlay" @click="cerrarModal"></div>
 
-          <!-- Contenido para tarea -->
-          <div v-if="modalTipo === 'tarea'" class="tarea-container">
-            <div class="tarea-instrucciones">
-              <h4>Instrucciones</h4>
-              <p>{{ recursoActivo.descripcion }}</p>
-              <div class="tarea-archivo">
-                <a :href="recursoActivo.archivoUrl" target="_blank" class="archivo-link">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                  <span>Ver documento de tarea</span>
-                </a>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>{{ recursoActivo.titulo }}</h3>
+      <button @click="cerrarModal" class="cerrar-modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <!-- Contenido para clase (video) - Sin cambios -->
+      <div v-if="modalTipo === 'clase'" class="clase-container">
+        <div class="video-wrapper">
+          <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="clase-descripcion">
+          <h4>Descripción de la clase</h4>
+          <p>{{ recursoActivo.descripcion }}</p>
+        </div>
+      </div>
+
+      <!-- Contenido para tarea - Reestructurado -->
+      <div v-if="modalTipo === 'tarea'" class="tarea-container">
+        <!-- Instrucciones de la tarea -->
+        <div class="tarea-instrucciones">
+          <h4>Instrucciones</h4>
+          <p>{{ recursoActivo.descripcion }}</p>
+          <div class="tarea-archivo">
+            <a :href="recursoActivo.archivoUrl" target="_blank" class="archivo-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Ver documento de tarea</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Formulario de respuestas - Reestructurado -->
+        <div class="formulario-tarea">
+          <h4>Respuestas</h4>
+          <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+
+          <form @submit.prevent="enviarRespuestas" class="respuestas-form">
+            <div class="preguntas-container">
+              <div v-for="i in 10" :key="i" class="pregunta-item">
+                <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
+                <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text" placeholder="Tu respuesta"
+                  required />
               </div>
             </div>
 
-            <div class="formulario-tarea">
-              <h4>Respuestas</h4>
-              <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+            <div class="submit-container">
+              <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
+                <span v-if="enviandoRespuestas">Enviando...</span>
+                <span v-else>Enviar respuestas</span>
+              </button>
+            </div>
+          </form>
 
-              <form @submit.prevent="enviarRespuestas">
-                <div v-for="i in 10" :key="i" class="pregunta-item">
-                  <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
-                  <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text" placeholder="Tu respuesta"
-                    required />
-                </div>
-
-                <div class="submit-container">
-                  <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
-                    <span v-if="enviandoRespuestas">Enviando...</span>
-                    <span v-else>Enviar respuestas</span>
-                  </button>
-                </div>
-              </form>
-
-              <!-- Resultado después de enviar -->
-              <div v-if="resultadoTarea" class="resultado-tarea">
-                <h4>Calificación</h4>
-                <div class="calificacion">
-                  <div class="nota">{{ resultadoTarea.nota }}/10</div>
-                  <div class="retroalimentacion">
-                    <p>{{ resultadoTarea.mensaje }}</p>
-                  </div>
-                </div>
+          <!-- Resultado después de enviar -->
+          <div v-if="resultadoTarea" class="resultado-tarea">
+            <h4>Calificación</h4>
+            <div class="calificacion">
+              <div class="nota">{{ resultadoTarea.nota }}/10</div>
+              <div class="retroalimentacion">
+                <p>{{ resultadoTarea.mensaje }}</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </div>
   </div>
@@ -259,6 +280,10 @@ onMounted(async () => {
     await cargarCurso();
   });
 });
+// Función para detectar dispositivo móvil y ajustar comportamiento
+const isMobile = () => {
+  return window.innerWidth <= 768;
+};
 
 // En la función cargarCurso, asegúrate de que estás recuperando todos los recursos
 // En la función cargarCurso
@@ -293,10 +318,10 @@ const cargarCurso = async () => {
     for (const semanaDoc of semanasSnapshot.docs) {
       // Para cada semana, obtener sus recursos
       const recursosRef = collection(db, `cursos/${cursoId}/semanas/${semanaDoc.id}/recursos`);
-      
+
       // No usar query con orderBy si no es necesario, para asegurar que todos los recursos se obtengan
       const recursosSnapshot = await getDocs(recursosRef);
-      
+
       // Depurar para verificar si se están encontrando todos los recursos
       console.log(`Semana ${semanaDoc.id} - Recursos encontrados: ${recursosSnapshot.docs.length}`);
       console.log('IDs de recursos encontrados:', recursosSnapshot.docs.map(doc => doc.id).join(', '));
@@ -494,6 +519,8 @@ const enviarRespuestas = async () => {
 .curso-container {
   min-height: 100vh;
   background-color: #f8f9fa;
+  overflow-x: hidden;
+  /* Evita desbordamiento horizontal */
 }
 
 .curso-header {
@@ -778,8 +805,8 @@ const enviarRespuestas = async () => {
 .modal-container {
   position: relative;
   background-color: white;
-  width: 95%; /* Aumentado de 90% a 95% */
-  max-width: 1000px; /* Aumentado de 900px a 1000px */
+  width: 95%;
+  max-width: 1000px;
   max-height: 90vh;
   border-radius: 12px;
   overflow: hidden;
@@ -829,7 +856,8 @@ const enviarRespuestas = async () => {
   border-radius: 8px;
   overflow: hidden;
   position: relative;
-  padding-top: 56.25%; /* Mantiene proporción 16:9 */
+  padding-top: 56.25%;
+  /* Mantiene proporción 16:9 */
   background-color: #000;
   width: 100%;
 }
@@ -1011,7 +1039,7 @@ const enviarRespuestas = async () => {
 @media (max-width: 768px) {
   .curso-content {
     padding: 0 1rem;
-    margin: 1.5rem auto;
+    margin: 1rem auto;
   }
 
   .header-content {
@@ -1022,6 +1050,55 @@ const enviarRespuestas = async () => {
 
   .tarea-container {
     grid-template-columns: 1fr;
+    gap: 1rem;
+    overflow-y: auto;
+  }
+
+  .pregunta-item input {
+    width: 100%;
+    max-width: calc(100vw - 4rem);
+    box-sizing: border-box;
+  }
+
+  /* Botones en modo móvil */
+  .recurso-acciones {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .accion-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* Ajustes para el modal de tareas */
+  .modal-content {
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* Ajuste para vídeos */
+  .clase-container .video-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  /* Botones de envío */
+  .submit-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-respuestas {
+    width: 100%;
+    padding: 0.8rem 1rem;
+  }
+
+  /* Ajustes para campos de respuesta */
+  .formulario-tarea {
+    overflow-y: auto;
+    max-height: 60vh;
   }
 }
 </style>
