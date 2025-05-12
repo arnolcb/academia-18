@@ -46,21 +46,93 @@
         <p>Ponte en contacto con tu profesor para obtener acceso a tus cursos</p>
       </div>
 
-      <!-- Lista de cursos -->
-      <div v-else class="cursos-grid">
-        <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
-          <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
-            <div class="curso-overlay"></div>
-          </div>
-          <div class="curso-info">
-            <h2>{{ curso.titulo }}</h2>
-            <p>{{ curso.descripcion }}</p>
+      <!-- Dashboard con cursos y materiales -->
+      <div v-else class="dashboard-main-wrapper">
+        <!-- Lista de cursos -->
+        <div class="cursos-grid">
+          <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
+            <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
+              <div class="curso-overlay"></div>
+            </div>
+            <div class="curso-info">
+              <h2>{{ curso.titulo }}</h2>
+              <p>{{ curso.descripcion }}</p>
+            </div>
           </div>
         </div>
-      </div>
+
+        <!-- Sección de materiales -->
+        <div class="materiales-sidebar">
+          <h2 class="materiales-title">Materiales</h2>
+
+          <!-- Estado de carga de materiales -->
+          <div v-if="loadingMateriales" class="materiales-loading">
+            <div class="loading-spinner-small"></div>
+            <p>Cargando materiales...</p>
+          </div>
+
+          <!-- Error en materiales -->
+          <div v-else-if="errorMateriales" class="materiales-error">
+            <p>{{ errorMateriales }}</p>
+            <button @click="fetchMateriales" class="retry-btn small">Reintentar</button>
+          </div>
+
+          <!-- Sin materiales -->
+          <div v-else-if="materiales.length === 0" class="materiales-empty">
+            <p>No hay materiales disponibles.</p>
+          </div>
+
+          <!-- Lista de materiales -->
+          <div v-else class="materiales-list">
+            <div v-for="material in materiales" :key="material.id" class="material-item">
+              <div class="material-header" @click="toggleMaterial(material.id)"
+                :class="{ 'active': materialActivo === material.id }">
+                <span class="material-title">{{ material.titulo }}</span>
+                <div class="material-toggle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+              </div>
+
+              <div v-if="materialActivo === material.id" class="material-items">
+                <div v-if="material.items.length === 0" class="items-empty">
+                  <p>No hay archivos disponibles.</p>
+                </div>
+
+                <div v-else class="items-list">
+                  <div v-for="item in material.items" :key="item.id" class="item-entry">
+                    <div class="item-info">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                      <span>{{ item.titulo }}</span>
+                    </div>
+                    <button @click="descargarMaterial(item)" class="material-download-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- dashboard-main-wrapper -->
     </main>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -75,6 +147,12 @@ const loading = ref(true);
 const error = ref(null);
 const userName = ref('');
 
+const materiales = ref([]);
+const loadingMateriales = ref(true);
+const errorMateriales = ref(null);
+const materialActivo = ref(null);
+
+
 // Verificar si el usuario está autenticado
 onMounted(async () => {
   // Escuchar cambios en la autenticación
@@ -83,6 +161,7 @@ onMounted(async () => {
       // Usuario autenticado
       userName.value = user.email.split('@')[0]; // Nombre de usuario simple
       await fetchCursos();
+      await fetchMateriales();
     } else {
       // No hay usuario autenticado, redirigir al login
       router.push('/aula-virtual');
@@ -94,23 +173,23 @@ onMounted(async () => {
 const fetchCursos = async () => {
   loading.value = true;
   error.value = null;
-  
+
   try {
     const user = auth.currentUser;
     if (!user) {
       throw new Error('No se ha iniciado sesión');
     }
-    
+
     // Modificación: Consulta para obtener todos los cursos disponibles
     // en lugar de filtrar por estudiantes
     const cursosRef = collection(db, 'cursos');
     // Si quieres mostrar todos los cursos a todos los usuarios:
     const querySnapshot = await getDocs(cursosRef);
-    
+
     // Alternativa: si prefieres mantener la lógica original y asignar usuarios específicos
     // const q = query(cursosRef, where('estudiantes', 'array-contains', user.uid));
     // const querySnapshot = await getDocs(q);
-    
+
     // Convertir los documentos a un array de objetos
     const cursosArray = [];
     querySnapshot.forEach((doc) => {
@@ -119,7 +198,7 @@ const fetchCursos = async () => {
         ...doc.data()
       });
     });
-    
+
     // Actualizar el estado
     cursos.value = cursosArray;
   } catch (err) {
@@ -135,6 +214,50 @@ const navegarACurso = (cursoId) => {
   router.push(`/curso/${cursoId}`);
 };
 
+const fetchMateriales = async () => {
+  loadingMateriales.value = true;
+  errorMateriales.value = null;
+
+  try {
+    // Obtener materiales (colección independiente de primer nivel)
+    const materialesRef = collection(db, 'materiales');
+    const materialesSnapshot = await getDocs(materialesRef);
+
+    // Crear array de materiales
+    const materialesArray = [];
+    for (const materialDoc of materialesSnapshot.docs) {
+      // Para cada material, obtener sus items
+      const itemsRef = collection(db, `materiales/${materialDoc.id}/items`);
+      const itemsSnapshot = await getDocs(itemsRef);
+
+      // Crear array de items
+      const items = itemsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Añadir material con sus items
+      materialesArray.push({
+        id: materialDoc.id,
+        ...materialDoc.data(),
+        items
+      });
+    }
+
+    materiales.value = materialesArray;
+
+    // Si hay materiales, abrir el primero por defecto
+    if (materialesArray.length > 0 && !materialActivo.value) {
+      materialActivo.value = materialesArray[0].id;
+    }
+  } catch (err) {
+    console.error('Error al cargar materiales:', err);
+    errorMateriales.value = 'No se pudieron cargar los materiales.';
+  } finally {
+    loadingMateriales.value = false;
+  }
+};
+
 // Función para cerrar sesión
 const logout = async () => {
   try {
@@ -145,6 +268,26 @@ const logout = async () => {
     alert('No se pudo cerrar sesión. Intenta de nuevo.');
   }
 };
+
+// AGREGAR FUNCIÓN PARA TOGGLE DE MATERIALES
+const toggleMaterial = (materialId) => {
+  if (materialActivo.value === materialId) {
+    materialActivo.value = null;
+  } else {
+    materialActivo.value = materialId;
+  }
+};
+
+// AGREGAR FUNCIÓN PARA DESCARGAR ITEM
+const descargarMaterial = (item) => {
+  if (!item.archivoUrl || item.archivoUrl.trim() === '') {
+    alert('El archivo no está disponible en este momento.');
+    return;
+  }
+
+  window.open(item.archivoUrl, '_blank');
+};
+
 </script>
 
 <style scoped>
@@ -206,10 +349,78 @@ const logout = async () => {
   background-color: rgba(0, 82, 175, 0.08);
 }
 
+/* Estilos para el contenedor principal */
 .dashboard-content {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
+}
+
+/* Layout principal */
+.dashboard-main-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* Grid de cursos */
+.cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 800px;
+}
+
+.curso-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.curso-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.curso-imagen {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.curso-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+}
+
+.curso-info {
+  padding: 1.5rem;
+}
+
+.curso-info h2 {
+  margin: 0 0 0.5rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.curso-info p {
+  color: #757575;
+  font-size: 0.9rem;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Estados de carga, error y vacío */
@@ -279,65 +490,170 @@ const logout = async () => {
   margin-bottom: 1rem;
 }
 
-/* Grid de cursos */
-.cursos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.curso-card {
+/* Estilos para la sección de materiales */
+.materiales-sidebar {
+  width: 300px;
   background-color: white;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.curso-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
-.curso-imagen {
-  height: 160px;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
-
-.curso-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
-}
-
-.curso-info {
   padding: 1.5rem;
+  align-self: flex-start;
+  height: fit-content;
 }
 
-.curso-info h2 {
-  margin: 0 0 0.5rem;
-  color: #333;
-  font-size: 1.2rem;
+.materiales-title {
+  color: #0052af;
+  font-size: 1.3rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.curso-info p {
+.materiales-loading, 
+.materiales-error, 
+.materiales-empty {
+  text-align: center;
+  padding: 1rem;
   color: #757575;
   font-size: 0.9rem;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.loading-spinner-small {
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(0, 82, 175, 0.1);
+  border-top: 2px solid #0052af;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 0.5rem;
+}
+
+.materiales-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.material-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   overflow: hidden;
 }
 
-/* Responsive design */
+.material-header {
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.material-header:hover {
+  background-color: #f0f0f0;
+}
+
+.material-header.active {
+  background-color: #e3f2fd;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.material-title {
+  font-weight: 500;
+  color: #333;
+}
+
+.material-toggle svg {
+  transition: transform 0.3s;
+}
+
+.material-header.active .material-toggle svg {
+  transform: rotate(180deg);
+}
+
+.material-items {
+  padding: 0.8rem;
+}
+
+.items-empty {
+  text-align: center;
+  padding: 0.5rem;
+  color: #757575;
+  font-size: 0.9rem;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  transition: all 0.2s;
+}
+
+.item-entry:hover {
+  background-color: #e3f2fd;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.item-info svg {
+  color: #0052af;
+}
+
+.material-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #f8f9fa;
+  border: 1px solid #0052af;
+  color: #0052af;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.material-download-btn:hover {
+  background-color: #0052af;
+  color: white;
+}
+
+.retry-btn.small {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+  .dashboard-main-wrapper {
+    flex-direction: column;
+  }
+
+  .cursos-grid {
+    max-width: 100%;
+  }
+
+  .materiales-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-content {
     padding: 0 1rem;
@@ -361,4 +677,5 @@ const logout = async () => {
     grid-template-columns: 1fr;
   }
 }
+
 </style>

@@ -367,9 +367,11 @@ const cargarCurso = async () => {
     semanas.value = semanasTemp;
 
     // Si hay semanas, abrir la primera por defecto
+    /*
     if (semanasTemp.length > 0) {
       semanaActiva.value = semanasTemp[0].id;
-    }
+    }*/
+   semanaActiva.value = null;
 
   } catch (err) {
     console.error('Error al cargar el curso:', err);
