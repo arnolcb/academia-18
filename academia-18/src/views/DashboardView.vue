@@ -247,9 +247,10 @@ const fetchMateriales = async () => {
     materiales.value = materialesArray;
 
     // Si hay materiales, abrir el primero por defecto
-    if (materialesArray.length > 0 && !materialActivo.value) {
-      materialActivo.value = materialesArray[0].id;
-    }
+    /* if (materialesArray.length > 0 && !materialActivo.value) {
+       materialActivo.value = materialesArray[0].id;
+     } 
+       */
   } catch (err) {
     console.error('Error al cargar materiales:', err);
     errorMateriales.value = 'No se pudieron cargar los materiales.';
@@ -509,8 +510,8 @@ const descargarMaterial = (item) => {
   border-bottom: 1px solid #e0e0e0;
 }
 
-.materiales-loading, 
-.materiales-error, 
+.materiales-loading,
+.materiales-error,
 .materiales-empty {
   text-align: center;
   padding: 1rem;
@@ -677,5 +678,4 @@ const descargarMaterial = (item) => {
     grid-template-columns: 1fr;
   }
 }
-
 </style>
