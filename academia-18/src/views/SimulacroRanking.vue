@@ -1,4 +1,3 @@
-// SimulacroRanking.vue
 <template>
   <div class="ranking-container">
     <!-- Header con navegación -->
@@ -157,7 +156,6 @@ onMounted(async () => {
   });
 });
 
-// Cargar ranking del simulacro
 const cargarRanking = async () => {
   loading.value = true;
   error.value = null;
@@ -176,58 +174,84 @@ const cargarRanking = async () => {
       ...simulacroDoc.data()
     };
 
-    // Obtener resultados ordenados por calificación
+    // Obtener todos los resultados para este simulacro (sin filtrar por usuario)
     const resultadosRef = collection(db, 'resultados');
     const q = query(
       resultadosRef, 
       where('simulacroId', '==', simulacroId),
-      orderBy('calificacion', 'desc'),
-      orderBy('tiempoUtilizado', 'asc'),
-      limit(100)
+      orderBy('fechaRealizacion', 'asc') // Ordenar por fecha ascendente (primero los más antiguos)
     );
     
     const resultadosSnapshot = await getDocs(q);
     
     if (resultadosSnapshot.empty) {
       resultados.value = [];
-    } else {
-      // Obtener información de usuarios para cada resultado
-      const resultadosTemp = [];
+      loading.value = false;
+      return;
+    }
+
+    // Procesar resultados - mantener solo el primer intento de cada usuario
+    const primerosIntentosPorUsuario = new Map(); // Usamos un Map para rastrear el primer intento de cada usuario
+    
+    resultadosSnapshot.docs.forEach(doc => {
+      const resultadoData = doc.data();
+      const userId = resultadoData.userId;
       
-      for (const docResult of resultadosSnapshot.docs) {
-        const resultadoData = docResult.data();
-        
-        // Obtener información del usuario
-        let userName = "Usuario";
-        let userPhoto = null;
-        
-        try {
-          const userDoc = await getDoc(doc(db, 'usuarios', resultadoData.userId));
-          if (userDoc.exists()) {
-            userName = userDoc.data().nombre || userDoc.data().displayName || "Usuario";
-            userPhoto = userDoc.data().photoURL || null;
-          }
-        } catch (err) {
-          console.error("Error al obtener información de usuario:", err);
-        }
-        
-        // Agregar a resultados
-        resultadosTemp.push({
-          id: docResult.id,
-          userId: resultadoData.userId,
-          userName,
-          userPhoto,
-          calificacion: resultadoData.calificacion,
-          correctas: resultadoData.correctas,
-          tiempoUtilizado: resultadoData.tiempoUtilizado,
-          fechaRealizacion: resultadoData.fechaRealizacion instanceof Timestamp 
-            ? resultadoData.fechaRealizacion.toDate() 
-            : new Date()
+      // Si este usuario no está en el Map, añadirlo (solo el primer intento se guardará)
+      if (!primerosIntentosPorUsuario.has(userId)) {
+        primerosIntentosPorUsuario.set(userId, {
+          id: doc.id,
+          ...resultadoData
         });
       }
+    });
+    
+    // Convertir el Map a un array
+    const resultadosTemp = Array.from(primerosIntentosPorUsuario.values());
+    
+    // Ahora, obtener información de usuario para cada resultado
+    const resultadosConUsuarios = [];
+    
+    for (const resultado of resultadosTemp) {
+      // Obtener información del usuario
+      let userName = "Usuario";
+      let userPhoto = null;
       
-      resultados.value = resultadosTemp;
+      try {
+        const userDoc = await getDoc(doc(db, 'usuarios', resultado.userId));
+        if (userDoc.exists()) {
+          userName = userDoc.data().nombre || userDoc.data().displayName || "Usuario";
+          userPhoto = userDoc.data().photoURL || null;
+        }
+      } catch (err) {
+        console.error("Error al obtener información de usuario:", err);
+      }
+      
+      // Agregar a resultados con info de usuario
+      resultadosConUsuarios.push({
+        id: resultado.id,
+        userId: resultado.userId,
+        userName,
+        userPhoto,
+        calificacion: resultado.calificacion,
+        correctas: resultado.correctas,
+        tiempoUtilizado: resultado.tiempoUtilizado,
+        fechaRealizacion: resultado.fechaRealizacion instanceof Timestamp 
+          ? resultado.fechaRealizacion.toDate() 
+          : new Date()
+      });
     }
+    
+    // Ordenar por calificación (mayor a menor) y luego por tiempo (menor a mayor)
+    resultadosConUsuarios.sort((a, b) => {
+      if (a.calificacion !== b.calificacion) {
+        return b.calificacion - a.calificacion; // Mayor calificación primero
+      }
+      return a.tiempoUtilizado - b.tiempoUtilizado; // Menor tiempo primero
+    });
+    
+    resultados.value = resultadosConUsuarios;
+
   } catch (err) {
     console.error('Error al cargar el ranking:', err);
     error.value = 'No se pudo cargar el ranking. Por favor, intenta de nuevo.';

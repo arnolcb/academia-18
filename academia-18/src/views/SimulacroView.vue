@@ -235,9 +235,11 @@
             <button @click="volverADashboard" class="btn-volver">
               Volver a Cursos
             </button>
+            <!--
             <button @click="verRanking" class="btn-ranking">
               Ver Ranking de Estudiantes
             </button>
+            --->
           </div>
         </div>
       </div>
