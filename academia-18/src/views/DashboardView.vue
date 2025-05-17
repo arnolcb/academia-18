@@ -48,16 +48,31 @@
 
       <!-- Dashboard con cursos y materiales -->
       <div v-else class="dashboard-main-wrapper">
-        <!-- Lista de cursos -->
+
+        <!-- Grid combinado de cursos y simulacro -->
         <div class="cursos-grid">
+          <!-- Tarjeta especial de Simulacro -->
+          <div class="simulacro-card" @click="navegarASimulacro">
+            <div class="simulacro-imagen">
+              <div class="simulacro-overlay"></div>
+              <div class="simulacro-badge">PRIMER SIMULACRO</div>
+            </div>
+            <div class="simulacro-info">
+              <h2>Pon a prueba tus conocimientos</h2>
+              <p>Realiza este simulacro de examen para evaluar tu aprendizaje</p>
+              <button class="simulacro-btn">¡Rendir simulacro ahora!</button>
+            </div>
+          </div>
+          
+          <!-- Las tarjetas de curso existentes -->
           <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
-            <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
-              <div class="curso-overlay"></div>
-            </div>
-            <div class="curso-info">
-              <h2>{{ curso.titulo }}</h2>
-              <p>{{ curso.descripcion }}</p>
-            </div>
+           <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
+  <div class="curso-overlay"></div>
+</div>
+<div class="curso-info">
+  <h2>{{ curso.titulo }}</h2>
+  <p>{{ curso.descripcion }}</p>
+</div>
           </div>
         </div>
 
@@ -151,7 +166,11 @@ const materiales = ref([]);
 const loadingMateriales = ref(true);
 const errorMateriales = ref(null);
 const materialActivo = ref(null);
-
+const navegarASimulacro = () => {
+  // Navega al primer simulacro disponible o a un ID específico
+  // Puedes cambiar 'simulacro1' por el ID de tu simulacro real
+  router.push('/simulacro/simulacro1');
+};
 
 // Verificar si el usuario está autenticado
 onMounted(async () => {
@@ -676,6 +695,104 @@ const descargarMaterial = (item) => {
 
   .cursos-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+.simulacro-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  position: relative;
+}
+
+.simulacro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(220, 53, 69, 0.3);
+}
+
+.simulacro-imagen {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-color: #dc3545; /* Fondo rojo */
+  background-image: url('/simulacro-bg.jpg'); /* Puedes usar una imagen o dejarla sin imagen */
+}
+
+.simulacro-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(220, 53, 69, 0.7), rgba(220, 53, 69, 0.9));
+}
+
+.simulacro-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: white;
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 32px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.simulacro-info {
+  padding: 1.5rem;
+}
+
+.simulacro-info h2 {
+  margin: 0 0 0.5rem;
+  color: #dc3545; /* Texto en rojo */
+  font-size: 1.2rem;
+}
+
+.simulacro-info p {
+  color: #757575;
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.simulacro-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.simulacro-btn:hover {
+  background-color: #bd2130;
+}
+
+/* Título de sección */
+.section-title {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .simulacro-card {
+    grid-column: 1 / -1; /* Hace que la tarjeta de simulacro ocupe toda la fila en móviles */
   }
 }
 </style>
