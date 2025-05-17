@@ -9,6 +9,10 @@ import Matricula2View from "@/views/Matricula2View.vue";
 import DashboardView from "../views/DashboardView.vue";
 import CursoView from "../views/CursoView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import SimulacroView from "../views/SimulacroView.vue";
+import SimulacroRanking from "../views/SimulacroRanking.vue";
+import SobreNosotros from "../views/AboutView.vue";
+
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -28,7 +32,7 @@ const requireAuth = (to, from, next) => {
 // Verificar si el usuario está autenticado para redireccionar desde login o registro
 const redirectIfAuthenticated = (to, from, next) => {
   const auth = getAuth();
-  
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       // Si el usuario está autenticado, redirigir a dashboard
@@ -104,7 +108,19 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "not-found",
       component: () => import("../views/NotFoundView.vue"),
-    }
+    },
+    {
+      path: "/simulacro/:id",
+      name: "Simulacro",
+      component: () => import("../views/SimulacroView.vue"),
+      beforeEnter: requireAuth,
+    },
+    {
+      path: "/simulacro/:id/ranking",
+      name: "SimulacroRanking",
+      component: () => import("../views/SimulacroRanking.vue"),
+      beforeEnter: requireAuth,
+    },
   ],
 });
 
