@@ -9,7 +9,8 @@
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          <span>Volver al simulacro</span>
+          <!--<span>Volver al simulacro</span>-->
+          <span>Volver al aula virtual</span>
         </button>
 
         <h1 class="ranking-titulo">Ranking - {{ simulacro.titulo || 'Cargando...' }}</h1>
@@ -312,7 +313,8 @@ const getInitials = (nombre) => {
 
 // Navegación
 const volverASimulacro = () => {
-  router.push(`/simulacro/${simulacro.value.id}`);
+  //router.push(`/simulacro/${simulacro.value.id}`);
+  router.push('/aula-virtual');
 };
 
 const irASimulacro = () => {

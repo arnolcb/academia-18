@@ -52,17 +52,17 @@
         <!-- Grid combinado de cursos y simulacro -->
         <div class="cursos-grid">
           <!-- Tarjeta especial de Simulacro -->
-          <div class="simulacro-card" @click="navegarASimulacro">
-            <div class="simulacro-imagen">
-              <div class="simulacro-overlay"></div>
-              <div class="simulacro-badge">PRIMER SIMULACRO</div>
-            </div>
-            <div class="simulacro-info">
-              <h2>Pon a prueba tus conocimientos</h2>
-              <p>Realiza este simulacro de examen para evaluar tu aprendizaje</p>
-              <button class="simulacro-btn">¡Rendir simulacro ahora!</button>
-            </div>
-          </div>
+<div class="simulacro-card resultados-card" @click="navegarAResultados">
+  <div class="simulacro-imagen resultados-imagen">
+    <div class="simulacro-overlay resultados-overlay"></div>
+    <div class="simulacro-badge resultados-badge">RESULTADOS</div>
+  </div>
+  <div class="simulacro-info">
+    <h2>Ver Resultados del Simulacro</h2>
+    <p>Revisa tu rendimiento y posición en el ranking</p>
+    <button class="simulacro-btn resultados-btn">Ver Resultados</button>
+  </div>
+</div>
           
           <!-- Las tarjetas de curso existentes -->
           <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
@@ -166,10 +166,16 @@ const materiales = ref([]);
 const loadingMateriales = ref(true);
 const errorMateriales = ref(null);
 const materialActivo = ref(null);
+/*
 const navegarASimulacro = () => {
   // Navega al primer simulacro disponible o a un ID específico
   // Puedes cambiar 'simulacro1' por el ID de tu simulacro real
   router.push('/simulacro/simulacro1');
+};
+*/
+
+const navegarAResultados = () => {
+  router.push('/simulacro/simulacro1/ranking');
 };
 
 // Verificar si el usuario está autenticado
@@ -698,65 +704,89 @@ const descargarMaterial = (item) => {
   }
 }
 
-.simulacro-card {
+
+/* OPCIÓN COHERENTE CON EL DISEÑO EXISTENTE */
+.simulacro-card.resultados-card {
   background-color: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(220, 53, 69, 0.3);
   position: relative;
 }
 
-.simulacro-card:hover {
+.simulacro-card.resultados-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(220, 53, 69, 0.3);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-.simulacro-imagen {
+.simulacro-imagen.resultados-imagen {
   height: 160px;
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
   position: relative;
-  background-color: #dc3545; /* Fondo rojo */
-  background-image: url('/simulacro-bg.jpg'); /* Puedes usar una imagen o dejarla sin imagen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.simulacro-overlay {
+.simulacro-overlay.resultados-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(220, 53, 69, 0.7), rgba(220, 53, 69, 0.9));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 }
 
-.simulacro-badge {
+.simulacro-badge.resultados-badge {
   position: absolute;
   top: 15px;
   right: 15px;
   background-color: white;
-  color: #dc3545;
-  font-weight: bold;
-  font-size: 32px;
-  padding: 4px 8px;
-  border-radius: 4px;
+  color: #20B2AA;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 16px;
   z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.simulacro-info {
+/* Ícono central opcional */
+.resultados-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.resultados-icon svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+  stroke-width: 2.5;
+}
+
+.simulacro-card.resultados-card .simulacro-info {
   padding: 1.5rem;
 }
 
-.simulacro-info h2 {
+.simulacro-card.resultados-card .simulacro-info h2 {
   margin: 0 0 0.5rem;
-  color: #dc3545; /* Texto en rojo */
+  color: #333;
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
-.simulacro-info p {
-  color: #757575;
+.simulacro-card.resultados-card .simulacro-info p {
+  color: #666;
   font-size: 0.9rem;
   margin: 0 0 1rem;
   display: -webkit-box;
@@ -765,8 +795,8 @@ const descargarMaterial = (item) => {
   overflow: hidden;
 }
 
-.simulacro-btn {
-  background-color: #dc3545;
+.simulacro-btn.resultados-btn {
+  background-color: #20B2AA;
   color: white;
   border: none;
   border-radius: 6px;
@@ -777,22 +807,110 @@ const descargarMaterial = (item) => {
   width: 100%;
 }
 
-.simulacro-btn:hover {
-  background-color: #bd2130;
+.simulacro-btn.resultados-btn:hover {
+  background-color: #1e9e95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
 }
 
-/* Título de sección */
-.section-title {
-  color: #333;
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+/* ALTERNATIVA SIN ÍCONO (más simple) */
+.simulacro-card.resultados-card-simple {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.simulacro-card.resultados-card-simple:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.simulacro-imagen.resultados-imagen-simple {
+  height: 160px;
+  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
+  position: relative;
+}
+
+.simulacro-overlay.resultados-overlay-simple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+}
+
+.simulacro-badge.resultados-badge-simple {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #20B2AA;
   font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  z-index: 2;
+  backdrop-filter: blur(10px);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .simulacro-card {
-    grid-column: 1 / -1; /* Hace que la tarjeta de simulacro ocupe toda la fila en móviles */
-  }
+/* VERSIÓN MINIMALISTA CON BORDE SUTIL */
+.simulacro-card.resultados-card-minimal {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f9ff;
+  position: relative;
+}
+
+.simulacro-card.resultados-card-minimal:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: #e0f2fe;
+}
+
+.simulacro-imagen.resultados-imagen-minimal {
+  height: 160px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simulacro-imagen.resultados-imagen-minimal::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #20B2AA 0%, #4682B4 100%);
+}
+
+.resultados-icon-minimal {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.2);
+}
+
+.resultados-icon-minimal svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+  stroke-width: 2;
 }
 </style>

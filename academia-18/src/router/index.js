@@ -109,12 +109,14 @@ const router = createRouter({
       name: "not-found",
       component: () => import("../views/NotFoundView.vue"),
     },
+    /*
     {
       path: "/simulacro/:id",
       name: "Simulacro",
       component: () => import("../views/SimulacroView.vue"),
       beforeEnter: requireAuth,
     },
+    */
     {
       path: "/simulacro/:id/ranking",
       name: "SimulacroRanking",
