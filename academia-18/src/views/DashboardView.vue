@@ -51,18 +51,34 @@
 
         <!-- Grid combinado de cursos y simulacro -->
         <div class="cursos-grid">
-          <!-- Tarjeta especial de Simulacro -->
-<div class="simulacro-card resultados-card" @click="navegarAResultados">
-  <div class="simulacro-imagen resultados-imagen">
-    <div class="simulacro-overlay resultados-overlay"></div>
-    <div class="simulacro-badge resultados-badge">RESULTADOS</div>
-  </div>
-  <div class="simulacro-info">
-    <h2>Ver Resultados del Simulacro</h2>
-    <p>Revisa tu rendimiento y posición en el ranking</p>
-    <button class="simulacro-btn resultados-btn">Ver Resultados</button>
-  </div>
-</div>
+          
+          <!-- TARJETA DE RESULTADOS COMENTADA -->
+          <!--
+          <div class="simulacro-card resultados-card" @click="navegarAResultados">
+            <div class="simulacro-imagen resultados-imagen">
+              <div class="simulacro-overlay resultados-overlay"></div>
+              <div class="simulacro-badge resultados-badge">RESULTADOS</div>
+            </div>
+            <div class="simulacro-info">
+              <h2>Ver Resultados del Simulacro</h2>
+              <p>Revisa tu rendimiento y posición en el ranking</p>
+              <button class="simulacro-btn resultados-btn">Ver Resultados</button>
+            </div>
+          </div>
+          -->
+
+          <!-- NUEVA TARJETA DE SEGUNDO SIMULACRO -->
+          <div class="simulacro-card segundo-simulacro-card" @click="navegarASegundoSimulacro">
+            <div class="simulacro-imagen segundo-simulacro-imagen">
+              <div class="simulacro-overlay segundo-simulacro-overlay"></div>
+              <div class="simulacro-badge segundo-simulacro-badge">SEGUNDO SIMULACRO</div>
+            </div>
+            <div class="simulacro-info">
+              <h2>¡Segundo Simulacro Disponible!</h2>
+              <p>Es momento de poner a prueba tus conocimientos nuevamente</p>
+              <button class="simulacro-btn segundo-simulacro-btn">¡Rendir Ahora!</button>
+            </div>
+          </div>
           
           <!-- Las tarjetas de curso existentes -->
           <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
@@ -166,16 +182,17 @@ const materiales = ref([]);
 const loadingMateriales = ref(true);
 const errorMateriales = ref(null);
 const materialActivo = ref(null);
+
+// FUNCIÓN COMENTADA PARA RESULTADOS
 /*
-const navegarASimulacro = () => {
-  // Navega al primer simulacro disponible o a un ID específico
-  // Puedes cambiar 'simulacro1' por el ID de tu simulacro real
-  router.push('/simulacro/simulacro1');
+const navegarAResultados = () => {
+  router.push('/simulacro/simulacro1/ranking');
 };
 */
 
-const navegarAResultados = () => {
-  router.push('/simulacro/simulacro1/ranking');
+// NUEVA FUNCIÓN PARA SEGUNDO SIMULACRO
+const navegarASegundoSimulacro = () => {
+  router.push('/simulacro/simulacro2');
 };
 
 // Verificar si el usuario está autenticado
@@ -664,6 +681,95 @@ const descargarMaterial = (item) => {
   padding: 0.4rem 0.8rem;
 }
 
+/* ESTILOS PARA EL SEGUNDO SIMULACRO */
+.simulacro-card.segundo-simulacro-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.simulacro-card.segundo-simulacro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.simulacro-imagen.segundo-simulacro-imagen {
+  height: 160px;
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  position: relative;
+}
+
+.simulacro-overlay.segundo-simulacro-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.simulacro-badge.segundo-simulacro-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: white;
+  color: #e53e3e;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+}
+
+.simulacro-card.segundo-simulacro-card .simulacro-info {
+  padding: 1.5rem;
+}
+
+.simulacro-card.segundo-simulacro-card .simulacro-info h2 {
+  margin: 0 0 0.5rem;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.simulacro-card.segundo-simulacro-card .simulacro-info p {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.simulacro-btn.segundo-simulacro-btn {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.simulacro-btn.segundo-simulacro-btn:hover {
+  background-color: #c53030;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(229, 62, 62, 0.4);
+}
+
 /* Responsive Design */
 @media (max-width: 1100px) {
   .dashboard-main-wrapper {
@@ -702,215 +808,5 @@ const descargarMaterial = (item) => {
   .cursos-grid {
     grid-template-columns: 1fr;
   }
-}
-
-
-/* OPCIÓN COHERENTE CON EL DISEÑO EXISTENTE */
-.simulacro-card.resultados-card {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.simulacro-card.resultados-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
-.simulacro-imagen.resultados-imagen {
-  height: 160px;
-  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.simulacro-overlay.resultados-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
-}
-
-.simulacro-badge.resultados-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background-color: white;
-  color: #20B2AA;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  padding: 6px 12px;
-  border-radius: 16px;
-  z-index: 2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Ícono central opcional */
-.resultados-icon {
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.resultados-icon svg {
-  width: 24px;
-  height: 24px;
-  color: white;
-  stroke-width: 2.5;
-}
-
-.simulacro-card.resultados-card .simulacro-info {
-  padding: 1.5rem;
-}
-
-.simulacro-card.resultados-card .simulacro-info h2 {
-  margin: 0 0 0.5rem;
-  color: #333;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.simulacro-card.resultados-card .simulacro-info p {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0 0 1rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.simulacro-btn.resultados-btn {
-  background-color: #20B2AA;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.7rem 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-}
-
-.simulacro-btn.resultados-btn:hover {
-  background-color: #1e9e95;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
-}
-
-/* ALTERNATIVA SIN ÍCONO (más simple) */
-.simulacro-card.resultados-card-simple {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.simulacro-card.resultados-card-simple:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
-.simulacro-imagen.resultados-imagen-simple {
-  height: 160px;
-  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
-  position: relative;
-}
-
-.simulacro-overlay.resultados-overlay-simple {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
-}
-
-.simulacro-badge.resultados-badge-simple {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #20B2AA;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  padding: 6px 12px;
-  border-radius: 16px;
-  z-index: 2;
-  backdrop-filter: blur(10px);
-}
-
-/* VERSIÓN MINIMALISTA CON BORDE SUTIL */
-.simulacro-card.resultados-card-minimal {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid #f0f9ff;
-  position: relative;
-}
-
-.simulacro-card.resultados-card-minimal:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  border-color: #e0f2fe;
-}
-
-.simulacro-imagen.resultados-imagen-minimal {
-  height: 160px;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.simulacro-imagen.resultados-imagen-minimal::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #20B2AA 0%, #4682B4 100%);
-}
-
-.resultados-icon-minimal {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(32, 178, 170, 0.2);
-}
-
-.resultados-icon-minimal svg {
-  width: 28px;
-  height: 28px;
-  color: white;
-  stroke-width: 2;
 }
 </style>
