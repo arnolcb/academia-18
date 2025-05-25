@@ -53,7 +53,7 @@
         <div class="cursos-grid">
           
           <!-- TARJETA DE RESULTADOS COMENTADA -->
-          <!--
+          
           <div class="simulacro-card resultados-card" @click="navegarAResultados">
             <div class="simulacro-imagen resultados-imagen">
               <div class="simulacro-overlay resultados-overlay"></div>
@@ -65,9 +65,10 @@
               <button class="simulacro-btn resultados-btn">Ver Resultados</button>
             </div>
           </div>
-          -->
+          
 
           <!-- NUEVA TARJETA DE SEGUNDO SIMULACRO -->
+           <!--
           <div class="simulacro-card segundo-simulacro-card" @click="navegarASegundoSimulacro">
             <div class="simulacro-imagen segundo-simulacro-imagen">
               <div class="simulacro-overlay segundo-simulacro-overlay"></div>
@@ -79,7 +80,8 @@
               <button class="simulacro-btn segundo-simulacro-btn">¡Rendir Ahora!</button>
             </div>
           </div>
-          
+          -->
+
           <!-- Las tarjetas de curso existentes -->
           <div v-for="curso in cursos" :key="curso.id" class="curso-card" @click="navegarACurso(curso.id)">
            <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
@@ -184,11 +186,10 @@ const errorMateriales = ref(null);
 const materialActivo = ref(null);
 
 // FUNCIÓN COMENTADA PARA RESULTADOS
-/*
 const navegarAResultados = () => {
   router.push('/simulacro/simulacro1/ranking');
 };
-*/
+
 
 // NUEVA FUNCIÓN PARA SEGUNDO SIMULACRO
 const navegarASegundoSimulacro = () => {
