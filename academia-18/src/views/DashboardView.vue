@@ -810,4 +810,89 @@ const descargarMaterial = (item) => {
     grid-template-columns: 1fr;
   }
 }
+
+/* ESTILOS PARA LA TARJETA DE RESULTADOS/RANKING */
+.simulacro-card.resultados-card {
+ background-color: white;
+ border-radius: 12px;
+ overflow: hidden;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+ cursor: pointer;
+ transition: all 0.3s ease;
+ position: relative;
+}
+
+.simulacro-card.resultados-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.simulacro-imagen.resultados-imagen {
+ height: 160px;
+ background: linear-gradient(135deg, #20B2AA 0%, #4682B4 100%);
+ position: relative;
+}
+
+.simulacro-overlay.resultados-overlay {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.simulacro-badge.resultados-badge {
+ position: absolute;
+ top: 15px;
+ right: 15px;
+ background-color: white;
+ color: #20B2AA;
+ font-weight: 600;
+ font-size: 11px;
+ letter-spacing: 0.5px;
+ padding: 6px 12px;
+ border-radius: 16px;
+ z-index: 2;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.simulacro-card.resultados-card .simulacro-info {
+ padding: 1.5rem;
+}
+
+.simulacro-card.resultados-card .simulacro-info h2 {
+ margin: 0 0 0.5rem;
+ color: #333;
+ font-size: 1.2rem;
+ font-weight: 600;
+}
+
+.simulacro-card.resultados-card .simulacro-info p {
+ color: #666;
+ font-size: 0.9rem;
+ margin: 0 0 1rem;
+ display: -webkit-box;
+ -webkit-line-clamp: 2;
+ -webkit-box-orient: vertical;
+ overflow: hidden;
+}
+
+.simulacro-btn.resultados-btn {
+ background-color: #20B2AA;
+ color: white;
+ border: none;
+ border-radius: 6px;
+ padding: 0.7rem 1rem;
+ font-weight: 500;
+ cursor: pointer;
+ transition: all 0.2s;
+ width: 100%;
+}
+
+.simulacro-btn.resultados-btn:hover {
+ background-color: #1e9e95;
+ transform: translateY(-1px);
+ box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
+}
 </style>
