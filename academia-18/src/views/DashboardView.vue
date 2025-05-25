@@ -187,7 +187,7 @@ const materialActivo = ref(null);
 
 // FUNCIÓN COMENTADA PARA RESULTADOS
 const navegarAResultados = () => {
-  router.push('/simulacro/simulacro1/ranking');
+  router.push('/simulacro/simulacro2/ranking');
 };
 
 
