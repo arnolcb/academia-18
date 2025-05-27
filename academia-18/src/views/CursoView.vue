@@ -202,34 +202,53 @@
                 </div>
 
                 <!-- Formulario de respuestas - Reestructurado -->
+                <!-- Formulario de respuestas - Mejorado -->
                 <div class="formulario-tarea">
-                  <h4>Respuestas</h4>
-                  <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+                  <!-- Mostrar formulario solo si no hay resultado -->
+                  <div v-if="!resultadoTarea">
+                    <h4>Respuestas</h4>
+                    <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
 
-                  <form @submit.prevent="enviarRespuestas" class="respuestas-form">
-                    <div class="preguntas-container">
-                      <div v-for="i in 10" :key="i" class="pregunta-item">
-                        <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
-                        <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text" placeholder="Tu respuesta"
-                          required />
+                    <form @submit.prevent="enviarRespuestas" class="respuestas-form">
+                      <div class="preguntas-container">
+                        <div v-for="i in 10" :key="i" class="pregunta-item">
+                          <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
+                          <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text"
+                            placeholder="Tu respuesta" required />
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="submit-container">
-                      <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
-                        <span v-if="enviandoRespuestas">Enviando...</span>
-                        <span v-else>Enviar respuestas</span>
-                      </button>
-                    </div>
-                  </form>
+                      <div class="submit-container">
+                        <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
+                          <span v-if="enviandoRespuestas">Enviando...</span>
+                          <span v-else>Enviar respuestas</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
 
-                  <!-- Resultado después de enviar -->
-                  <div v-if="resultadoTarea" class="resultado-tarea">
+                  <!-- Resultado después de enviar - Ahora ocupa todo el espacio -->
+                  <div v-if="resultadoTarea" class="resultado-tarea resultado-completo">
                     <h4>Calificación</h4>
                     <div class="calificacion">
-                      <div class="nota">{{ resultadoTarea.nota }}/10</div>
+                      <div class="nota" :class="resultadoTarea.clase">{{ resultadoTarea.nota }}/10</div>
                       <div class="retroalimentacion">
                         <p>{{ resultadoTarea.mensaje }}</p>
+                      </div>
+                      <!-- NUEVA SECCIÓN: Enlace al solucionario -->
+                      <div v-if="solucionarioInfo" class="solucionario-descarga">
+                        <h5>Descarga el solucionario:</h5>
+                        <a :href="solucionarioInfo.url" target="_blank" class="solucionario-link">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                          </svg>
+                          {{ solucionarioInfo.nombre }}
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -291,6 +310,7 @@ const recursoActivo = ref({});
 const respuestas = ref(Array(10).fill(''));
 const enviandoRespuestas = ref(false);
 const resultadoTarea = ref(null);
+const solucionarioInfo = ref(null);
 
 // Cargar datos del curso
 onMounted(async () => {
@@ -371,7 +391,7 @@ const cargarCurso = async () => {
     if (semanasTemp.length > 0) {
       semanaActiva.value = semanasTemp[0].id;
     }*/
-   semanaActiva.value = null;
+    semanaActiva.value = null;
 
   } catch (err) {
     console.error('Error al cargar el curso:', err);
@@ -435,6 +455,7 @@ const abrirRecursoModal = (recurso, tipo) => {
   if (tipo === 'tarea') {
     respuestas.value = Array(10).fill('');
     resultadoTarea.value = null;
+    solucionarioInfo.value = null;
     cargarRespuestaPrevia(recurso.id);
   }
 };
@@ -455,6 +476,7 @@ const cerrarModal = () => {
   recursoActivo.value = {};
   respuestas.value = Array(10).fill('');
   resultadoTarea.value = null;
+  solucionarioInfo.value = null;
 };
 
 
@@ -477,12 +499,24 @@ const cargarRespuestaPrevia = async (recursoId) => {
 
       // Cargar respuestas anteriores
       respuestas.value = respuestaData.respuestas.map(r => r.respuesta);
+      // Determinar clase CSS según la nota
+      const nota = respuestaData.calificacion;
+      let claseNota = 'malo';
+      if (nota >= 9) claseNota = 'excelente';
+      else if (nota >= 7) claseNota = 'bueno';
+      else if (nota >= 5) claseNota = 'regular';
 
       // Mostrar resultado
       resultadoTarea.value = {
         nota: respuestaData.calificacion,
-        mensaje: respuestaData.retroalimentacion
+        mensaje: respuestaData.retroalimentacion,
+        clase: claseNota // AGREGAR ESTA LÍNEA
       };
+
+      // Cargar información del solucionario si ya hay resultado
+      if (resultadoTarea.value) {
+        await cargarSolucionario(recursoId);
+      }
     }
   } catch (err) {
     console.error('Error al cargar respuesta previa:', err);
@@ -509,20 +543,29 @@ const enviarRespuestas = async () => {
     }));
 
     // Obtener respuestas correctas (solucionario)
-    const solucionarioRef = doc(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionario`);
-    const solucionarioDoc = await getDoc(solucionarioRef);
+    // Obtener respuestas correctas (desde la subcolección solucionarios)
+    const solucionariosRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    const solucionariosSnapshot = await getDocs(solucionariosRef);
 
-    if (!solucionarioDoc.exists()) {
+    if (solucionariosSnapshot.empty) {
       throw new Error('No se encontró el solucionario para esta tarea');
     }
 
+    // Tomar el primer solucionario
+    const solucionarioDoc = solucionariosSnapshot.docs[0];
+    const solucionarioData = solucionarioDoc.data();
+
     // Calcular calificación
-    const solucionario = solucionarioDoc.data().respuestas;
+    const solucionario = solucionarioData.respuestas.map(resp => JSON.parse(resp));
     let aciertos = 0;
     let total = solucionario.length;
 
     for (let i = 0; i < total; i++) {
-      if (respuestasFormateadas[i].respuesta.toLowerCase() === solucionario[i].respuesta.toLowerCase()) {
+      // CONVERTIR A MAYÚSCULAS para comparar
+      const respuestaEstudiante = respuestasFormateadas[i].respuesta.toUpperCase();
+      const respuestaCorrecta = solucionario[i].respuesta.toUpperCase();
+
+      if (respuestaEstudiante === respuestaCorrecta) {
         aciertos += solucionario[i].valor || 1;
       }
     }
@@ -567,11 +610,21 @@ const enviarRespuestas = async () => {
       });
     }
 
+    // Determinar clase CSS según la nota
+    let claseNota = 'malo';
+    if (nota >= 9) claseNota = 'excelente';
+    else if (nota >= 7) claseNota = 'bueno';
+    else if (nota >= 5) claseNota = 'regular';
+
     // Mostrar resultado
     resultadoTarea.value = {
       nota,
-      mensaje: retroalimentacion
+      mensaje: retroalimentacion,
+      clase: claseNota
     };
+
+    // Cargar información del solucionario
+    await cargarSolucionario(recursoId);
 
   } catch (err) {
     console.error('Error al enviar respuestas:', err);
@@ -581,6 +634,33 @@ const enviarRespuestas = async () => {
   }
 };
 
+// NUEVA FUNCIÓN - Cargar información del solucionario
+const cargarSolucionario = async (recursoId) => {
+  try {
+    const cursoId = route.params.id;
+    const semanaId = semanaActiva.value;
+
+    // Buscar en la subcolección solucionarios
+    const solucionariosRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    const solucionariosSnapshot = await getDocs(solucionariosRef);
+
+    if (!solucionariosSnapshot.empty) {
+      // Tomar el primer solucionario
+      const solucionarioDoc = solucionariosSnapshot.docs[0];
+      const data = solucionarioDoc.data();
+
+      // Si tiene URL y nombre del archivo del solucionario
+      if (data.archivoUrl && data.nombreArchivo) {
+        solucionarioInfo.value = {
+          url: data.archivoUrl,
+          nombre: data.nombreArchivo
+        };
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar solucionario:', error);
+  }
+};
 
 </script>
 
@@ -589,7 +669,6 @@ const enviarRespuestas = async () => {
   min-height: 100vh;
   background-color: #f8f9fa;
   overflow-x: hidden;
-  /* Evita desbordamiento horizontal */
 }
 
 .curso-header {
@@ -619,20 +698,20 @@ const enviarRespuestas = async () => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  padding: 0.7rem 1.2rem; /* Padding aumentado */
+  padding: 0.7rem 1.2rem;
   border-radius: 8px;
-  font-size: 1.1rem; /* Tamaño de texto aumentado */
+  font-size: 1.1rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .back-btn:hover {
- background-color: rgba(0, 82, 175, 0.1);
+  background-color: rgba(0, 82, 175, 0.1);
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .back-btn svg {
-  width: 18px; /* Icono más grande */
+  width: 18px;
   height: 18px;
 }
 
@@ -892,15 +971,6 @@ const enviarRespuestas = async () => {
   flex-direction: column;
 }
 
-.clase-container .video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
 .modal-header {
   padding: 1.5rem;
   display: flex;
@@ -935,28 +1005,17 @@ const enviarRespuestas = async () => {
   overflow: hidden;
   position: relative;
   padding-top: 56.25%;
-  /* Mantiene proporción 16:9 */
   background-color: #000;
   width: 100%;
 }
 
-.demo-video {
-  background-color: #000;
-  aspect-ratio: 16/9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.demo-video-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-}
-
-.demo-video-placeholder p {
-  margin-top: 1rem;
+.clase-container .video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .clase-descripcion h4 {
@@ -980,14 +1039,36 @@ const enviarRespuestas = async () => {
   margin-top: 1rem;
 }
 
+/* Botón "Ver documento de tarea" mejorado */
 .archivo-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   color: #0052af;
   text-decoration: none;
   font-weight: 500;
   cursor: pointer;
+  padding: 0.7rem 1.2rem;
+  background-color: #f8f9fa;
+  border: 2px solid #0052af;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.archivo-link:hover {
+  background-color: #0052af;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 82, 175, 0.2);
+}
+
+.archivo-link svg {
+  transition: transform 0.3s ease;
+}
+
+.archivo-link:hover svg {
+  transform: scale(1.1);
 }
 
 .instruccion-tarea {
@@ -1033,86 +1114,161 @@ const enviarRespuestas = async () => {
   background-color: #003c8f;
 }
 
-.demo-note {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #0052af;
+/* Resultado completo - DISEÑO MINIMALISTA Y PROFESIONAL */
+.resultado-completo {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.demo-note p {
-  margin: 0;
-  color: #333;
+.resultado-completo h4 {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #374151;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 
-/* Mensaje Demo */
-.mensaje-demo-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.calificacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Nota - diseño minimalista */
+.nota {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #374151;
+  background: #f9fafb;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 110;
-  background-color: rgba(0, 0, 0, 0.5);
+  border: 3px solid #e5e7eb;
+  transition: all 0.3s ease;
+  letter-spacing: -0.05em;
 }
 
-.mensaje-demo-container {
-  background-color: white;
-  width: 90%;
-  max-width: 500px;
+/* Colores según la nota - más sutiles */
+.nota.excelente {
+  color: #059669;
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.nota.bueno {
+  color: #0284c7;
+  border-color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+.nota.regular {
+  color: #d97706;
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.nota.malo {
+  color: #dc2626;
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.retroalimentacion {
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.retroalimentacion p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 1.5rem;
   border-radius: 12px;
-  overflow: hidden;
-}
-
-.mensaje-demo-header {
-  padding: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-}
-
-.mensaje-demo-header h3 {
+  border: 1px solid #e5e7eb;
   margin: 0;
-  color: #0052af;
+  font-weight: 400;
 }
 
-.cerrar-mensaje {
-  background: none;
+/* Solucionario - diseño minimalista */
+.solucionario-descarga {
+  margin-top: 2rem;
+  padding: 0;
+  background: transparent;
   border: none;
-  cursor: pointer;
-  color: #666;
 }
 
-.mensaje-demo-content {
-  padding: 1.5rem;
-  text-align: center;
+.solucionario-descarga h5 {
+  margin: 0 0 1rem;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.mensaje-demo-content p {
-  margin-bottom: 1rem;
-}
-
-.ir-login-btn {
-  margin-top: 1rem;
+.solucionario-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 500;
   padding: 0.8rem 1.5rem;
-  background-color: #0052af;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.solucionario-link:hover {
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+.solucionario-link svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.solucionario-link:hover svg {
+  transform: scale(1.1);
+}
+
+/* Botón para reintentar */
+.reintentar-btn {
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.5rem;
+  background-color: #6b7280;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 0.9rem;
 }
 
-.ir-login-btn:hover {
-  background-color: #003c8f;
+.reintentar-btn:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
 }
 
+/* Toast */
 .toast-container {
   position: fixed;
   bottom: 2rem;
@@ -1188,6 +1344,13 @@ const enviarRespuestas = async () => {
     gap: 1rem;
   }
 
+  .back-btn {
+    padding: 0.8rem 1.2rem;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
   .tarea-container {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -1200,7 +1363,6 @@ const enviarRespuestas = async () => {
     box-sizing: border-box;
   }
 
-  /* Botones en modo móvil */
   .recurso-acciones {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -1211,19 +1373,16 @@ const enviarRespuestas = async () => {
     font-size: 0.85rem;
   }
 
-  /* Ajustes para el modal de tareas */
   .modal-content {
     padding: 1rem;
     max-height: 70vh;
     overflow-y: auto;
   }
 
-  /* Ajuste para vídeos */
   .clase-container .video-wrapper {
     margin-bottom: 1rem;
   }
 
-  /* Botones de envío */
   .submit-container {
     margin-top: 1rem;
     display: flex;
@@ -1235,7 +1394,6 @@ const enviarRespuestas = async () => {
     padding: 0.8rem 1rem;
   }
 
-  /* Ajustes para campos de respuesta */
   .formulario-tarea {
     overflow-y: auto;
     max-height: 60vh;
@@ -1247,12 +1405,26 @@ const enviarRespuestas = async () => {
     bottom: 1rem;
   }
 
-    .back-btn {
-    padding: 0.8rem 1.2rem; /* Aún más grande en móvil para facilitar el toque */
-    width: 100%; /* Ocupa todo el ancho disponible en móvil */
-    justify-content: center;
-    margin-bottom: 0.5rem;
+  /* Resultado completo responsive */
+  .resultado-completo {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
   }
 
+  .nota {
+    width: 90px;
+    height: 90px;
+    font-size: 2.2rem;
+  }
+
+  .retroalimentacion p {
+    font-size: 0.95rem;
+    padding: 1.2rem;
+  }
+
+  .solucionario-link {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
 }
 </style>
