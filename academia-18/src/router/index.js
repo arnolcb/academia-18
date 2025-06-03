@@ -12,7 +12,7 @@ import NotFoundView from "../views/NotFoundView.vue";
 import SimulacroView from "../views/SimulacroView.vue";
 import SimulacroRanking from "../views/SimulacroRanking.vue";
 import SobreNosotros from "../views/AboutView.vue";
-
+import MatriculaVip from "@/views/MatriculaVip.vue";
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -72,6 +72,11 @@ const router = createRouter({
       component: () => import("../views/RendirTestView.vue"),
     },
     */
+    {
+      path: "/matricula-vip",
+      name: "matricula-vip",
+      component: () => import("../views/MatriculaVip.vue"),
+    },
     {
       path: "/aula-virtual",
       name: "aula-virtual",
