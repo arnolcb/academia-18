@@ -12,7 +12,16 @@
           <span>Volver a cursos</span>
         </button>
 
-        <h1 class="curso-titulo">{{ curso.titulo || 'Cargando...' }}</h1>
+        <div class="curso-titulo-container">
+          <h1 class="curso-titulo">{{ curso.titulo || 'Cargando...' }}</h1>
+          <!-- Badge VIP si es curso VIP -->
+          <div v-if="esVip" class="curso-vip-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>VIP</span>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -32,7 +41,7 @@
       <!-- Contenido del curso -->
       <div v-else class="semanas-container">
         <!-- Banner del curso -->
-        <div class="curso-banner" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-banner.jpg'})` }">
+        <div class="curso-banner" :class="{ 'curso-banner-vip': esVip }" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-banner.jpg'})` }">
           <div class="banner-overlay"></div>
           <div class="banner-content">
             <h2>{{ curso.titulo }}</h2>
@@ -42,7 +51,7 @@
 
         <!-- Acordeón de semanas -->
         <div class="semanas-lista">
-          <div v-for="(semana, index) in semanas" :key="semana.id" class="semana-item">
+          <div v-for="(semana, index) in semanas" :key="semana.id" class="semana-item" :class="{ 'semana-item-vip': esVip }">
             <div class="semana-header" @click="toggleSemana(semana.id)"
               :class="{ 'active': semanaActiva === semana.id }">
               <div class="semana-titulo">
@@ -153,41 +162,76 @@
           </button>
         </div>
 
-        <div v-if="modalVisible" class="recurso-modal">
-          <div class="modal-overlay" @click="cerrarModal"></div>
+        <div class="modal-content">
+          <!-- Contenido para clase (video) -->
+          <div v-if="modalTipo === 'clase'" class="clase-container">
+            <div class="video-wrapper">
+              <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="clase-descripcion">
+              <h4>Descripción de la clase</h4>
+              <p>{{ recursoActivo.descripcion }}</p>
+            </div>
+          </div>
 
-          <div class="modal-container">
-            <div class="modal-header">
-              <h3>{{ recursoActivo.titulo }}</h3>
-              <button @click="cerrarModal" class="cerrar-modal">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
+          <!-- Contenido para tarea -->
+          <div v-if="modalTipo === 'tarea'" class="tarea-container">
+            <!-- Instrucciones de la tarea -->
+            <div class="tarea-instrucciones">
+              <h4>Instrucciones</h4>
+              <p>{{ recursoActivo.descripcion }}</p>
+              <div class="tarea-archivo">
+                <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                  <span>Ver documento de tarea</span>
+                </button>
+              </div>
             </div>
 
-            <div class="modal-content">
-              <!-- Contenido para clase (video) - Sin cambios -->
-              <div v-if="modalTipo === 'clase'" class="clase-container">
-                <div class="video-wrapper">
-                  <iframe :src="recursoActivo.videoUrl" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="clase-descripcion">
-                  <h4>Descripción de la clase</h4>
-                  <p>{{ recursoActivo.descripcion }}</p>
-                </div>
+            <!-- Formulario de respuestas -->
+            <div class="formulario-tarea">
+              <!-- Mostrar formulario solo si no hay resultado -->
+              <div v-if="!resultadoTarea">
+                <h4>Respuestas</h4>
+                <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+
+                <form @submit.prevent="enviarRespuestas" class="respuestas-form">
+                  <div class="preguntas-container">
+                    <div v-for="i in 10" :key="i" class="pregunta-item">
+                      <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
+                      <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text"
+                        placeholder="Tu respuesta" required />
+                    </div>
+                  </div>
+
+                  <div class="submit-container">
+                    <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
+                      <span v-if="enviandoRespuestas">Enviando...</span>
+                      <span v-else>Enviar respuestas</span>
+                    </button>
+                  </div>
+                </form>
               </div>
 
-              <!-- Contenido para tarea - Reestructurado -->
-              <div v-if="modalTipo === 'tarea'" class="tarea-container">
-                <!-- Instrucciones de la tarea -->
-                <div class="tarea-instrucciones">
-                  <h4>Instrucciones</h4>
-                  <p>{{ recursoActivo.descripcion }}</p>
-                  <div class="tarea-archivo">
-                    <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
+              <!-- Resultado después de enviar -->
+              <div v-if="resultadoTarea" class="resultado-tarea resultado-completo">
+                <h4>Calificación</h4>
+                <div class="calificacion">
+                  <div class="nota" :class="resultadoTarea.clase">{{ resultadoTarea.nota }}/10</div>
+                  <div class="retroalimentacion">
+                    <p>{{ resultadoTarea.mensaje }}</p>
+                  </div>
+                  <!-- Enlace al solucionario -->
+                  <div v-if="solucionarioInfo" class="solucionario-descarga">
+                    <h5>Descarga el solucionario:</h5>
+                    <a :href="solucionarioInfo.url" target="_blank" class="solucionario-link">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -196,61 +240,8 @@
                         <line x1="16" y1="17" x2="8" y2="17"></line>
                         <polyline points="10 9 9 9 8 9"></polyline>
                       </svg>
-                      <span>Ver documento de tarea</span>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Formulario de respuestas - Reestructurado -->
-                <!-- Formulario de respuestas - Mejorado -->
-                <div class="formulario-tarea">
-                  <!-- Mostrar formulario solo si no hay resultado -->
-                  <div v-if="!resultadoTarea">
-                    <h4>Respuestas</h4>
-                    <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
-
-                    <form @submit.prevent="enviarRespuestas" class="respuestas-form">
-                      <div class="preguntas-container">
-                        <div v-for="i in 10" :key="i" class="pregunta-item">
-                          <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
-                          <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text"
-                            placeholder="Tu respuesta" required />
-                        </div>
-                      </div>
-
-                      <div class="submit-container">
-                        <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
-                          <span v-if="enviandoRespuestas">Enviando...</span>
-                          <span v-else>Enviar respuestas</span>
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-
-                  <!-- Resultado después de enviar - Ahora ocupa todo el espacio -->
-                  <div v-if="resultadoTarea" class="resultado-tarea resultado-completo">
-                    <h4>Calificación</h4>
-                    <div class="calificacion">
-                      <div class="nota" :class="resultadoTarea.clase">{{ resultadoTarea.nota }}/10</div>
-                      <div class="retroalimentacion">
-                        <p>{{ resultadoTarea.mensaje }}</p>
-                      </div>
-                      <!-- NUEVA SECCIÓN: Enlace al solucionario -->
-                      <div v-if="solucionarioInfo" class="solucionario-descarga">
-                        <h5>Descarga el solucionario:</h5>
-                        <a :href="solucionarioInfo.url" target="_blank" class="solucionario-link">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                          </svg>
-                          {{ solucionarioInfo.nombre }}
-                        </a>
-                      </div>
-                    </div>
+                      {{ solucionarioInfo.nombre }}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -287,7 +278,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { auth, db } from '@/firebase';
 import { doc, getDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, where } from 'firebase/firestore';
@@ -302,6 +293,12 @@ const semanas = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const semanaActiva = ref(null);
+const esUsuarioVip = ref(false);
+
+// Detectar si es curso VIP por la URL
+const esVip = computed(() => {
+  return route.path.includes('/vip/') || route.params.id?.includes('vip');
+});
 
 // Modal
 const modalVisible = ref(false);
@@ -312,25 +309,54 @@ const enviandoRespuestas = ref(false);
 const resultadoTarea = ref(null);
 const solucionarioInfo = ref(null);
 
+// Toast
+const toast = ref({
+  visible: false,
+  message: '',
+  type: 'info'
+});
+
 // Cargar datos del curso
 onMounted(async () => {
-  // Verificar autenticación
   auth.onAuthStateChanged(async (user) => {
     if (!user) {
       router.push('/aula-virtual');
       return;
     }
 
+    // Verificar acceso VIP si es curso VIP
+    if (esVip.value) {
+      await verificarAccesoVip(user.email);
+      if (!esUsuarioVip.value) {
+        // Redirigir a dashboard si no tiene acceso VIP
+        showToast('No tienes acceso a cursos VIP. Contacta con tu instructor.', 'error');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+        return;
+      }
+    }
+
     await cargarCurso();
   });
 });
-// Función para detectar dispositivo móvil y ajustar comportamiento
-const isMobile = () => {
-  return window.innerWidth <= 768;
+
+// Verificar acceso VIP
+const verificarAccesoVip = async (userEmail) => {
+  try {
+    const vipQuery = query(
+      collection(db, 'usuariosVip'),
+      where('email', '==', userEmail),
+      where('estado', '==', 'activo')
+    );
+    const querySnapshot = await getDocs(vipQuery);
+    esUsuarioVip.value = !querySnapshot.empty;
+  } catch (error) {
+    console.error('Error al verificar acceso VIP:', error);
+    esUsuarioVip.value = false;
+  }
 };
 
-// En la función cargarCurso, asegúrate de que estás recuperando todos los recursos
-// En la función cargarCurso
 const cargarCurso = async () => {
   loading.value = true;
   error.value = null;
@@ -341,8 +367,11 @@ const cargarCurso = async () => {
       throw new Error('ID de curso no proporcionado');
     }
 
+    // Determinar colección según si es VIP o no
+    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
+
     // Obtener datos del curso
-    const cursoDoc = await getDoc(doc(db, 'cursos', cursoId));
+    const cursoDoc = await getDoc(doc(db, coleccion, cursoId));
     if (!cursoDoc.exists()) {
       throw new Error('El curso no existe');
     }
@@ -353,7 +382,7 @@ const cargarCurso = async () => {
     };
 
     // Obtener semanas del curso
-    const semanasRef = collection(db, `cursos/${cursoId}/semanas`);
+    const semanasRef = collection(db, `${coleccion}/${cursoId}/semanas`);
     const q = query(semanasRef, orderBy('orden', 'asc'));
     const semanasSnapshot = await getDocs(q);
 
@@ -361,14 +390,8 @@ const cargarCurso = async () => {
     const semanasTemp = [];
     for (const semanaDoc of semanasSnapshot.docs) {
       // Para cada semana, obtener sus recursos
-      const recursosRef = collection(db, `cursos/${cursoId}/semanas/${semanaDoc.id}/recursos`);
-
-      // No usar query con orderBy si no es necesario, para asegurar que todos los recursos se obtengan
+      const recursosRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaDoc.id}/recursos`);
       const recursosSnapshot = await getDocs(recursosRef);
-
-      // Depurar para verificar si se están encontrando todos los recursos
-      console.log(`Semana ${semanaDoc.id} - Recursos encontrados: ${recursosSnapshot.docs.length}`);
-      console.log('IDs de recursos encontrados:', recursosSnapshot.docs.map(doc => doc.id).join(', '));
 
       // Crear array de recursos
       const recursos = recursosSnapshot.docs.map(doc => ({
@@ -385,12 +408,6 @@ const cargarCurso = async () => {
     }
 
     semanas.value = semanasTemp;
-
-    // Si hay semanas, abrir la primera por defecto
-    /*
-    if (semanasTemp.length > 0) {
-      semanaActiva.value = semanasTemp[0].id;
-    }*/
     semanaActiva.value = null;
 
   } catch (err) {
@@ -414,22 +431,14 @@ const toggleSemana = (semanaId) => {
 const volverADashboard = () => {
   router.push('/dashboard');
 };
+
 const handleDescargar = (recurso) => {
-  // Validar si existe una URL de archivo
   if (!recurso.archivoUrl || recurso.archivoUrl.trim() === '') {
     showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
     return;
   }
-
-  // Si hay URL válida, abre en nueva pestaña
   window.open(recurso.archivoUrl, '_blank');
 };
-
-const toast = ref({
-  visible: false,
-  message: '',
-  type: 'info' // 'info', 'error', 'success'
-});
 
 // Función para mostrar toast
 const showToast = (message, type = 'info') => {
@@ -439,7 +448,6 @@ const showToast = (message, type = 'info') => {
     type
   };
 
-  // Ocultar automáticamente después de 3 segundos
   setTimeout(() => {
     toast.value.visible = false;
   }, 3000);
@@ -451,7 +459,6 @@ const abrirRecursoModal = (recurso, tipo) => {
   modalTipo.value = tipo;
   modalVisible.value = true;
 
-  // Si es una tarea, verificar si ya hay respuestas previas
   if (tipo === 'tarea') {
     respuestas.value = Array(10).fill('');
     resultadoTarea.value = null;
@@ -460,13 +467,11 @@ const abrirRecursoModal = (recurso, tipo) => {
   }
 };
 
-// Agregar función para manejo de archivos dentro del modal
 const handleDescargarEnModal = (recurso) => {
   if (!recurso.archivoUrl || recurso.archivoUrl.trim() === '') {
     showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
     return;
   }
-
   window.open(recurso.archivoUrl, '_blank');
 };
 
@@ -479,7 +484,6 @@ const cerrarModal = () => {
   solucionarioInfo.value = null;
 };
 
-
 // Cargar respuesta previa de tarea
 const cargarRespuestaPrevia = async (recursoId) => {
   try {
@@ -488,8 +492,9 @@ const cargarRespuestaPrevia = async (recursoId) => {
 
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
+    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
 
-    const respuestasRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
+    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
     const q = query(respuestasRef, where('userId', '==', user.uid));
     const respuestasSnapshot = await getDocs(q);
 
@@ -497,23 +502,19 @@ const cargarRespuestaPrevia = async (recursoId) => {
       const respuestaDoc = respuestasSnapshot.docs[0];
       const respuestaData = respuestaDoc.data();
 
-      // Cargar respuestas anteriores
       respuestas.value = respuestaData.respuestas.map(r => r.respuesta);
-      // Determinar clase CSS según la nota
       const nota = respuestaData.calificacion;
       let claseNota = 'malo';
       if (nota >= 9) claseNota = 'excelente';
       else if (nota >= 7) claseNota = 'bueno';
       else if (nota >= 5) claseNota = 'regular';
 
-      // Mostrar resultado
       resultadoTarea.value = {
         nota: respuestaData.calificacion,
         mensaje: respuestaData.retroalimentacion,
-        clase: claseNota // AGREGAR ESTA LÍNEA
+        clase: claseNota
       };
 
-      // Cargar información del solucionario si ya hay resultado
       if (resultadoTarea.value) {
         await cargarSolucionario(recursoId);
       }
@@ -535,23 +536,21 @@ const enviarRespuestas = async () => {
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
     const recursoId = recursoActivo.value.id;
+    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
 
-    // Formatear respuestas para guardar
     const respuestasFormateadas = respuestas.value.map((respuesta, index) => ({
       pregunta: index + 1,
       respuesta: respuesta.trim()
     }));
 
-    // Obtener respuestas correctas (solucionario)
-    // Obtener respuestas correctas (desde la subcolección solucionarios)
-    const solucionariosRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    // Obtener solucionario
+    const solucionariosRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
     const solucionariosSnapshot = await getDocs(solucionariosRef);
 
     if (solucionariosSnapshot.empty) {
       throw new Error('No se encontró el solucionario para esta tarea');
     }
 
-    // Tomar el primer solucionario
     const solucionarioDoc = solucionariosSnapshot.docs[0];
     const solucionarioData = solucionarioDoc.data();
 
@@ -561,7 +560,6 @@ const enviarRespuestas = async () => {
     let total = solucionario.length;
 
     for (let i = 0; i < total; i++) {
-      // CONVERTIR A MAYÚSCULAS para comparar
       const respuestaEstudiante = respuestasFormateadas[i].respuesta.toUpperCase();
       const respuestaCorrecta = solucionario[i].respuesta.toUpperCase();
 
@@ -570,7 +568,6 @@ const enviarRespuestas = async () => {
       }
     }
 
-    // Calcular nota final (sobre 10)
     const nota = Math.round((aciertos / total) * 10);
 
     // Generar retroalimentación
@@ -586,12 +583,11 @@ const enviarRespuestas = async () => {
     }
 
     // Guardar respuestas en Firestore
-    const respuestasRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
+    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
     const q = query(respuestasRef, where('userId', '==', user.uid));
     const respuestasSnapshot = await getDocs(q);
 
     if (respuestasSnapshot.empty) {
-      // Crear nuevo documento
       await addDoc(respuestasRef, {
         userId: user.uid,
         respuestas: respuestasFormateadas,
@@ -600,9 +596,8 @@ const enviarRespuestas = async () => {
         fechaEnvio: new Date()
       });
     } else {
-      // Actualizar documento existente
       const respuestaDoc = respuestasSnapshot.docs[0];
-      await updateDoc(doc(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas/${respuestaDoc.id}`), {
+      await updateDoc(doc(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas/${respuestaDoc.id}`), {
         respuestas: respuestasFormateadas,
         calificacion: nota,
         retroalimentacion,
@@ -628,28 +623,26 @@ const enviarRespuestas = async () => {
 
   } catch (err) {
     console.error('Error al enviar respuestas:', err);
-    alert('No se pudieron enviar las respuestas. Por favor, intenta de nuevo.');
+    showToast('No se pudieron enviar las respuestas. Por favor, intenta de nuevo.', 'error');
   } finally {
     enviandoRespuestas.value = false;
   }
 };
 
-// NUEVA FUNCIÓN - Cargar información del solucionario
+// Cargar información del solucionario
 const cargarSolucionario = async (recursoId) => {
   try {
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
+    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
 
-    // Buscar en la subcolección solucionarios
-    const solucionariosRef = collection(db, `cursos/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    const solucionariosRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
     const solucionariosSnapshot = await getDocs(solucionariosRef);
 
     if (!solucionariosSnapshot.empty) {
-      // Tomar el primer solucionario
       const solucionarioDoc = solucionariosSnapshot.docs[0];
       const data = solucionarioDoc.data();
 
-      // Si tiene URL y nombre del archivo del solucionario
       if (data.archivoUrl && data.nombreArchivo) {
         solucionarioInfo.value = {
           url: data.archivoUrl,
@@ -661,7 +654,6 @@ const cargarSolucionario = async (recursoId) => {
     console.error('Error al cargar solucionario:', error);
   }
 };
-
 </script>
 
 <style scoped>
@@ -686,6 +678,12 @@ const cargarSolucionario = async (recursoId) => {
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+
+.curso-titulo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .back-btn {
@@ -722,10 +720,71 @@ const cargarSolucionario = async (recursoId) => {
   margin: 0;
 }
 
+/* BADGE VIP EN HEADER */
+.curso-vip-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, #b8860b, #daa520);
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
+}
+
 .curso-content {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
+}
+
+/* Estados de carga */
+.estado-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  min-height: 50vh;
+}
+
+.error-container {
+  color: #d32f2f;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 82, 175, 0.1);
+  border-top: 3px solid #0052af;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0052af;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.retry-btn:hover {
+  background-color: #003c8f;
 }
 
 /* Banner del curso */
@@ -736,6 +795,12 @@ const cargarSolucionario = async (recursoId) => {
   border-radius: 12px;
   position: relative;
   margin-bottom: 2rem;
+}
+
+/* BANNER VIP CON BORDE SUTIL */
+.curso-banner-vip {
+  border: 2px solid #b8860b;
+  box-shadow: 0 8px 32px rgba(184, 134, 11, 0.15);
 }
 
 .banner-overlay {
@@ -782,6 +847,12 @@ const cargarSolucionario = async (recursoId) => {
   background-color: white;
 }
 
+/* SEMANAS VIP CON BORDE SUTIL */
+.semana-item-vip {
+  border: 1px solid #daa520;
+  background: linear-gradient(135deg, #fffef7, #ffffff);
+}
+
 .semana-header {
   padding: 1.5rem;
   display: flex;
@@ -799,6 +870,15 @@ const cargarSolucionario = async (recursoId) => {
   background-color: rgba(0, 82, 175, 0.08);
 }
 
+/* HOVER VIP */
+.semana-item-vip .semana-header:hover {
+  background-color: rgba(184, 134, 11, 0.05);
+}
+
+.semana-item-vip .semana-header.active {
+  background-color: rgba(184, 134, 11, 0.08);
+}
+
 .semana-titulo {
   display: flex;
   flex-direction: column;
@@ -809,6 +889,11 @@ const cargarSolucionario = async (recursoId) => {
   color: #0052af;
   font-weight: 600;
   margin-bottom: 0.3rem;
+}
+
+/* NÚMERO VIP */
+.semana-item-vip .semana-numero {
+  color: #b8860b;
 }
 
 .semana-titulo h3 {
@@ -1249,25 +1334,6 @@ const cargarSolucionario = async (recursoId) => {
   transform: scale(1.1);
 }
 
-/* Botón para reintentar */
-.reintentar-btn {
-  margin-top: 1.5rem;
-  padding: 0.7rem 1.5rem;
-  background-color: #6b7280;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
-
-.reintentar-btn:hover {
-  background-color: #4b5563;
-  transform: translateY(-1px);
-}
-
 /* Toast */
 .toast-container {
   position: fixed;
@@ -1324,7 +1390,6 @@ const cargarSolucionario = async (recursoId) => {
     opacity: 0;
     transform: translate(-50%, 20px);
   }
-
   to {
     opacity: 0.95;
     transform: translate(-50%, 0);
@@ -1342,6 +1407,13 @@ const cargarSolucionario = async (recursoId) => {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .curso-titulo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
   }
 
   .back-btn {
@@ -1405,7 +1477,6 @@ const cargarSolucionario = async (recursoId) => {
     bottom: 1rem;
   }
 
-  /* Resultado completo responsive */
   .resultado-completo {
     padding: 2rem 1.5rem;
     margin: 1rem;

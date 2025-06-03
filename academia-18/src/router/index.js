@@ -102,6 +102,12 @@ const router = createRouter({
       component: () => import("../views/DashboardView.vue"),
       beforeEnter: requireAuth, // Solo esta ruta requiere autenticación
     },
+    // Ruta para cursos VIP
+    {
+      path: '/vip/curso/:id',
+      name: 'CursoVip',
+      component: () => import('@/views/CursoView.vue')
+    },
     {
       path: "/curso/:id",
       name: "curso",

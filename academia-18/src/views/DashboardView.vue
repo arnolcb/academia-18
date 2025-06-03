@@ -478,7 +478,8 @@ const navegarACurso = (cursoId) => {
 };
 
 const navegarACursoVip = (cursoId) => {
-  router.push(`/curso/${cursoId}`);
+  //router.push(`/curso/${cursoId}`);
+  router.push(`/vip/curso/${cursoId}`);
 };
 
 const toggleMaterial = (materialId) => {
@@ -802,6 +803,29 @@ Mi email registrado es: ${auth.currentUser?.email}
   width: 100%;
 }
 
+.cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 800px;
+  /* ORDEN PARA RESPONSIVE */
+  order: 1;
+}
+
+.materiales-sidebar {
+  width: 300px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  align-self: flex-start;
+  height: fit-content;
+  /* ORDEN PARA RESPONSIVE */
+  order: 2;
+}
+
 /* VIP SECTION - CON ACCESO - LAYOUT ARREGLADO */
 .vip-content-wrapper {
   width: 100%;
@@ -862,6 +886,8 @@ Mi email registrado es: ${auth.currentUser?.email}
   flex: 1;
   min-width: 0;
   max-width: 800px;
+  /* ORDEN PARA RESPONSIVE */
+  order: 1;
 }
 
 .curso-card {
@@ -1223,24 +1249,29 @@ Mi email registrado es: ${auth.currentUser?.email}
   padding: 0.4rem 0.8rem;
 }
 
-/* Responsive Design */
-@media (max-width: 1100px) {
+/* Responsive Design - ORDEN CORREGIDO */
+@media (max-width: 900px) {
   .dashboard-main-wrapper,
   .main-content-layout {
     flex-direction: column;
   }
 
-  .cursos-grid {
-    max-width: 100%;
-  }
-
   .materiales-sidebar {
     width: 100%;
     max-width: 100%;
+    /* MATERIALES VA ABAJO EN RESPONSIVE */
+    order: 2;
+  }
+
+  .cursos-grid {
+    max-width: 100%;
+    /* CURSOS VA ARRIBA EN RESPONSIVE */
+    order: 1;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
   .dashboard-content {
     padding: 0 1rem;
     margin: 1.5rem auto;
@@ -1255,8 +1286,9 @@ Mi email registrado es: ${auth.currentUser?.email}
     justify-content: center;
   }
 
+  /* AQUÍ SÍ va a 1 columna en móviles pequeños */
   .cursos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
