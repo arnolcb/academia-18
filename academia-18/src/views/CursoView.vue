@@ -429,7 +429,12 @@ const toggleSemana = (semanaId) => {
 
 // Función para volver al dashboard
 const volverADashboard = () => {
-  router.push('/dashboard');
+  // Detectar si es curso VIP y mantener la pestaña activa
+  if (esVip.value) {
+    router.push('/dashboard?tab=vip');
+  } else {
+    router.push('/dashboard');
+  }
 };
 
 const handleDescargar = (recurso) => {

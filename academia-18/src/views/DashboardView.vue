@@ -322,6 +322,14 @@ onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       userName.value = user.email.split('@')[0];
+      
+      // NUEVO: Detectar parámetro de pestaña en la URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam === 'vip') {
+        activeTab.value = 'vip';
+      }
+      
       await Promise.all([
         fetchCursos(),
         fetchMateriales(),
@@ -366,7 +374,9 @@ const cargarContenidoVip = async () => {
         ...doc.data()
       });
     });
-    cursosVip.value = cursosVipArray;
+    //cursosVip.value = cursosVipArray;
+    // Ordenarlos por el campo "orden"
+    cursosVip.value = cursosVipArray.sort((a, b) => a.orden - b.orden);
 
     await fetchMaterialesVip();
   } catch (error) {
@@ -655,9 +665,24 @@ Mi email registrado es: ${auth.currentUser?.email}
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.tab-vip {
+  /* Estado tenue cuando NO está activo - misma estructura, menos intenso */
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 179, 71, 0.3)) !important;
+  color: #b8860b !important;
+  font-weight: 500;
+}
+
+.tab-vip:hover {
+  /* Hover un poco más intenso pero sin llegar al completo */
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(255, 179, 71, 0.5)) !important;
+  color: #b8860b !important;
+}
+
 .tab-vip.active {
-  background: linear-gradient(135deg, #ffd700, #ffb347);
-  color: #333;
+  /* Estado completo cuando SÍ está activo - EXACTAMENTE como antes */
+  background: linear-gradient(135deg, #ffd700, #ffb347) !important;
+  color: #333 !important;
+  font-weight: 600;
 }
 
 .dashboard-main-wrapper {
