@@ -667,14 +667,16 @@ Mi email registrado es: ${auth.currentUser?.email}
 
 .tab-vip {
   /* Estado tenue cuando NO está activo - misma estructura, menos intenso */
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 179, 71, 0.3)) !important;
+  /*background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 179, 71, 0.3)) !important;*/
+  background: linear-gradient(135deg, #ffd700, #ffb347) !important;
   color: #b8860b !important;
   font-weight: 500;
 }
 
 .tab-vip:hover {
   /* Hover un poco más intenso pero sin llegar al completo */
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(255, 179, 71, 0.5)) !important;
+  /*background: linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(255, 179, 71, 0.5)) !important;*/
+  background: linear-gradient(135deg, #ffd700, #ffb347) !important; 
   color: #b8860b !important;
 }
 
