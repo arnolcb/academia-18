@@ -3,64 +3,196 @@
     <div class="wave-container">
       <div class="waves"></div>
     </div>
+    
     <div class="login-container">
       <div class="image-container">
         <img src="@/assets/img/study-min-min.jpeg" alt="Estudiantes en aula virtual" class="login-image" />
       </div>
+      
       <div class="form-section">
-        <h2 class="login-title">Aula Virtual</h2>
-        <p class="login-subtitle">Accede a tus cursos y contenido educativo</p>
-        
-        <!-- Alert para mostrar errores -->
-        <div v-if="errorMessage" class="error-alert">
-          {{ errorMessage }}
+        <!-- Cabecera con pestañas -->
+        <div class="tabs-container">
+          <button 
+            @click="activeTab = 'login'" 
+            :class="['tab-button', { 'active': activeTab === 'login' }]"
+          >
+            Iniciar Sesión
+          </button>
+          <button 
+            @click="activeTab = 'register'" 
+            :class="['tab-button', { 'active': activeTab === 'register' }]"
+          >
+            Crear Cuenta
+          </button>
         </div>
-        
-        <form @submit.prevent="handleLogin" class="login-form">
-          <div class="form-group">
-            <div class="floating-input">
-              <input type="email" id="usuario" v-model="loginData.usuario" required />
-              <label for="usuario" :class="{ 'active': loginData.usuario }">Usuario / Correo</label>
+
+        <!-- Vista de Login -->
+        <div v-if="activeTab === 'login'" class="tab-content">
+          <h2 class="form-title">Aula Virtual</h2>
+          <p class="form-subtitle">Accede a tus cursos VIP y contenido exclusivo</p>
+          
+          <!-- Alert para mostrar errores -->
+          <div v-if="errorMessage" class="error-alert">
+            {{ errorMessage }}
+          </div>
+          
+          <form @submit.prevent="handleLogin" class="auth-form">
+            <div class="form-group">
+              <div class="floating-input">
+                <input type="email" id="usuario" v-model="loginData.usuario" required />
+                <label for="usuario" :class="{ 'active': loginData.usuario }">Usuario / Correo</label>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <div class="floating-input">
-              <input type="password" id="password" v-model="loginData.password" required />
-              <label for="password" :class="{ 'active': loginData.password }">Contraseña</label>
+            <div class="form-group">
+              <div class="floating-input">
+                <input type="password" id="password" v-model="loginData.password" required />
+                <label for="password" :class="{ 'active': loginData.password }">Contraseña</label>
+              </div>
             </div>
-          </div>
-          <div class="form-options">
-            <div class="remember-me">
-              <input type="checkbox" id="recordar" v-model="loginData.recordar" />
-              <label for="recordar">Recordarme</label>
+            <div class="form-options">
+              <div class="remember-me">
+                <input type="checkbox" id="recordar" v-model="loginData.recordar" />
+                <label for="recordar">Recordarme</label>
+              </div>
+              <a href="#" @click.prevent="olvidarPassword" class="forgot-password">¿Olvidaste tu contraseña?</a>
             </div>
-            <a href="#" @click.prevent="olvidarPassword" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            <div class="submit-group">
+              <button type="submit" class="submit-btn" :disabled="isLoading">
+                <span>{{ isLoading ? 'Cargando...' : 'Ingresar' }}</span>
+                <svg v-if="!isLoading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Vista de Registro -->
+        <div v-if="activeTab === 'register'" class="tab-content">
+          <h2 class="form-title">Crear Cuenta</h2>
+          <p class="form-subtitle">Únete al aula virtual para acceso exclusivo</p>
+          
+          <!-- Alerta de éxito o error -->
+          <div v-if="mensaje" class="alert" :class="{ 'alert-success': exito, 'alert-error': !exito }">
+            {{ mensaje }}
           </div>
-          <div class="submit-group">
-            <button type="submit" class="submit-btn" :disabled="isLoading">
-              <span>{{ isLoading ? 'Cargando...' : 'Ingresar' }}</span>
-              <svg v-if="!isLoading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
-          <div class="register-link">
-            <p> ¿No tienes cuenta? <a href="/registro-aula-virtual">Crea una ahora aquí</a></p>
-          </div>
-        </form>
+          
+          <form @submit.prevent="handleRegister" class="auth-form">
+            <!-- Datos de contacto -->
+            <div class="form-group">
+              <div class="floating-input">
+                <input 
+                  type="email" 
+                  id="register-email" 
+                  v-model="registerData.email" 
+                  required 
+                  @blur="validarEmail"
+                />
+                <label for="register-email" :class="{ 'active': registerData.email }">Correo electrónico</label>
+                <p v-if="errores.email" class="error-message">{{ errores.email }}</p>
+              </div>
+            </div>
+            
+            <!-- Contraseña para la cuenta -->
+            <div class="form-group">
+              <div class="floating-input">
+                <input 
+                  type="password" 
+                  id="register-password" 
+                  v-model="registerData.password" 
+                  required 
+                  minlength="6" 
+                  @blur="validarPassword"
+                />
+                <label for="register-password" :class="{ 'active': registerData.password }">Contraseña</label>
+                <p v-if="errores.password" class="error-message">{{ errores.password }}</p>
+                <p class="input-helper">La contraseña debe tener al menos 6 caracteres</p>
+              </div>
+              
+              <div class="floating-input">
+                <input 
+                  type="password" 
+                  id="register-confirm-password" 
+                  v-model="registerData.confirmPassword" 
+                  required 
+                  @blur="validarConfirmPassword"
+                  @input="validarConfirmPassword"
+                />
+                <label for="register-confirm-password" :class="{ 'active': registerData.confirmPassword }">Confirmar contraseña</label>
+                <p v-if="errores.confirmPassword" class="error-message">{{ errores.confirmPassword }}</p>
+              </div>
+            </div>
+            
+            <!-- Términos y condiciones -->
+            <div class="form-terms">
+              <div class="checkbox-container">
+                <input type="checkbox" id="terminos" v-model="registerData.terminos" required @change="validarTerminos" />
+                <label for="terminos">Acepto los <a href="#" @click.prevent="mostrarTerminos">términos y condiciones</a></label>
+                <p v-if="errores.terminos" class="error-message">{{ errores.terminos }}</p>
+              </div>
+            </div>
+            
+            <!-- Botón de envío -->
+            <div class="submit-group">
+              <button 
+                type="submit" 
+                class="submit-btn" 
+                :disabled="isRegisterLoading || !esFormularioValido"
+              >
+                <span v-if="isRegisterLoading">Registrando...</span>
+                <span v-else>Crear mi cuenta</span>
+                <svg v-if="!isRegisterLoading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de términos y condiciones -->
+    <div v-if="modalVisible" class="terminos-modal">
+      <div class="modal-overlay" @click="cerrarModal"></div>
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Términos y condiciones</h3>
+          <button @click="cerrarModal" class="cerrar-modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <h4>1. Servicios de Academia 18</h4>
+          <p>Academia 18 ofrece servicios de preparación para la postulación a BECA 18, el programa de becas del Estado Peruano. Nuestros servicios incluyen clases en línea, materiales de estudio y asesoría personalizada.</p>
+          
+          <h4>2. Responsabilidades del estudiante</h4>
+          <p>El estudiante se compromete a asistir a las clases programadas, realizar las tareas asignadas y participar activamente en las actividades académicas.</p>
+          
+          <h4>3. Protección de datos personales</h4>
+          <p>Los datos personales proporcionados serán tratados de acuerdo a la Ley de Protección de Datos Personales (Ley N° 29733) y su reglamento.</p>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '@/firebase';
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, sendPasswordResetEmail, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 
 const router = useRouter();
+
+// Estados para las pestañas
+const activeTab = ref('login');
+
+// Estados para login
 const isLoading = ref(false);
 const errorMessage = ref('');
 
@@ -70,6 +202,28 @@ const loginData = reactive({
   recordar: false
 });
 
+// Estados para registro
+const isRegisterLoading = ref(false);
+const mensaje = ref('');
+const exito = ref(false);
+const modalVisible = ref(false);
+
+const registerData = reactive({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  terminos: false
+});
+
+// Errores de validación
+const errores = reactive({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  terminos: ''
+});
+
+// Funciones de login
 const handleLogin = async () => {
   isLoading.value = true;
   errorMessage.value = '';
@@ -85,8 +239,8 @@ const handleLogin = async () => {
     // Intentar iniciar sesión
     await authService.login(loginData.usuario, loginData.password, loginData.recordar);
     
-    // Redireccionar al dashboard después del login exitoso
-    router.push('/dashboard');
+    // Redireccionar al dashboard con pestaña VIP activa
+    router.push('/dashboard?tab=vip');
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     
@@ -131,10 +285,146 @@ const olvidarPassword = async () => {
     isLoading.value = false;
   }
 };
+
+// Funciones de registro
+const validarEmail = () => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!registerData.email) {
+    errores.email = 'El correo electrónico es obligatorio';
+  } else if (!emailRegex.test(registerData.email)) {
+    errores.email = 'Ingresa un correo electrónico válido';
+  } else {
+    errores.email = '';
+  }
+};
+
+const validarPassword = () => {
+  if (!registerData.password) {
+    errores.password = 'La contraseña es obligatoria';
+  } else if (registerData.password.length < 6) {
+    errores.password = 'La contraseña debe tener al menos 6 caracteres';
+  } else {
+    errores.password = '';
+  }
+  
+  if (registerData.confirmPassword) {
+    validarConfirmPassword();
+  }
+};
+
+const validarConfirmPassword = () => {
+  if (!registerData.confirmPassword) {
+    errores.confirmPassword = 'Debes confirmar tu contraseña';
+  } else if (registerData.password !== registerData.confirmPassword) {
+    errores.confirmPassword = 'Las contraseñas no coinciden';
+  } else {
+    errores.confirmPassword = '';
+  }
+};
+
+const validarTerminos = () => {
+  errores.terminos = registerData.terminos ? '' : 'Debes aceptar los términos y condiciones';
+};
+
+const esFormularioValido = computed(() => {
+  return (
+    !errores.email &&
+    !errores.password &&
+    !errores.confirmPassword &&
+    !errores.terminos &&
+    registerData.email &&
+    registerData.password &&
+    registerData.confirmPassword &&
+    registerData.terminos
+  );
+});
+
+const mostrarTerminos = () => {
+  modalVisible.value = true;
+};
+
+const cerrarModal = () => {
+  modalVisible.value = false;
+};
+
+const verificarCorreoExistente = async (email) => {
+  try {
+    const methods = await fetchSignInMethodsForEmail(getAuth(), email);
+    return methods.length > 0;
+  } catch (error) {
+    console.error('Error al verificar correo:', error);
+    return false;
+  }
+};
+
+const handleRegister = async () => {
+  // Validar todos los campos antes de enviar
+  validarEmail();
+  validarPassword();
+  validarConfirmPassword();
+  validarTerminos();
+  
+  // Comprobar si hay errores
+  if (!esFormularioValido.value) {
+    mensaje.value = 'Por favor, corrige los errores en el formulario';
+    exito.value = false;
+    return;
+  }
+  
+  isRegisterLoading.value = true;
+  mensaje.value = '';
+  exito.value = false;
+  
+  try {
+    // Paso 1: Verificar correo existente
+    console.log('Verificando si el correo ya existe...');
+    const correoExiste = await verificarCorreoExistente(registerData.email);
+    if (correoExiste) {
+      mensaje.value = 'Este correo electrónico ya está registrado';
+      exito.value = false;
+      isRegisterLoading.value = false;
+      return;
+    }
+    
+    // Paso 2: Registrar en Authentication
+    console.log('Creando usuario en Authentication...');
+    const userCredential = await createUserWithEmailAndPassword(
+      getAuth(),
+      registerData.email,
+      registerData.password
+    );
+    
+    // Mensaje de éxito
+    exito.value = true;
+    mensaje.value = '¡Cuenta VIP creada exitosamente! Redirigiendo al Aula Virtual...';
+    
+    // Redirigir al dashboard con pestaña VIP después de 2 segundos
+    setTimeout(() => {
+      localStorage.setItem('userEmail', registerData.email);
+      router.push('/dashboard?tab=vip');
+    }, 2000);
+    
+  } catch (error) {
+    console.error('Error completo:', error);
+    exito.value = false;
+    
+    // Manejar errores
+    if (error.code === 'auth/email-already-in-use') {
+      mensaje.value = 'Este correo electrónico ya está registrado';
+    } else if (error.code === 'auth/invalid-email') {
+      mensaje.value = 'El correo electrónico no es válido';
+    } else if (error.code === 'auth/weak-password') {
+      mensaje.value = 'La contraseña es demasiado débil';
+    } else {
+      mensaje.value = error.message || 'Error al registrar. Intenta de nuevo más tarde.';
+    }
+  } finally {
+    isRegisterLoading.value = false;
+  }
+};
 </script>
 
 <style scoped>
-/* Mantener los estilos originales y añadir nuevos */
 .aulavirtual-login {
   padding: 3rem 2rem;
   background: #ffffff;
@@ -146,18 +436,7 @@ const olvidarPassword = async () => {
   overflow: hidden;
 }
 
-/* Nuevo: Alerta de error */
-.error-alert {
-  background-color: #ffebee;
-  color: #d32f2f;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  border-left: 4px solid #d32f2f;
-}
-
-/* Mantener el resto de los estilos originales... */
+/* Ondas en el fondo */
 .wave-container {
   position: absolute;
   top: 0;
@@ -209,7 +488,43 @@ const olvidarPassword = async () => {
   justify-content: center;
 }
 
-.login-title {
+/* Pestañas */
+.tabs-container {
+  display: flex;
+  margin-bottom: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 0.3rem;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #666;
+}
+
+.tab-button:hover {
+  background-color: rgba(0, 82, 175, 0.1);
+  color: #0052af;
+}
+
+.tab-button.active {
+  background-color: white;
+  color: #0052af;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content {
+  width: 100%;
+}
+
+.form-title {
   font-size: 2.2rem;
   font-weight: 700;
   color: #0052af;
@@ -218,13 +533,36 @@ const olvidarPassword = async () => {
   z-index: 1;
 }
 
-.login-subtitle {
+.form-subtitle {
   font-size: 1rem;
   color: #757575;
   margin-bottom: 2rem;
 }
 
-.login-form {
+/* Alertas */
+.error-alert,
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.error-alert,
+.alert-error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-left: 4px solid #d32f2f;
+}
+
+.alert-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #2e7d32;
+}
+
+/* Formularios */
+.auth-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -233,11 +571,13 @@ const olvidarPassword = async () => {
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 .floating-input {
   position: relative;
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .floating-input input {
@@ -285,6 +625,20 @@ const olvidarPassword = async () => {
   color: transparent;
 }
 
+.input-helper {
+  font-size: 0.8rem;
+  color: #757575;
+  margin-top: 0.3rem;
+  margin-left: 0.5rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  margin-left: 0.5rem;
+}
+
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -312,6 +666,46 @@ const olvidarPassword = async () => {
   text-decoration: underline;
 }
 
+/* Checkbox de términos */
+.form-terms {
+  display: flex;
+  align-items: flex-start;
+  margin-top: -0.5rem;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.checkbox-container label {
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container a {
+  color: #0052af;
+  text-decoration: none;
+  transition: color 0.3s;
+  margin-left: 0.3rem;
+}
+
+.checkbox-container a:hover {
+  color: #003c8f;
+  text-decoration: underline;
+}
+
+/* Botón de envío */
 .submit-btn {
   display: flex;
   align-items: center;
@@ -356,29 +750,90 @@ const olvidarPassword = async () => {
   transform: translateX(4px);
 }
 
-.register-link {
-  text-align: center;
-  margin-top: 1rem;
+/* Modal de términos */
+.terminos-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.register-link p {
-  font-size: 0.9rem;
-  color: #555;
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
-.register-link a {
+.modal-container {
+  background-color: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  z-index: 2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+  margin: 0;
   color: #0052af;
-  text-decoration: none;
-  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.cerrar-modal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
   transition: color 0.3s;
 }
 
-.register-link a:hover {
-  color: #003c8f;
-  text-decoration: underline;
+.cerrar-modal:hover {
+  color: #333;
 }
 
-/* Responsive Design */
+.modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.modal-content h4 {
+  color: #0052af;
+  margin: 1.5rem 0 0.8rem;
+  font-size: 1.1rem;
+}
+
+.modal-content h4:first-child {
+  margin-top: 0;
+}
+
+.modal-content p {
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
   .aulavirtual-login {
     max-width: 90%;
@@ -399,34 +854,9 @@ const olvidarPassword = async () => {
     margin: 1rem;
   }
   
-  .login-title {
+  .form-title {
     font-size: 1.8rem;
     text-align: center;
-  }
-  
-  .login-subtitle {
-    text-align: center;
-  }
-  
-  .submit-btn {
-    padding: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .aulavirtual-login {
-    padding: 2rem 1rem;
-    border-radius: 1rem;
-  }
-  
-  .login-title {
-    font-size: 1.6rem;
-  }
-  
-  .form-options {
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: flex-start;
   }
 }
 </style>

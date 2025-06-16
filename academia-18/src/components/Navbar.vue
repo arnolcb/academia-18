@@ -51,7 +51,7 @@ onUnmounted(() => {
       <nav class="desktop-menu">
         <RouterLink to="/cursos">Cursos</RouterLink>
         <RouterLink to="/matriculate">Matricúlate</RouterLink>
-        <RouterLink to="/registro-aula-virtual">Registro Aula</RouterLink>
+        <RouterLink to="/clases-gratuitas">Clases Gratuitas</RouterLink>
         <RouterLink to="/aula-virtual">Aula Virtual</RouterLink>
       </nav>
     </div>
@@ -68,7 +68,7 @@ onUnmounted(() => {
           <div class="menu-links">
             <RouterLink to="/cursos" class="menu-link" @click="toggleMenu">Cursos</RouterLink>
             <RouterLink to="/matriculate" class="menu-link" @click="toggleMenu">Matricúlate</RouterLink>
-            <RouterLink to="/registro-aula-virtual" class="menu-link" @click="toggleMenu">Registro Aula</RouterLink>
+            <RouterLink to="/clases-gratuitas" class="menu-link" @click="toggleMenu">Clases Gratuitas</RouterLink>
             <RouterLink to="/aula-virtual" class="menu-link" @click="toggleMenu">Aula Virtual</RouterLink>
           </div>
         </div>
