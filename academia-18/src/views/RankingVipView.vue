@@ -218,7 +218,6 @@ onMounted(async () => {
   });
 });
 
-// Cargar ranking VIP
 const cargarRanking = async () => {
   loading.value = true;
   error.value = null;
@@ -232,40 +231,71 @@ const cargarRanking = async () => {
       simulacroTitulo.value = simulacroDoc.data().titulo || 'Simulacro VIP';
     }
 
-    // Obtener resultados VIP ordenados por calificación
+    // Obtener todos los resultados del simulacro
     const resultadosRef = collection(db, 'resultadosVip');
     const q = query(
       resultadosRef,
-      where('simulacroId', '==', simulacroId),
-      orderBy('calificacion', 'desc'),
-      orderBy('tiempoUtilizado', 'asc')
+      where('simulacroId', '==', simulacroId)
     );
 
     const querySnapshot = await getDocs(q);
-    const resultadosTemp = [];
-
-    for (const docSnapshot of querySnapshot.docs) {
+    
+    // Agrupar por usuario manteniendo solo el primer intento
+    const resultadosPorUsuario = new Map();
+    
+    querySnapshot.docs.forEach(docSnapshot => {
       const data = docSnapshot.data();
+      const userId = data.userId;
       
-      // Obtener información del usuario
-      const userEmail = auth.currentUser?.uid === data.userId ? 
+      // Si no existe el usuario O si este resultado es más antiguo
+      if (!resultadosPorUsuario.has(userId)) {
+        resultadosPorUsuario.set(userId, {
+          id: docSnapshot.id,
+          ...data
+        });
+      } else {
+        // Comparar fechas para mantener el más antiguo
+        const existente = resultadosPorUsuario.get(userId);
+        const fechaExistente = new Date(existente.fechaRealizacion.seconds * 1000);
+        const fechaNueva = new Date(data.fechaRealizacion.seconds * 1000);
+        
+        if (fechaNueva < fechaExistente) {
+          resultadosPorUsuario.set(userId, {
+            id: docSnapshot.id,
+            ...data
+          });
+        }
+      }
+    });
+
+    // Convertir a array y procesar datos de usuario
+    const resultadosTemp = [];
+    
+    resultadosPorUsuario.forEach((data, userId) => {
+      const userEmail = auth.currentUser?.uid === userId ? 
         auth.currentUser.email : 
-        `estudiante${data.userId.slice(-4)}@vip.com`;
+        `estudiante${userId.slice(-4)}@vip.com`;
       
       const nombre = userEmail.split('@')[0];
       const inicial = nombre.charAt(0).toUpperCase();
       
       resultadosTemp.push({
-        id: docSnapshot.id,
+        id: data.id,
         ...data,
         nombre,
         email: userEmail,
         inicial,
-        esTuyo: auth.currentUser?.uid === data.userId
+        esTuyo: auth.currentUser?.uid === userId
       });
-    }
+    });
 
-    resultados.value = resultadosTemp;
+    // Ordenar por calificación (descendente) y tiempo (ascendente)
+    resultados.value = resultadosTemp.sort((a, b) => {
+      if (b.calificacion !== a.calificacion) {
+        return b.calificacion - a.calificacion;
+      }
+      return a.tiempoUtilizado - b.tiempoUtilizado;
+    });
 
   } catch (err) {
     console.error('Error al cargar ranking VIP:', err);
@@ -274,7 +304,6 @@ const cargarRanking = async () => {
     loading.value = false;
   }
 };
-
 // Propiedades computadas
 const totalParticipantes = computed(() => resultados.value.length);
 
