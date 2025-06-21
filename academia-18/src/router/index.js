@@ -11,6 +11,8 @@ import SimulacroView from "../views/SimulacroView.vue";
 import SimulacroRanking from "../views/SimulacroRanking.vue";
 import SobreNosotros from "../views/AboutView.vue";
 import MatriculaVip from "@/views/MatriculaVip.vue";
+import SimulacroVipView from "@/views/SimulacroVipView.vue";
+import RankingVipView from "@/views/RankingVipView.vue";
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -115,7 +117,7 @@ const router = createRouter({
       component: () => import("../views/CursoView.vue"),
       beforeEnter: requireAuth,
     },
-    // Simulacros
+    // Simulacros regulares
     {
       path: "/simulacro/:id",
       name: "Simulacro",
@@ -127,6 +129,25 @@ const router = createRouter({
       name: "SimulacroRanking",
       component: () => import("../views/SimulacroRanking.vue"),
       beforeEnter: requireAuth,
+    },
+    // 🌟 NUEVAS RUTAS VIP PARA SIMULACROS
+    {
+      path: "/simulacro-vip/:id",
+      name: "SimulacroVip",
+      component: SimulacroVipView,
+      beforeEnter: requireAuth,
+      meta: {
+        requiresVip: true // Opcional: para verificación VIP adicional
+      }
+    },
+    {
+      path: "/simulacro-vip/:id/ranking",
+      name: "RankingVip", 
+      component: RankingVipView,
+      beforeEnter: requireAuth,
+      meta: {
+        requiresVip: true // Opcional: para verificación VIP adicional
+      }
     },
     // Pagina 404 para rutas no encontradas
     {
