@@ -96,25 +96,47 @@
           <div class="main-content-layout">
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
-              <!-- Tarjeta especial de Simulacro VIP -->
+              <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
+<!--
               <div class="curso-card curso-vip simulacro-vip-especial" @click="navegarASimulacroVip">
-                <div class="curso-imagen simulacro-vip-imagen">
-                  <div class="curso-overlay"></div>
-                  <div class="vip-badge-curso simulacro-vip-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                      fill="currentColor">
-                      <polygon
-                        points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-                      </polygon>
-                    </svg>
-                    <span>SIMULACRO VIP #1</span>
-                  </div>
-                </div>
-                <div class="curso-info">
-                  <h2>RENDIR SIMULACRO #1</h2>
-                  <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
-                </div>
-              </div>
+  <div class="curso-imagen simulacro-vip-imagen">
+    <div class="curso-overlay"></div>
+    <div class="vip-badge-curso simulacro-vip-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+        fill="currentColor">
+        <polygon
+          points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
+        </polygon>
+      </svg>
+      <span>SIMULACRO VIP #1</span>
+    </div>
+  </div>
+  <div class="curso-info">
+    <h2>RENDIR SIMULACRO #1</h2>
+    <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
+  </div>
+</div>
+-->
+<!-- VERSIÓN 2: VER RESULTADOS (COMENTADA) -->
+
+<div class="curso-card curso-vip simulacro-vip-especial simulacro-resultados" @click="navegarAResultadosVip">
+  <div class="curso-imagen simulacro-resultados-imagen">
+    <div class="curso-overlay"></div>
+    <div class="vip-badge-curso simulacro-resultados-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+        fill="currentColor">
+        <polygon points="6 2 18 2 22 6 22 18 18 22 6 22 2 18 2 6 6 2"></polygon>
+        <polyline points="6 12 10 16 18 8"></polyline>
+      </svg>
+      <span>RESULTADOS VIP</span>
+    </div>
+  </div>
+  <div class="curso-info">
+    <h2>VER RESULTADOS</h2>
+    <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
+  </div>
+</div>
+
               <!-- Las tarjetas de curso VIP existentes -->
               <div v-for="curso in cursosVip" :key="curso.id" class="curso-card curso-vip"
                 @click="navegarACursoVip(curso.id)">
@@ -381,6 +403,10 @@ Mi email registrado es: ${auth.currentUser?.email}
 
 const navegarASimulacroVip = () => {
   router.push('/simulacro-vip/simulacro1'); // Cambia por el ID real de tu simulacro VIP
+};
+
+const navegarAResultadosVip = () => {
+  router.push('/simulacro-vip/simulacro1/ranking');
 };
 </script>
 
@@ -982,7 +1008,7 @@ const navegarASimulacroVip = () => {
   }
 }
 
-/* Estilos específicos para la tarjeta de simulacro VIP */
+/* Estilos para VERSIÓN 1: RENDIR SIMULACRO (rojo) */
 .simulacro-vip-especial .curso-imagen {
   background: linear-gradient(135deg, #f57070 0%, #a24b4f 50%, #350502 100%);
   position: relative;
@@ -996,7 +1022,7 @@ const navegarASimulacroVip = () => {
   right: -10%;
   width: 200px;
   height: 200px;
-  background: #dc2626; /* Círculo rojo sólido */
+  background: #dc2626;
   opacity: 0.2;
   border-radius: 50%;
   animation: float 6s ease-in-out infinite;
@@ -1010,16 +1036,11 @@ const navegarASimulacroVip = () => {
   left: -10%;
   width: 150px;
   height: 150px;
-  background: #ef4444; /* Círculo rojo sólido */
+  background: #ef4444;
   opacity: 0.15;
   border-radius: 50%;
   animation: float 8s ease-in-out infinite reverse;
   z-index: 2;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(10deg); }
 }
 
 .simulacro-vip-especial .simulacro-vip-badge {
@@ -1038,7 +1059,7 @@ const navegarASimulacroVip = () => {
 }
 
 .simulacro-vip-especial .curso-info h2 {
-  color: #dc2626; /* Título rojo */
+  color: #dc2626;
   font-weight: 700;
   text-align: center;
   font-size: 1.2rem;
@@ -1047,7 +1068,7 @@ const navegarASimulacroVip = () => {
 
 .simulacro-vip-especial .curso-info p {
   text-align: center;
-  font-size: 0.85rem; /* Texto más pequeño */
+  font-size: 0.85rem;
   line-height: 1.4;
   color: #666;
   margin: 0;
@@ -1063,16 +1084,63 @@ const navegarASimulacroVip = () => {
 }
 
 .simulacro-vip-especial:hover .curso-info h2 {
-  color: #b91c1c; /* Rojo más intenso en hover */
+  color: #b91c1c;
 }
 
-/* Responsive para simulacro VIP */
+/* Estilos para VERSIÓN 2: VER RESULTADOS (verde) */
+.simulacro-resultados .curso-imagen {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #065f46 100%) !important;
+}
+
+.simulacro-resultados .curso-imagen::before {
+  background: #16a34a !important;
+}
+
+.simulacro-resultados .curso-imagen::after {
+  background: #22c55e !important;
+}
+
+.simulacro-resultados .simulacro-resultados-badge {
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  color: #333;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  padding: 6px 10px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
+  text-transform: uppercase;
+}
+
+.simulacro-resultados .curso-info h2 {
+  color: #16a34a !important;
+}
+
+.simulacro-resultados:hover {
+  box-shadow: 0 16px 32px rgba(16, 185, 129, 0.3) !important;
+}
+
+.simulacro-resultados:hover .curso-info h2 {
+  color: #15803d !important;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Responsive para ambas versiones */
 @media (max-width: 650px) {
-  .simulacro-vip-especial .curso-info h2 {
+  .simulacro-vip-especial .curso-info h2,
+  .simulacro-resultados .curso-info h2 {
     font-size: 1.1rem;
   }
   
-  .simulacro-vip-especial .curso-info p {
+  .simulacro-vip-especial .curso-info p,
+  .simulacro-resultados .curso-info p {
     font-size: 0.8rem;
   }
 }
