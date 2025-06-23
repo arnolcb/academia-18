@@ -130,7 +130,7 @@ const router = createRouter({
       component: () => import("../views/SimulacroRanking.vue"),
       beforeEnter: requireAuth,
     },
-    // 🌟 NUEVAS RUTAS VIP PARA SIMULACROS
+    /*
     {
       path: "/simulacro-vip/:id",
       name: "SimulacroVip",
@@ -140,6 +140,7 @@ const router = createRouter({
         requiresVip: true // Opcional: para verificación VIP adicional
       }
     },
+    */
     {
       path: "/simulacro-vip/:id/ranking",
       name: "RankingVip", 
