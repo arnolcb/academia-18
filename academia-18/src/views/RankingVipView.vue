@@ -1,21 +1,20 @@
 <template>
   <div class="ranking-container">
-    <!-- Header -->
+    <!-- Header minimalista -->
     <header class="ranking-header">
       <div class="header-content">
         <button @click="volverAAulaVirtual" class="back-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
+            <path d="M19 12H5m7-7l-7 7 7 7"/>
           </svg>
           <span>Volver a Aula Virtual</span>
         </button>
 
-        <div class="ranking-titulo-container">
-          <h1 class="ranking-titulo">Ranking - {{ simulacroTitulo }}</h1>
+        <div class="titulo-section">
+          <h1 class="ranking-titulo">Ranking {{ simulacroTitulo }}</h1>
           <div class="exclusivo-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <polygon points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"></polygon>
             </svg>
             <span>EXCLUSIVO</span>
@@ -40,145 +39,155 @@
 
       <!-- Ranking content -->
       <div v-else class="ranking-main-content">
-        <!-- Encabezado del ranking -->
-        <div class="ranking-header-info">
+        <!-- Info del simulacro -->
+        <div class="simulacro-info">
           <h2>{{ simulacroTitulo }}</h2>
           <p>{{ totalParticipantes }} estudiantes han completado este simulacro</p>
         </div>
 
         <!-- Tu resultado (si existe) -->
         <div v-if="tuPosicion" class="tu-resultado">
-          <h3>Tu resultado</h3>
-          <div class="resultado-detalle">
-            <div class="posicion" :class="getPosicionClass(tuPosicion.posicion)">
-              <span class="puesto-label">PUESTO:</span>
-              <span class="numero">{{ tuPosicion.posicion }}</span>
+          <div class="resultado-header">
+            <h3>Tu resultado</h3>
+          </div>
+          <div class="resultado-grid">
+            <div class="resultado-item posicion-item">
+              <span class="puesto-label">PUESTO</span>
+              <span class="numero" :class="getPosicionClass(tuPosicion.posicion)">{{ tuPosicion.posicion }}</span>
             </div>
-            <div class="puntuacion">
-              <div class="valor">{{ tuPosicion.calificacion }}</div>
-              <div class="label">puntos</div>
+            <div class="resultado-item">
+              <span class="label">PUNTOS</span>
+              <span class="valor">{{ tuPosicion.calificacion }}</span>
             </div>
-            <div class="correctas">
-              <div class="valor">{{ tuPosicion.correctas }}</div>
-              <div class="label">correctas</div>
+            <div class="resultado-item">
+              <span class="label">CORRECTAS</span>
+              <span class="valor">{{ tuPosicion.correctas }}/30</span>
             </div>
-            <div class="tiempo">
-              <div class="valor">{{ formatearTiempo(tuPosicion.tiempoUtilizado) }}</div>
-              <div class="label">tiempo</div>
+            <div class="resultado-item">
+              <span class="label">TIEMPO</span>
+              <span class="valor">{{ formatearTiempo(tuPosicion.tiempoUtilizado) }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Tabla de ranking responsive -->
+        <!-- Tabla de ranking limpia -->
         <div class="ranking-table-container">
           <!-- Vista Desktop -->
-          <div class="desktop-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Posición</th>
-                  <th>Estudiante</th>
-                  <th>Puntuación</th>
-                  <th>Respuestas correctas</th>
-                  <th>Tiempo</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(resultado, index) in resultados" :key="resultado.id" 
-                    :class="{ 'mi-fila': resultado.esTuyo }">
-                  <td class="posicion-col">
-                    <div class="posicion-badge" :class="getPosicionClass(index + 1)">
-                      {{ index + 1 }}
-                    </div>
-                  </td>
-                  <td class="estudiante-col">
-                    <div class="estudiante-info">
-                      <div class="avatar">{{ resultado.inicial }}</div>
-                      <div class="nombre">
-                        {{ resultado.nombre }}
-                        <span v-if="resultado.esTuyo">(Tú)</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="puntuacion-col">{{ resultado.calificacion }}</td>
-                  <td class="correctas-col">{{ resultado.correctas }} / 30</td>
-                  <td class="tiempo-col">{{ formatearTiempo(resultado.tiempoUtilizado) }}</td>
-                  <td class="fecha-col">{{ formatearFecha(resultado.fechaRealizacion) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="desktop-view">
+            <div class="table-header">
+              <div class="header-col pos-col">Pos</div>
+              <div class="header-col student-col">Estudiante</div>
+              <div class="header-col score-col">Puntos</div>
+              <div class="header-col correct-col">Correctas</div>
+              <div class="header-col time-col">Tiempo</div>
+              <div class="header-col date-col">Fecha</div>
+            </div>
 
-          <!-- Vista Mobile -->
-          <div class="mobile-cards">
-            <div v-for="(resultado, index) in resultados" :key="resultado.id" 
-                 :class="{ 
-                   'result-card': true, 
-                   'mi-card': resultado.esTuyo,
-                   'top-3': index < 3 
-                 }">
-              
-              <!-- Header de la card -->
-              <div class="card-header">
-                <div class="posicion-mobile" :class="getPosicionClass(index + 1)">
-                  <span class="numero">{{ index + 1 }}°</span>
-                  <div class="medal" v-if="index < 3">
-                    <svg v-if="index === 0" width="16" height="16" fill="#ffd700" viewBox="0 0 24 24">
-                      <path d="M12 2L9 9l-7 1 5.5 4.5L6 22l6-3 6 3-1.5-7.5L22 10l-7-1-3-7z"/>
-                    </svg>
-                    <svg v-else-if="index === 1" width="16" height="16" fill="#c0c0c0" viewBox="0 0 24 24">
-                      <path d="M12 2L9 9l-7 1 5.5 4.5L6 22l6-3 6 3-1.5-7.5L22 10l-7-1-3-7z"/>
-                    </svg>
-                    <svg v-else width="16" height="16" fill="#cd7f32" viewBox="0 0 24 24">
-                      <path d="M12 2L9 9l-7 1 5.5 4.5L6 22l6-3 6 3-1.5-7.5L22 10l-7-1-3-7z"/>
-                    </svg>
+            <div class="table-body">
+              <div v-for="(resultado, index) in resultados" :key="resultado.id" 
+                   :class="{ 
+                     'table-row': true,
+                     'my-row': resultado.esTuyo,
+                     'top-row': index < 3
+                   }">
+                
+                <div class="table-col pos-col">
+                  <div class="position-badge" :class="getPosicionClass(index + 1)">
+                    <span v-if="index === 0" class="medal">🥇</span>
+                    <span v-else-if="index === 1" class="medal">🥈</span>
+                    <span v-else-if="index === 2" class="medal">🥉</span>
+                    <span v-else class="pos-number">{{ index + 1 }}</span>
                   </div>
                 </div>
                 
-                <div class="estudiante-mobile">
+                <div class="table-col student-col">
+                  <div class="student-info">
+                    <div class="avatar">{{ resultado.inicial }}</div>
+                    <div class="student-details">
+                      <span class="name">{{ resultado.nombre }}</span>
+                      <span v-if="resultado.esTuyo" class="you-tag">Tú</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="table-col score-col">
+                  <span class="score">{{ resultado.calificacion }}</span>
+                </div>
+                
+                <div class="table-col correct-col">
+                  <span class="correct">{{ resultado.correctas }}/30</span>
+                </div>
+                
+                <div class="table-col time-col">
+                  <span class="time">{{ formatearTiempo(resultado.tiempoUtilizado) }}</span>
+                </div>
+                
+                <div class="table-col date-col">
+                  <span class="date">{{ formatearFecha(resultado.fechaRealizacion) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vista Mobile -->
+          <div class="mobile-view">
+            <div v-for="(resultado, index) in resultados" :key="resultado.id" 
+                 :class="{ 
+                   'mobile-card': true, 
+                   'my-card': resultado.esTuyo,
+                   'top-card': index < 3 
+                 }">
+              
+              <div class="card-header">
+                <div class="position-section">
+                  <div class="position-badge" :class="getPosicionClass(index + 1)">
+                    <span v-if="index === 0" class="medal">🥇</span>
+                    <span v-else-if="index === 1" class="medal">🥈</span>
+                    <span v-else-if="index === 2" class="medal">🥉</span>
+                    <span v-else class="pos-number">{{ index + 1 }}</span>
+                  </div>
+                </div>
+                
+                <div class="student-section">
                   <div class="avatar">{{ resultado.inicial }}</div>
-                  <div class="nombre">
+                  <div class="student-name">
                     {{ resultado.nombre }}
-                    <span v-if="resultado.esTuyo" class="tu-badge">Tú</span>
+                    <span v-if="resultado.esTuyo" class="you-tag">Tú</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Datos de la card -->
-              <div class="card-datos">
-                <div class="dato-item">
-                  <span class="dato-label">Puntuación</span>
-                  <span class="dato-valor puntuacion">{{ resultado.calificacion }}</span>
+              <div class="card-data">
+                <div class="data-row">
+                  <div class="data-item">
+                    <span class="data-label">Puntos</span>
+                    <span class="data-value score">{{ resultado.calificacion }}</span>
+                  </div>
+                  <div class="data-item">
+                    <span class="data-label">Correctas</span>
+                    <span class="data-value">{{ resultado.correctas }}/30</span>
+                  </div>
                 </div>
-                <div class="dato-item">
-                  <span class="dato-label">Correctas</span>
-                  <span class="dato-valor">{{ resultado.correctas }}/30</span>
-                </div>
-                <div class="dato-item">
-                  <span class="dato-label">Tiempo</span>
-                  <span class="dato-valor">{{ formatearTiempo(resultado.tiempoUtilizado) }}</span>
-                </div>
-                <div class="dato-item">
-                  <span class="dato-label">Fecha</span>
-                  <span class="dato-valor fecha">{{ formatearFecha(resultado.fechaRealizacion) }}</span>
+                <div class="data-row">
+                  <div class="data-item">
+                    <span class="data-label">Tiempo</span>
+                    <span class="data-value">{{ formatearTiempo(resultado.tiempoUtilizado) }}</span>
+                  </div>
+                  <div class="data-item">
+                    <span class="data-label">Fecha</span>
+                    <span class="data-value date-small">{{ formatearFecha(resultado.fechaRealizacion) }}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Mensaje si no hay resultados -->
-        <div v-if="resultados.length === 0" class="no-resultados">
-          <div class="no-resultados-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="M21 21l-4.35-4.35"></path>
-            </svg>
-          </div>
+        <!-- Estado vacío -->
+        <div v-if="resultados.length === 0" class="empty-state">
+          <div class="empty-icon">📊</div>
           <h3>No hay resultados aún</h3>
-          <p>Sé el primero en completar este simulacro y aparecer en el ranking.</p>
+          <p>Sé el primero en completar este simulacro y aparecer en el ranking</p>
         </div>
       </div>
     </main>
@@ -320,17 +329,10 @@ const tuPosicion = computed(() => {
 
 // Funciones de utilidad
 const getPosicionClass = (posicion) => {
-  if (posicion === 1) return 'primero';
-  if (posicion === 2) return 'segundo';
-  if (posicion === 3) return 'tercero';
+  if (posicion === 1) return 'first';
+  if (posicion === 2) return 'second';
+  if (posicion === 3) return 'third';
   return '';
-};
-
-const getTextoPos = (posicion) => {
-  if (posicion === 1) return 'er';
-  if (posicion === 2) return 'do';
-  if (posicion === 3) return 'er';
-  return 'to';
 };
 
 const formatearTiempo = (tiempoEnSegundos) => {
@@ -363,24 +365,37 @@ const volverAAulaVirtual = () => {
 </script>
 
 <style scoped>
-.ranking-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #fff9e6 100%);
+/* Fuentes modernas */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
+.ranking-container {
+  min-height: 100vh;
+  background: #fafafa;
+  color: #1a1a1a;
+}
+
+/* Header minimalista */
 .ranking-header {
-  background: linear-gradient(135deg, #ffffff 0%, #fff9e6 100%);
+  background: white;
   border-bottom: 2px solid #ffd700;
-  box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
-  padding: 1rem 2rem;
+  border-top: 2px solid #ffd700;
+  padding: 1.5rem 0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 12px rgba(255, 215, 0, 0.15);
 }
 
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -395,30 +410,34 @@ const volverAAulaVirtual = () => {
   color: #333;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-  padding: 0.7rem 1.2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.75rem 1rem;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
 }
 
 .back-btn:hover {
   background: linear-gradient(135deg, #ffb347, #ffd700);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
 }
 
-.ranking-titulo-container {
+.titulo-section {
+  flex: 1;
+  text-align: center;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 
 .ranking-titulo {
-  color: #333;
-  font-size: 1.4rem;
+  color: #2a2a2a;
+  font-size: 1.75rem;
   font-weight: 600;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .exclusivo-badge {
@@ -428,18 +447,19 @@ const volverAAulaVirtual = () => {
   background: linear-gradient(135deg, #ffd700, #ffb347);
   color: #333;
   font-weight: 700;
-  font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.25);
 }
 
+/* Contenido principal */
 .ranking-content {
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
+  margin: 0 auto;
+  padding: 3rem 2rem;
 }
 
 .estado-container {
@@ -447,16 +467,17 @@ const volverAAulaVirtual = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: 5rem 2rem;
   text-align: center;
+  color: #6a6a6a;
 }
 
 .loading-spinner {
-  border: 4px solid rgba(255, 215, 0, 0.1);
+  width: 32px;
+  height: 32px;
+  border: 2px solid #e8e8e8;
+  border-top: 2px solid #4a90e2;
   border-radius: 50%;
-  border-top: 4px solid #ffd700;
-  width: 40px;
-  height: 40px;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
 }
@@ -467,446 +488,425 @@ const volverAAulaVirtual = () => {
 }
 
 .error-container {
-  color: #d32f2f;
+  color: #dc3545;
 }
 
 .retry-btn {
-  margin-top: 1rem;
-  padding: 0.7rem 1.5rem;
-  background-color: #0052af;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #4a90e2;
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .retry-btn:hover {
-  background-color: #003c8f;
+  background: #357abd;
 }
 
-/* Encabezado del ranking */
-.ranking-header-info {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+/* Info del simulacro */
+.simulacro-info {
   text-align: center;
-  border: 2px solid #ffd700;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
+  margin-bottom: 3rem;
 }
 
-.ranking-header-info h2 {
-  color: #0052af;
+.simulacro-info h2 {
+  color: #2a2a2a;
+  font-size: 1.5rem;
+  font-weight: 600;
   margin: 0 0 0.5rem;
-  font-size: 1.8rem;
+  letter-spacing: -0.02em;
 }
 
-.ranking-header-info p {
+.simulacro-info p {
+  color: #6a6a6a;
+  font-size: 1rem;
   margin: 0;
-  color: #666;
 }
 
 /* Tu resultado */
 .tu-resultado {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e8e8e8;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.tu-resultado h3 {
-  margin: 0 0 1rem;
-  color: white;
+.resultado-header h3 {
+  color: #2a2a2a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+}
+
+.resultado-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 2rem;
+}
+
+.resultado-item {
+  text-align: center;
+}
+
+.puesto-label,
+.label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.numero,
+.valor {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2a2a2a;
+  line-height: 1;
+}
+
+.numero.first {
+  color: #ff6b35;
+}
+
+.numero.second {
+  color: #4a90e2;
+}
+
+.numero.third {
+  color: #28a745;
+}
+
+/* Tabla de ranking */
+.ranking-table-container {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Vista Desktop */
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 100px 80px 120px;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.header-col {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6a6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-body {
+  padding: 0.5rem 0;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 100px 80px 120px;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  align-items: center;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.table-row:hover {
+  background: #fafafa;
+}
+
+.table-row.my-row {
+  background: #f0f8ff;
+  border-left: 3px solid #4a90e2;
+}
+
+.table-row.top-row {
+  background: #fffbf0;
+}
+
+.table-col {
+  display: flex;
+  align-items: center;
+}
+
+.position-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.medal {
   font-size: 1.2rem;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.student-details {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.resultado-detalle {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: center;
+.name {
+  font-weight: 500;
+  color: #2a2a2a;
 }
 
-.posicion {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.puesto-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  opacity: 0.9;
-  margin-bottom: 0.2rem;
-  letter-spacing: 1px;
-}
-
-.posicion .numero {
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.posicion.primero {
-  color: #ffd700;
-}
-
-.posicion.segundo {
-  color: #c0c0c0;
-}
-
-.posicion.tercero {
-  color: #cd7f32;
-}
-
-.puntuacion, .correctas, .tiempo {
-  text-align: center;
-}
-
-.valor {
-  font-size: 1.8rem;
-  font-weight: 600;
+.you-tag {
+  background: #4a90e2;
   color: white;
-  margin-bottom: 0.3rem;
-}
-
-.label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* Tabla responsive */
-.ranking-table-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  border: 2px solid #ffd700;
-}
-
-/* Vista Desktop */
-.desktop-table {
-  display: block;
-}
-
-.mobile-cards {
-  display: none;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  padding: 1rem;
-  text-align: left;
-  background: linear-gradient(135deg, #f8f9fa, #fff9e6);
-  color: #555;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid #e0e0e0;
 }
 
-td {
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-  color: #333;
+.score {
+  font-weight: 700;
+  color: #ff6b35;
 }
 
-tr.mi-fila {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(255, 249, 230, 0.5));
-}
-
-.posicion-col {
-  width: 80px;
-  text-align: center;
-}
-
-.posicion-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #f8f9fa;
-  font-weight: 600;
-}
-
-.posicion-badge.primero {
-  background-color: #fff9e6;
-  color: #ffd700;
-  border: 2px solid #ffd700;
-}
-
-.posicion-badge.segundo {
-  background-color: #f5f5f5;
-  color: #757575;
-  border: 2px solid #bdbdbd;
-}
-
-.posicion-badge.tercero {
-  background-color: #f9f2ec;
-  color: #cd7f32;
-  border: 2px solid #cd7f32;
-}
-
-.estudiante-col {
-  min-width: 200px;
-}
-
-.estudiante-info {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.nombre {
+.correct,
+.time {
+  color: #2a2a2a;
   font-weight: 500;
 }
 
-.nombre span {
-  font-weight: normal;
-  font-size: 0.9rem;
-  opacity: 0.7;
-  margin-left: 0.3rem;
+.date {
+  color: #6a6a6a;
+  font-size: 0.85rem;
 }
 
-.puntuacion-col {
-  font-weight: 600;
-  color: #0052af;
-}
-
-/* Vista Mobile Cards */
-.result-card {
+/* Vista Mobile */
+.mobile-card {
   background: white;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0;
-  overflow: hidden;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 1.25rem;
 }
 
-.result-card.mi-card {
-  border: 2px solid #ffd700;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(255, 249, 230, 0.3));
+.mobile-card.my-card {
+  background: #f0f8ff;
+  border-left: 3px solid #4a90e2;
 }
 
-.result-card.top-3 {
-  border: 2px solid #ffd700;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), white);
+.mobile-card.top-card {
+  background: #fffbf0;
 }
 
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f8f9fa, #fff9e6);
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.posicion-mobile {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.posicion-mobile.primero {
-  color: #ffd700;
-}
-
-.posicion-mobile.segundo {
-  color: #c0c0c0;
-}
-
-.posicion-mobile.tercero {
-  color: #cd7f32;
-}
-
-.estudiante-mobile {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.estudiante-mobile .avatar {
-  width: 35px;
-  height: 35px;
-  font-size: 1rem;
-}
-
-.tu-badge {
-  background: linear-gradient(135deg, #ffd700, #ffb347);
-  color: #333;
-  font-size: 0.7rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 8px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-left: 0.5rem;
-}
-
-.card-datos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-  padding: 1rem;
-}
-
-.dato-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.dato-label {
-  font-size: 0.8rem;
-  color: #666;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.3rem;
-}
-
-.dato-valor {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.dato-valor.puntuacion {
-  color: #0052af;
-  font-weight: 700;
-}
-
-.dato-valor.fecha {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.no-resultados {
-  text-align: center;
-  padding: 3rem;
-  color: #666;
-}
-
-.no-resultados-icon {
-  color: #ffd700;
   margin-bottom: 1rem;
 }
 
-.no-resultados h3 {
-  margin: 0 0 0.5rem;
-  color: #333;
+.position-section .position-badge {
+  width: 36px;
+  height: 36px;
 }
 
-/* Responsive breakpoints */
+.student-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.student-name {
+  font-weight: 500;
+  color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.data-item {
+  text-align: center;
+}
+
+.data-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.data-value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+.data-value.score {
+  color: #ff6b35;
+  font-weight: 700;
+}
+
+.data-value.date-small {
+  font-size: 0.8rem;
+  color: #6a6a6a;
+  font-weight: 500;
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #6a6a6a;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: #2a2a2a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .ranking-header {
+    padding: 1rem 0;
+  }
+
   .header-content {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
   }
 
-  .ranking-titulo-container {
+  .titulo-section {
+    text-align: left;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
-    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .ranking-titulo {
+    font-size: 1.5rem;
+  }
+
+  .exclusivo-badge {
+    align-self: flex-start;
   }
 
   .back-btn {
-    width: 100%;
+    align-self: stretch;
     justify-content: center;
   }
 
   .ranking-content {
-    padding: 0 1rem;
-    margin: 1rem auto;
+    padding: 2rem 1rem;
   }
 
-  .ranking-header-info {
-    padding: 1rem;
+  .tu-resultado {
+    padding: 1.5rem;
   }
 
-  .ranking-header-info h2 {
-    font-size: 1.5rem;
+  .resultado-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
-  .resultado-detalle {
-    justify-content: space-around;
-    gap: 1rem;
-  }
-
-  .posicion .numero {
-    font-size: 2rem;
-  }
-
-  .valor {
-    font-size: 1.5rem;
-  }
-
-  /* Ocultar tabla desktop, mostrar cards mobile */
-  .desktop-table {
+  /* Ocultar desktop, mostrar mobile */
+  .desktop-view {
     display: none;
   }
 
-  .mobile-cards {
+  .mobile-view {
     display: block;
-    padding: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .ranking-titulo {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
 
-  .exclusivo-badge {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-  }
-
-  .card-datos {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-    padding: 0.8rem;
-  }
-
-  .dato-valor {
-    font-size: 1rem;
-  }
-
-  .resultado-detalle {
-    flex-direction: column;
+  .resultado-grid {
+    grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .mobile-card {
+    padding: 1rem;
+  }
+
+  .data-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 }
 </style>
