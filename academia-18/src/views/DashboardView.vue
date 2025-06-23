@@ -128,11 +128,11 @@
         <polygon points="6 2 18 2 22 6 22 18 18 22 6 22 2 18 2 6 6 2"></polygon>
         <polyline points="6 12 10 16 18 8"></polyline>
       </svg>
-      <span>RESULTADOS VIP</span>
+      <span>RESULTADOS</span>
     </div>
   </div>
   <div class="curso-info">
-    <h2>VER RESULTADOS</h2>
+    <h2>SIMULACRO #1 RESULTADOS</h2>
     <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
   </div>
 </div>
