@@ -108,11 +108,11 @@
           points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
         </polygon>
       </svg>
-      <span>SIMULACRO VIP #1</span>
+      <span>SIMULACRO VIP #2</span>
     </div>
   </div>
   <div class="curso-info">
-    <h2>RENDIR SIMULACRO #1</h2>
+    <h2>RENDIR SIMULACRO #2</h2>
     <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
   </div>
 </div>
