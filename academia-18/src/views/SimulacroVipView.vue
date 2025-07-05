@@ -58,7 +58,7 @@
               </svg>
             </div>
             <h2>{{ simulacro.titulo }} - VIP</h2>
-            <p class="vip-subtitle">Simulacro exclusivo para estudiantes VIP con preguntas premium</p>
+            <p class="vip-subtitle">Simulacro exclusivo con preguntas del ENP</p>
           </div>
           
           <div class="info-simulacro">
@@ -68,7 +68,7 @@
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              <span>Duración: 70 minutos</span>
+              <span>Duración: 2 horas y 5 minutos</span>
             </div>
             <div class="info-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -100,7 +100,6 @@
               <li>Puedes alternar entre las preguntas usando los botones de navegación.</li>
               <li>Una vez finalizado el tiempo o enviado el examen, se mostrará tu calificación final.</li>
               <li>No podrás retomar el examen una vez finalizado.</li>
-              <li>🌟 Como estudiante VIP, tendrás acceso a una revisión detallada de tus respuestas al finalizar.</li>
             </ul>
           </div>
           <button @click="iniciarExamen" class="btn-iniciar">
@@ -131,7 +130,7 @@
           </div>
 
           <div class="pregunta-contenido">
-            <h3>{{ preguntas[preguntaActual].enunciado }}</h3>
+            <h3 v-html="preguntas[preguntaActual].enunciado"></h3>
             
             <!-- Imagen de la pregunta (si existe) -->
             <div v-if="preguntas[preguntaActual].imagen" class="pregunta-imagen">
@@ -1351,6 +1350,11 @@ watch(examenIniciado, (newVal) => {
 
 .btn-confirmar:hover {
   background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+h3 .texto-negrita {
+    font-weight: 900 !important;
+    font-family: Arial, sans-serif !important;
 }
 
 /* Responsive design */
