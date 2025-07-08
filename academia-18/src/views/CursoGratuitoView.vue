@@ -15,8 +15,9 @@
         <div class="curso-titulo-container">
           <h1 class="curso-titulo">{{ curso.titulo || 'Cargando...' }}</h1>
           <div class="curso-gratuito-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
             <span>GRATUITO</span>
           </div>
@@ -91,6 +92,13 @@
                       <polygon points="23 7 16 12 23 17 23 7"></polygon>
                       <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
                     </svg>
+
+                    <svg v-else-if="recurso.tipo === 'tarea'" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
                   </div>
 
                   <div class="recurso-info">
@@ -99,7 +107,7 @@
 
                     <!-- Botones de acción según el tipo -->
                     <div class="recurso-acciones">
-                      <button v-if="recurso.tipo === 'guia'"
+                      <button v-if="recurso.tipo === 'guia' || recurso.tipo === 'tarea'"
                         @click="handleDescargar(recurso)" class="accion-btn descargar-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -119,6 +127,16 @@
                         </svg>
                         <span>Ver clase</span>
                       </button>
+
+                      <button v-if="recurso.tipo === 'tarea'" @click="abrirRecursoModal(recurso, 'tarea')"
+                        class="accion-btn responder-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="9 11 12 14 22 4"></polyline>
+                          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                        <span>Responder</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -131,8 +149,11 @@
         <div class="conversion-cta">
           <div class="cta-card">
             <div class="cta-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"></polygon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon
+                  points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
+                </polygon>
               </svg>
             </div>
             <h3>¿Te gustó este contenido?</h3>
@@ -145,7 +166,7 @@
       </div>
     </main>
 
-    <!-- Modal para clases -->
+    <!-- Modal para clases y tareas -->
     <div v-if="modalVisible" class="recurso-modal">
       <div class="modal-overlay" @click="cerrarModal"></div>
 
@@ -172,6 +193,80 @@
               <p>{{ recursoActivo.descripcion }}</p>
             </div>
           </div>
+
+          <!-- Contenido para tarea -->
+          <div v-if="modalTipo === 'tarea'" class="tarea-container">
+            <!-- Instrucciones de la tarea -->
+            <div class="tarea-instrucciones">
+              <h4>Instrucciones</h4>
+              <p>{{ recursoActivo.descripcion }}</p>
+              <div class="tarea-archivo">
+                <button @click="handleDescargarEnModal(recursoActivo)" class="archivo-link">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                  <span>Ver documento de tarea</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Formulario de respuestas -->
+            <div class="formulario-tarea">
+              <!-- Mostrar formulario solo si no hay resultado -->
+              <div v-if="!resultadoTarea">
+                <h4>Respuestas</h4>
+                <p class="instruccion-tarea">Ingresa las respuestas a las preguntas:</p>
+
+                <form @submit.prevent="enviarRespuestas" class="respuestas-form">
+                  <div class="preguntas-container">
+                    <div v-for="i in 10" :key="i" class="pregunta-item">
+                      <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
+                      <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text"
+                        placeholder="Tu respuesta" required />
+                    </div>
+                  </div>
+
+                  <div class="submit-container">
+                    <button type="submit" class="submit-respuestas" :disabled="enviandoRespuestas">
+                      <span v-if="enviandoRespuestas">Enviando...</span>
+                      <span v-else>Enviar respuestas</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Resultado después de enviar -->
+              <div v-if="resultadoTarea" class="resultado-tarea resultado-completo">
+                <h4>Calificación</h4>
+                <div class="calificacion">
+                  <div class="nota" :class="resultadoTarea.clase">{{ resultadoTarea.nota }}/10</div>
+                  <div class="retroalimentacion">
+                    <p>{{ resultadoTarea.mensaje }}</p>
+                  </div>
+                  <!-- Enlace al solucionario -->
+                  <div v-if="solucionarioInfo" class="solucionario-descarga">
+                    <h5>Descarga el solucionario:</h5>
+                    <a :href="solucionarioInfo.url" target="_blank" class="solucionario-link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                      {{ solucionarioInfo.nombre }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -194,8 +289,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { db } from '@/firebase';
-import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
+import { doc, getDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, where } from 'firebase/firestore';
 
 // Router y route
 const router = useRouter();
@@ -212,6 +307,12 @@ const semanaActiva = ref(null);
 const modalVisible = ref(false);
 const modalTipo = ref('');
 const recursoActivo = ref({});
+
+// Variables para tareas
+const respuestas = ref(Array(10).fill(''));
+const enviandoRespuestas = ref(false);
+const resultadoTarea = ref(null);
+const solucionarioInfo = ref(null);
 
 // Toast
 const toast = ref({
@@ -236,7 +337,7 @@ const cargarCurso = async () => {
     }
 
     // Obtener datos del curso desde la colección regular
-    const cursoDoc = await getDoc(doc(db, 'cursos', cursoId));
+    const cursoDoc = await getDoc(doc(db, 'cursos2', cursoId));
     if (!cursoDoc.exists()) {
       throw new Error('El curso no existe');
     }
@@ -247,24 +348,24 @@ const cargarCurso = async () => {
     };
 
     // Obtener semanas del curso
-    const semanasRef = collection(db, `cursos/${cursoId}/semanas`);
+    const semanasRef = collection(db, `cursos2/${cursoId}/semanas`);
     const q = query(semanasRef, orderBy('orden', 'asc'));
     const semanasSnapshot = await getDocs(q);
 
     // Crear array de semanas
     const semanasTemp = [];
     for (const semanaDoc of semanasSnapshot.docs) {
-      // Para cada semana, obtener sus recursos (solo guías y clases, no tareas)
-      const recursosRef = collection(db, `cursos/${cursoId}/semanas/${semanaDoc.id}/recursos`);
+      // Para cada semana, obtener sus recursos
+      const recursosRef = collection(db, `cursos2/${cursoId}/semanas/${semanaDoc.id}/recursos`);
       const recursosSnapshot = await getDocs(recursosRef);
 
-      // Filtrar solo recursos públicos (guías y clases)
+      // Incluir todos los recursos (guías, clases y tareas)
       const recursos = recursosSnapshot.docs
         .map(doc => ({
           id: doc.id,
           ...doc.data()
         }))
-        .filter(recurso => recurso.tipo === 'guia' || recurso.tipo === 'clase');
+        .filter(recurso => recurso.tipo === 'guia' || recurso.tipo === 'clase' || recurso.tipo === 'tarea');
 
       // Añadir semana con sus recursos
       semanasTemp.push({
@@ -325,12 +426,198 @@ const abrirRecursoModal = (recurso, tipo) => {
   recursoActivo.value = recurso;
   modalTipo.value = tipo;
   modalVisible.value = true;
+
+  if (tipo === 'tarea') {
+    respuestas.value = Array(10).fill('');
+    resultadoTarea.value = null;
+    solucionarioInfo.value = null;
+    cargarRespuestaPrevia(recurso.id);
+  }
+};
+
+const handleDescargarEnModal = (recurso) => {
+  if (!recurso.archivoUrl || recurso.archivoUrl.trim() === '') {
+    showToast('El archivo no está disponible en este momento. Por favor, vuelve más tarde.', 'error');
+    return;
+  }
+  window.open(recurso.archivoUrl, '_blank');
 };
 
 // Cerrar modal
 const cerrarModal = () => {
   modalVisible.value = false;
   recursoActivo.value = {};
+  respuestas.value = Array(10).fill('');
+  resultadoTarea.value = null;
+  solucionarioInfo.value = null;
+};
+
+// Cargar respuesta previa de tarea
+const cargarRespuestaPrevia = async (recursoId) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const cursoId = route.params.id;
+    const semanaId = semanaActiva.value;
+
+    const respuestasRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
+    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const respuestasSnapshot = await getDocs(q);
+
+    if (!respuestasSnapshot.empty) {
+      const respuestaDoc = respuestasSnapshot.docs[0];
+      const respuestaData = respuestaDoc.data();
+
+      respuestas.value = respuestaData.respuestas.map(r => r.respuesta);
+      const nota = respuestaData.calificacion;
+      let claseNota = 'malo';
+      if (nota >= 9) claseNota = 'excelente';
+      else if (nota >= 7) claseNota = 'bueno';
+      else if (nota >= 5) claseNota = 'regular';
+
+      resultadoTarea.value = {
+        nota: respuestaData.calificacion,
+        mensaje: respuestaData.retroalimentacion,
+        clase: claseNota
+      };
+
+      if (resultadoTarea.value) {
+        await cargarSolucionario(recursoId);
+      }
+    }
+  } catch (err) {
+    console.error('Error al cargar respuesta previa:', err);
+  }
+};
+
+// Enviar respuestas de tarea
+const enviarRespuestas = async () => {
+  enviandoRespuestas.value = true;
+  resultadoTarea.value = null;
+
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error('No se ha iniciado sesión');
+
+    const cursoId = route.params.id;
+    const semanaId = semanaActiva.value;
+    const recursoId = recursoActivo.value.id;
+
+    const respuestasFormateadas = respuestas.value.map((respuesta, index) => ({
+      pregunta: index + 1,
+      respuesta: respuesta.trim()
+    }));
+
+    // Obtener solucionario
+    const solucionariosRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    const solucionariosSnapshot = await getDocs(solucionariosRef);
+
+    if (solucionariosSnapshot.empty) {
+      throw new Error('No se encontró el solucionario para esta tarea');
+    }
+
+    const solucionarioDoc = solucionariosSnapshot.docs[0];
+    const solucionarioData = solucionarioDoc.data();
+
+    // Calcular calificación
+    const solucionario = solucionarioData.respuestas.map(resp => JSON.parse(resp));
+    let aciertos = 0;
+    let total = solucionario.length;
+
+    for (let i = 0; i < total; i++) {
+      const respuestaEstudiante = respuestasFormateadas[i].respuesta.toUpperCase();
+      const respuestaCorrecta = solucionario[i].respuesta.toUpperCase();
+
+      if (respuestaEstudiante === respuestaCorrecta) {
+        aciertos += solucionario[i].valor || 1;
+      }
+    }
+
+    const nota = Math.round((aciertos / total) * 10);
+
+    // Generar retroalimentación
+    let retroalimentacion = '';
+    if (nota >= 9) {
+      retroalimentacion = '¡Excelente trabajo! Has dominado este tema.';
+    } else if (nota >= 7) {
+      retroalimentacion = 'Buen trabajo. Has comprendido la mayoría de los conceptos.';
+    } else if (nota >= 5) {
+      retroalimentacion = 'Aprobado. Hay algunos conceptos que deberías revisar.';
+    } else {
+      retroalimentacion = 'Necesitas repasar los conceptos básicos de este tema.';
+    }
+
+    // Guardar respuestas en Firestore
+    const respuestasRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
+    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const respuestasSnapshot = await getDocs(q);
+
+    if (respuestasSnapshot.empty) {
+      await addDoc(respuestasRef, {
+        userId: user.uid,
+        respuestas: respuestasFormateadas,
+        calificacion: nota,
+        retroalimentacion,
+        fechaEnvio: new Date()
+      });
+    } else {
+      const respuestaDoc = respuestasSnapshot.docs[0];
+      await updateDoc(doc(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas/${respuestaDoc.id}`), {
+        respuestas: respuestasFormateadas,
+        calificacion: nota,
+        retroalimentacion,
+        fechaEnvio: new Date()
+      });
+    }
+
+    // Determinar clase CSS según la nota
+    let claseNota = 'malo';
+    if (nota >= 9) claseNota = 'excelente';
+    else if (nota >= 7) claseNota = 'bueno';
+    else if (nota >= 5) claseNota = 'regular';
+
+    // Mostrar resultado
+    resultadoTarea.value = {
+      nota,
+      mensaje: retroalimentacion,
+      clase: claseNota
+    };
+
+    // Cargar información del solucionario
+    await cargarSolucionario(recursoId);
+
+  } catch (err) {
+    console.error('Error al enviar respuestas:', err);
+    showToast('No se pudieron enviar las respuestas. Por favor, intenta de nuevo.', 'error');
+  } finally {
+    enviandoRespuestas.value = false;
+  }
+};
+
+// Cargar información del solucionario
+const cargarSolucionario = async (recursoId) => {
+  try {
+    const cursoId = route.params.id;
+    const semanaId = semanaActiva.value;
+
+    const solucionariosRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
+    const solucionariosSnapshot = await getDocs(solucionariosRef);
+
+    if (!solucionariosSnapshot.empty) {
+      const solucionarioDoc = solucionariosSnapshot.docs[0];
+      const data = solucionarioDoc.data();
+
+      if (data.archivoUrl && data.nombreArchivo) {
+        solucionarioInfo.value = {
+          url: data.archivoUrl,
+          nombre: data.nombreArchivo
+        };
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar solucionario:', error);
+  }
 };
 </script>
 
@@ -624,6 +911,11 @@ const cerrarModal = () => {
   color: white;
 }
 
+.recurso-tipo.tarea {
+  background-color: #ff9800;
+  color: white;
+}
+
 .recurso-info {
   flex: 1;
 }
@@ -676,6 +968,15 @@ const cerrarModal = () => {
 
 .ver-btn:hover {
   background-color: #1976d2;
+}
+
+.responder-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.responder-btn:hover {
+  background-color: #f57c00;
 }
 
 /* CTA de conversión */
@@ -834,6 +1135,7 @@ const cerrarModal = () => {
   flex: 1;
 }
 
+/* Contenido específico del modal */
 .clase-container .video-wrapper {
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -856,6 +1158,223 @@ const cerrarModal = () => {
 .clase-descripcion h4 {
   margin: 0 0 0.8rem;
   color: #333;
+}
+
+.tarea-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.tarea-instrucciones h4,
+.formulario-tarea h4 {
+  margin: 0 0 0.8rem;
+  color: #333;
+}
+
+.tarea-archivo {
+  margin-top: 1rem;
+}
+
+.archivo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0052af;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.7rem 1.2rem;
+  background-color: #f8f9fa;
+  border: 2px solid #0052af;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.archivo-link:hover {
+  background-color: #0052af;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 82, 175, 0.2);
+}
+
+.instruccion-tarea {
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.pregunta-item {
+  margin-bottom: 1rem;
+}
+
+.pregunta-item label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.pregunta-item input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.submit-container {
+  margin-top: 1.5rem;
+}
+
+.submit-respuestas {
+  padding: 0.8rem 1.5rem;
+  background-color: #0052af;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-respuestas:hover {
+  background-color: #003c8f;
+}
+
+/* Resultado completo - DISEÑO MINIMALISTA Y PROFESIONAL */
+.resultado-completo {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.resultado-completo h4 {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #374151;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.calificacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Nota - diseño minimalista */
+.nota {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #374151;
+  background: #f9fafb;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e5e7eb;
+  transition: all 0.3s ease;
+  letter-spacing: -0.05em;
+}
+
+/* Colores según la nota - más sutiles */
+.nota.excelente {
+  color: #059669;
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.nota.bueno {
+  color: #0284c7;
+  border-color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+.nota.regular {
+  color: #d97706;
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.nota.malo {
+  color: #dc2626;
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.retroalimentacion {
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.retroalimentacion p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Solucionario - diseño minimalista */
+.solucionario-descarga {
+  margin-top: 2rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.solucionario-descarga h5 {
+  margin: 0 0 1rem;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.solucionario-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.8rem 1.5rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.solucionario-link:hover {
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+.solucionario-link svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.solucionario-link:hover svg {
+  transform: scale(1.1);
 }
 
 /* Toast */
@@ -928,6 +1447,18 @@ const cerrarModal = () => {
     margin-bottom: 0.5rem;
   }
 
+  .tarea-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    overflow-y: auto;
+  }
+
+  .pregunta-item input {
+    width: 100%;
+    max-width: calc(100vw - 4rem);
+    box-sizing: border-box;
+  }
+
   .recurso-acciones {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -942,6 +1473,53 @@ const cerrarModal = () => {
     padding: 1rem;
     max-height: 70vh;
     overflow-y: auto;
+  }
+
+  .clase-container .video-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  .submit-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-respuestas {
+    width: 100%;
+    padding: 0.8rem 1rem;
+  }
+
+  .formulario-tarea {
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+
+  .toast-container {
+    width: 85%;
+    padding: 0.7rem 1rem;
+    bottom: 1rem;
+  }
+
+  .resultado-completo {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+
+  .nota {
+    width: 90px;
+    height: 90px;
+    font-size: 2.2rem;
+  }
+
+  .retroalimentacion p {
+    font-size: 0.95rem;
+    padding: 1.2rem;
+  }
+
+  .solucionario-link {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
   }
 
   .cta-buttons {

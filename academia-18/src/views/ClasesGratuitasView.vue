@@ -23,9 +23,8 @@
 
       <!-- Grid de cursos -->
       <div v-else class="cursos-gratuitos-grid">
-        <div v-for="curso in cursosRegulares" :key="curso.id" 
-             class="curso-gratuito-card" 
-             @click="navegarACurso(curso.id)">
+        <div v-for="curso in cursosRegulares" :key="curso.id" class="curso-gratuito-card"
+          @click="navegarACurso(curso.id)">
           <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
             <div class="curso-overlay"></div>
             <div class="curso-badge">GRATUITO</div>
@@ -35,14 +34,16 @@
             <p>{{ curso.descripcion }}</p>
             <div class="curso-meta">
               <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
                 <span>{{ curso.duracion || 'Duración flexible' }}</span>
               </div>
               <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polygon points="23 7 16 12 23 17 23 7"></polygon>
                   <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
                 </svg>
@@ -51,7 +52,8 @@
             </div>
             <button class="ver-curso-btn">
               <span>Ver Curso</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
@@ -64,7 +66,8 @@
       <section class="cta-matricula">
         <div class="cta-content">
           <h2>¿Quieres acceso a contenido premium?</h2>
-          <p>Únete a nuestros cursos completos con material exclusivo, ejercicios personalizados y seguimiento de profesores.</p>
+          <p>Únete a nuestros cursos completos con material exclusivo, ejercicios personalizados y seguimiento de
+            profesores.</p>
           <div class="cta-buttons">
             <router-link to="/aula-virtual" class="cta-button secondary">Ir a Aula VIP</router-link>
           </div>
@@ -98,7 +101,7 @@ const cargarCursos = async () => {
 
   try {
     // Obtener cursos regulares de Firebase
-    const cursosRef = collection(db, 'cursos');
+    const cursosRef = collection(db, 'cursos2');
     const querySnapshot = await getDocs(cursosRef);
 
     const cursosArray = [];
@@ -108,8 +111,8 @@ const cargarCursos = async () => {
         ...doc.data()
       });
     });
-
-    cursosRegulares.value = cursosArray;
+    
+    cursosRegulares.value = cursosArray.sort((a, b) => a.orden - b.orden);
   } catch (err) {
     console.error('Error al obtener los cursos:', err);
     error.value = 'No se pudieron cargar los cursos. Por favor, intenta de nuevo.';
@@ -182,8 +185,13 @@ const navegarACurso = (cursoId) => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .retry-btn {
@@ -529,15 +537,15 @@ const navegarACurso = (cursoId) => {
     gap: 1rem;
     max-width: 400px;
   }
-  
+
   .curso-info {
     padding: 0.8rem;
   }
-  
+
   .curso-info h2 {
     font-size: 1rem;
   }
-  
+
   .curso-info p {
     font-size: 0.8rem;
   }
