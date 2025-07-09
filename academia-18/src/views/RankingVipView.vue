@@ -61,7 +61,7 @@
             </div>
             <div class="resultado-item">
               <span class="label">CORRECTAS</span>
-              <span class="valor">{{ tuPosicion.correctas }}/30</span>
+              <span class="valor">{{ tuPosicion.correctas }}/60</span>
             </div>
             <div class="resultado-item">
               <span class="label">TIEMPO</span>
@@ -115,7 +115,7 @@
                 </div>
                 
                 <div class="table-col correct-col">
-                  <span class="correct">{{ resultado.correctas }}/30</span>
+                  <span class="correct">{{ resultado.correctas }}/60</span>
                 </div>
                 
                 <div class="table-col time-col">
@@ -165,7 +165,7 @@
                   </div>
                   <div class="data-item">
                     <span class="data-label">Correctas</span>
-                    <span class="data-value">{{ resultado.correctas }}/30</span>
+                    <span class="data-value">{{ resultado.correctas }}/60</span>
                   </div>
                 </div>
                 <div class="data-row">
