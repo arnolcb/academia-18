@@ -97,7 +97,7 @@
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-
+<!--
               <div class="curso-card curso-vip simulacro-vip-especial" @click="navegarASimulacroVip">
   <div class="curso-imagen simulacro-vip-imagen">
     <div class="curso-overlay"></div>
@@ -116,9 +116,9 @@
     <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
   </div>
 </div>
-
+-->
 <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA) -->
-<!--
+
 <div class="curso-card curso-vip simulacro-vip-especial simulacro-resultados" @click="navegarAResultadosVip">
   <div class="curso-imagen simulacro-resultados-imagen">
     <div class="curso-overlay"></div>
@@ -132,11 +132,11 @@
     </div>
   </div>
   <div class="curso-info">
-    <h2>SIMULACRO #1 RESULTADOS</h2>
+    <h2>SIMULACRO #2 RESULTADOS</h2>
     <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
   </div>
 </div>
--->
+
               <!-- Las tarjetas de curso VIP existentes -->
               <div v-for="curso in cursosVip" :key="curso.id" class="curso-card curso-vip"
                 @click="navegarACursoVip(curso.id)">
