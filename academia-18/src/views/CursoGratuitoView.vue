@@ -314,6 +314,16 @@ const enviandoRespuestas = ref(false);
 const resultadoTarea = ref(null);
 const solucionarioInfo = ref(null);
 
+// Función para generar ID único para usuarios sin cuenta
+const getOrCreateGuestId = () => {
+  let guestId = localStorage.getItem('guestUserId');
+  if (!guestId) {
+    guestId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('guestUserId', guestId);
+  }
+  return guestId;
+};
+
 // Toast
 const toast = ref({
   visible: false,
@@ -455,14 +465,13 @@ const cerrarModal = () => {
 // Cargar respuesta previa de tarea
 const cargarRespuestaPrevia = async (recursoId) => {
   try {
-    const user = auth.currentUser;
-    if (!user) return;
+    const userId = auth.currentUser ? auth.currentUser.uid : getOrCreateGuestId();
 
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
 
     const respuestasRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
-    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const q = query(respuestasRef, where('userId', '==', userId));
     const respuestasSnapshot = await getDocs(q);
 
     if (!respuestasSnapshot.empty) {
@@ -497,8 +506,7 @@ const enviarRespuestas = async () => {
   resultadoTarea.value = null;
 
   try {
-    const user = auth.currentUser;
-    if (!user) throw new Error('No se ha iniciado sesión');
+    const userId = auth.currentUser ? auth.currentUser.uid : getOrCreateGuestId();
 
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
@@ -550,12 +558,12 @@ const enviarRespuestas = async () => {
 
     // Guardar respuestas en Firestore
     const respuestasRef = collection(db, `cursos2/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
-    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const q = query(respuestasRef, where('userId', '==', userId));
     const respuestasSnapshot = await getDocs(q);
 
     if (respuestasSnapshot.empty) {
       await addDoc(respuestasRef, {
-        userId: user.uid,
+        userId: userId,
         respuestas: respuestasFormateadas,
         calificacion: nota,
         retroalimentacion,
