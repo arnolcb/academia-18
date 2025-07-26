@@ -38,29 +38,6 @@
                     <p>{{ resultados.length }} estudiantes han completado este simulacro</p>
                 </div>
 
-                <!-- Mi resultado -->
-                <div v-if="miResultado && currentUserId" class="mi-resultado">
-                    <h3>Tu resultado</h3>
-                    <div class="resultado-detalle">
-                        <div class="posicion" :class="getPosicionClass(miPosicion)">
-                            <span class="numero">{{ miPosicion }}</span>
-                            <span class="texto">{{ getTextoPos(miPosicion) }}</span>
-                        </div>
-                        <div class="puntuacion">
-                            <div class="valor">{{ miResultado.calificacion }}</div>
-                            <div class="label">puntos</div>
-                        </div>
-                        <div class="correctas">
-                            <div class="valor">{{ miResultado.correctas }}</div>
-                            <div class="label">correctas</div>
-                        </div>
-                        <div class="tiempo">
-                            <div class="valor">{{ formatearTiempo(miResultado.tiempoUtilizado) }}</div>
-                            <div class="label">tiempo</div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Tabla de ranking -->
                 <div class="tabla-ranking">
                     <table>
@@ -75,8 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(resultado, index) in resultados" :key="resultado.id"
-                                :class="{ 'mi-fila': resultado.userId === currentUserId }">
+                            <tr v-for="(resultado, index) in resultados" :key="resultado.id">
                                 <td class="posicion-col">
                                     <div class="posicion-badge" :class="getPosicionClass(index + 1)">
                                         {{ index + 1 }}
@@ -84,15 +60,11 @@
                                 </td>
                                 <td class="estudiante-col">
                                     <div class="estudiante-info">
-                                        <div class="avatar" v-if="resultado.userPhoto">
-                                            <img :src="resultado.userPhoto" :alt="resultado.userName">
-                                        </div>
-                                        <div class="avatar" v-else>
-                                            {{ getInitials(resultado.userName) }}
+                                        <div class="avatar">
+                                            {{ getInitials(resultado.userNick) }}
                                         </div>
                                         <div class="nombre">
-                                            <span v-if="resultado.userId === currentUserId">Tú</span>
-                                            <span v-else>{{ resultado.userName }}</span>
+                                            <span>{{ resultado.userNick }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -152,42 +124,60 @@ onMounted(async () => {
 });
 
 const cargarRanking = async () => {
-    loading.value = true;
-    error.value = null;
+  loading.value = true;
+  error.value = null;
 
-    try {
-        const simulacroId = route.params.id;
+  try {
+    const simulacroId = route.params.id;
 
-        // Cambiar de 'simulacros' a 'simulacrosGratuitos'
-        const simulacroDoc = await getDoc(doc(db, 'simulacrosGratuitos', simulacroId));
-        if (!simulacroDoc.exists()) {
-            throw new Error('El simulacro no existe');
-        }
-
-        simulacro.value = {
-            id: simulacroDoc.id,
-            ...simulacroDoc.data()
-        };
-
-        // Obtener resultados desde localStorage
-        const resultadosLocales = obtenerResultadosLocales(simulacroId);
-
-        // Combinar con resultados de otros usuarios (si los hay almacenados globalmente)
-        // Por ahora solo mostramos los resultados locales
-        resultados.value = resultadosLocales;
-
-    } catch (err) {
-        console.error('Error al cargar el ranking:', err);
-        error.value = 'No se pudo cargar el ranking. Por favor, intenta de nuevo.';
-    } finally {
-        loading.value = false;
+    // Cargar información del simulacro
+    const simulacroDoc = await getDoc(doc(db, 'simulacrosGratuitos', simulacroId));
+    if (!simulacroDoc.exists()) {
+      throw new Error('El simulacro no existe');
     }
-};
 
-// Propiedades computadas
-const miResultado = computed(() => {
-    return resultados.value.find(r => r.userId === currentUserId.value) || null;
-});
+    simulacro.value = {
+      id: simulacroDoc.id,
+      ...simulacroDoc.data()
+    };
+
+    // NUEVO: Cargar resultados desde Firestore
+    const resultadosRef = collection(db, 'resultadosGratuitos');
+    const q = query(
+      resultadosRef,
+      where('simulacroId', '==', simulacroId),
+      orderBy('calificacion', 'desc'),
+      orderBy('tiempoUtilizado', 'asc')
+    );
+    
+    const snapshot = await getDocs(q);
+    
+    if (snapshot.empty) {
+      resultados.value = [];
+    } else {
+      const resultadosFirestore = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          userNick: data.userNick,
+          calificacion: data.calificacion,
+          correctas: data.correctas,
+          tiempoUtilizado: data.tiempoUtilizado,
+          fechaRealizacion: data.fechaRealizacion?.toDate() || new Date(data.fechaRealizacion)
+        };
+      });
+      
+      resultados.value = resultadosFirestore;
+    }
+
+  } catch (err) {
+    console.error('Error al cargar el ranking:', err);
+    error.value = 'No se pudo cargar el ranking. Por favor, intenta de nuevo.';
+
+  } finally {
+    loading.value = false;
+  }
+};
 
 const obtenerResultadosLocales = (simulacroId) => {
     try {
@@ -197,11 +187,9 @@ const obtenerResultadosLocales = (simulacroId) => {
         const resultadosSimulacro = resultadosGuardados.filter(r => r.simulacroId === simulacroId);
 
         // Procesar resultados para mostrar
-        const resultadosProcesados = resultadosSimulacro.map((resultado, index) => ({
-            id: resultado.userId + '_' + resultado.fechaRealizacion,
-            userId: resultado.userId,
-            userName: `Participante ${index + 1}`, // Nombre genérico
-            userPhoto: null,
+        const resultadosProcesados = resultadosSimulacro.map(resultado => ({
+            id: resultado.userNick + '_' + resultado.fechaRealizacion,
+            userNick: resultado.userNick,
             calificacion: resultado.calificacion,
             correctas: resultado.correctas,
             tiempoUtilizado: resultado.tiempoUtilizado,
@@ -223,10 +211,6 @@ const obtenerResultadosLocales = (simulacroId) => {
     }
 };
 
-const miPosicion = computed(() => {
-    if (!miResultado.value) return null;
-    return resultados.value.findIndex(r => r.userId === currentUserId.value) + 1;
-});
 
 // Funciones de utilidad
 const getPosicionClass = (posicion) => {

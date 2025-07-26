@@ -84,7 +84,7 @@
               <li>No podrás retomar el examen una vez finalizado.</li>
             </ul>
           </div>
-          <button @click="iniciarExamen" class="btn-iniciar">Comenzar Simulacro</button>
+        <button @click="mostrarModalNick = true" class="btn-iniciar">Comenzar Simulacro</button>
         </div>
       </div>
 
@@ -246,6 +246,28 @@
       </div>
     </main>
 
+        <!-- NUEVO: Modal para ingresar Nick -->
+    <div v-if="mostrarModalNick" class="modal-overlay">
+      <div class="modal-confirmacion">
+        <h3>Ingresa tu Nick para el Ranking</h3>
+        <p>Este nombre se mostrará en la tabla de posiciones. No podrás cambiarlo después.</p>
+        <input 
+          type="text" 
+          v-model="userNick" 
+          placeholder="Escribe tu nick aquí" 
+          class="nick-input"
+          @keyup.enter="iniciarExamen"
+        />
+        <div class="modal-acciones">
+          <button @click="mostrarModalNick = false" class="btn-cancelar">
+            Cancelar
+          </button>
+          <button @click="iniciarExamen" class="btn-confirmar" :disabled="!userNick.trim()">
+            Comenzar
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- Modal de confirmación para finalizar examen -->
     <div v-if="mostrarModalConfirmacion" class="modal-overlay">
       <div class="modal-confirmacion">
@@ -308,6 +330,9 @@ const tiempoRestante = ref(3600); // 60 minutos en segundos
 const tiempoInicio = ref(null);
 const intervalId = ref(null);
 const mostrarModalConfirmacion = ref(false);
+// Agregar estas líneas después de `mostrarModalConfirmacion`
+const mostrarModalNick = ref(false);
+const userNick = ref('');
 
 // Cargar datos del simulacro
 onMounted(async () => {
@@ -369,6 +394,12 @@ const cargarSimulacro = async () => {
 
 // Iniciar el examen
 const iniciarExamen = () => {
+  if (!userNick.value.trim()) {
+    alert('Por favor, ingresa un nick para continuar.');
+    return;
+  }
+  
+  mostrarModalNick.value = false; // Oculta el modal de nick
   examenIniciado.value = true;
   tiempoInicio.value = Date.now();
   
@@ -381,7 +412,6 @@ const iniciarExamen = () => {
     }
   }, 1000);
 };
-
 // Navegar entre preguntas
 const anteriorPregunta = () => {
   if (preguntaActual.value > 0) {
@@ -435,19 +465,30 @@ const finalizarExamen = async () => {
   
   const calificacion = correctas * simulacro.value.puntajePorPregunta;
   
-  // Guardar resultado en localStorage
-  const resultado = {
-    simulacroId: simulacro.value.id,
-    respuestas: respuestasUsuario.value,
-    correctas,
-    calificacion,
-    tiempoUtilizado: simulacro.value.duracion - tiempoRestante.value,
-    fechaRealizacion: new Date().toISOString(),
-    userId: generateUserId() // Generar ID único para este usuario
+// Preparar resultado
+const resultado = {
+  simulacroId: simulacro.value.id,
+  respuestas: respuestasUsuario.value,
+  correctas,
+  calificacion,
+  tiempoUtilizado: simulacro.value.duracion - tiempoRestante.value,
+  fechaRealizacion: new Date().toISOString(),
+  userNick: userNick.value 
+};
+
+try {
+  const resultadoFirestore = {
+    ...resultado,
+    fechaRealizacion: serverTimestamp() // Usar timestamp de servidor
   };
   
-  // Guardar en localStorage
-  guardarResultadoLocal(resultado);
+  await addDoc(collection(db, 'resultadosGratuitos'), resultadoFirestore);
+  console.log('Resultado guardado en Firestore exitosamente');
+} catch (error) {
+  console.error('Error al guardar resultado en Firestore:', error);
+  // El resultado ya está guardado en localStorage como respaldo
+}
+
 };
 
 // Volver al dashboard
@@ -466,7 +507,7 @@ const volverADashboard = () => {
 
 // Ver ranking de estudiantes
 const verRanking = () => {
-  router.push(`/simulacro/${simulacro.value.id}/ranking`);
+  router.push(`/simulacro-gratuito/${simulacro.value.id}/ranking`); // CAMBIAR: era /simulacro/
 };
 
 // Funciones de utilidad
@@ -565,16 +606,6 @@ watch(examenIniciado, (newVal) => {
     window.removeEventListener('beforeunload', () => {});
   }
 });
-
-// Generar ID único para usuario anónimo
-const generateUserId = () => {
-  let userId = localStorage.getItem('simulacro_user_id');
-  if (!userId) {
-    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('simulacro_user_id', userId);
-  }
-  return userId;
-};
 
 // Guardar resultado en localStorage
 const guardarResultadoLocal = (resultado) => {
@@ -1307,8 +1338,7 @@ const obtenerRankingLocal = () => {
 
   .header-content {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: flex-start;gap: 1rem;
     padding: 1rem 0;
   }
 
@@ -1362,5 +1392,27 @@ const obtenerRankingLocal = () => {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* Agregar estos estilos para el input del Nick */
+.nick-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+
+.nick-input:focus {
+  outline: none;
+  border-color: #0052af;
+  box-shadow: 0 0 0 2px rgba(0, 82, 175, 0.2);
+}
+
+.modal-confirmacion .btn-confirmar:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
