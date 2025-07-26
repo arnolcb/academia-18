@@ -25,11 +25,13 @@
       <!-- Grid de cursos -->
 <div v-else class="cursos-gratuitos-grid">
   <!-- Card manual para simulacro -->
+   <!--
   <div class="curso-gratuito-card simulacro-card" @click="navegarASimulacro">
     <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/f_auto,q_auto/v1753567508/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_zbogvn.png')` }">
       <div class="curso-overlay"></div>
       <div class="curso-badge simulacro-badge">SIMULACRO GRATUITO</div>
     </div>
+    
     <div class="curso-info">
       <h2>Simulacro Gratuito</h2>
       <p>Pon a prueba tus conocimientos con nuestro simulacro de examen gratuito. 60 preguntas, 125 minutos.</p>
@@ -63,7 +65,7 @@
       </button>
     </div>
   </div>
-
+-->
   <!-- Cards de cursos existentes -->
   <div v-for="curso in cursosRegulares" :key="curso.id" class="curso-gratuito-card"
     @click="navegarACurso(curso.id)">
