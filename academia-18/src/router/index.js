@@ -13,6 +13,9 @@ import SobreNosotros from "../views/AboutView.vue";
 import MatriculaVip from "@/views/MatriculaVip.vue";
 import SimulacroVipView from "@/views/SimulacroVipView.vue";
 import RankingVipView from "@/views/RankingVipView.vue";
+import SimulacroGratuitoView from "../views/SimulacroGratuitoView.vue";
+import RankingGratuitoView from "@/views/RankingGratuitoView.vue";
+
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -155,6 +158,18 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "not-found",
       component: () => import("../views/NotFoundView.vue"),
+    },
+    // Ruta para el simulacro gratuito
+    {
+      path: "/simulacro-gratuito/:id",
+      name: "SimulacroGratuito",
+      component: () => import("../views/SimulacroGratuitoView.vue"),
+    },
+    // Ruta para el ranking del simulacro gratuito
+    {
+      path: "/simulacro-gratuito/:id/ranking",
+      name: "RankingGratuito",
+      component: RankingGratuitoView,
     },
   ],
 });

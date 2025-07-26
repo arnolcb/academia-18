@@ -22,45 +22,88 @@
       </div>
 
       <!-- Grid de cursos -->
-      <div v-else class="cursos-gratuitos-grid">
-        <div v-for="curso in cursosRegulares" :key="curso.id" class="curso-gratuito-card"
-          @click="navegarACurso(curso.id)">
-          <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
-            <div class="curso-overlay"></div>
-            <div class="curso-badge">GRATUITO</div>
-          </div>
-          <div class="curso-info">
-            <h2>{{ curso.titulo }}</h2>
-            <p>{{ curso.descripcion }}</p>
-            <div class="curso-meta">
-              <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span>{{ curso.duracion || 'Duración flexible' }}</span>
-              </div>
-              <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                </svg>
-                <span>{{ curso.totalClases || 'Múltiples clases' }}</span>
-              </div>
-            </div>
-            <button class="ver-curso-btn">
-              <span>Ver Curso</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
+      <!-- Grid de cursos -->
+<div v-else class="cursos-gratuitos-grid">
+  <!-- Card manual para simulacro -->
+  <div class="curso-gratuito-card simulacro-card" @click="navegarASimulacro">
+    <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/f_auto,q_auto/v1753567508/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_zbogvn.png')` }">
+      <div class="curso-overlay"></div>
+      <div class="curso-badge simulacro-badge">SIMULACRO GRATUITO</div>
+    </div>
+    <div class="curso-info">
+      <h2>Simulacro Gratuito</h2>
+      <p>Pon a prueba tus conocimientos con nuestro simulacro de examen gratuito. 60 preguntas, 125 minutos.</p>
+      <div class="curso-meta">
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>125 minutos</span>
+        </div>
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>60 preguntas</span>
         </div>
       </div>
+      <button class="ver-curso-btn simulacro-btn">
+        <span>Iniciar Simulacro</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards de cursos existentes -->
+  <div v-for="curso in cursosRegulares" :key="curso.id" class="curso-gratuito-card"
+    @click="navegarACurso(curso.id)">
+    <!-- El resto del código de las cards de cursos se mantiene igual -->
+    <div class="curso-imagen" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
+      <div class="curso-overlay"></div>
+      <div class="curso-badge">GRATUITO</div>
+    </div>
+    <div class="curso-info">
+      <h2>{{ curso.titulo }}</h2>
+      <p>{{ curso.descripcion }}</p>
+      <div class="curso-meta">
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>{{ curso.duracion || 'Duración flexible' }}</span>
+        </div>
+        <div class="meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <span>{{ curso.totalClases || 'Múltiples clases' }}</span>
+        </div>
+      </div>
+      <button class="ver-curso-btn">
+        <span>Ver Curso</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
 
       <!-- CTA Section para invitar a matricularse -->
       <section class="cta-matricula">
@@ -84,7 +127,9 @@ import { db } from '@/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
 const router = useRouter();
-
+const navegarASimulacro = () => {
+  router.push('/simulacro-gratuito/simulacro1');
+};
 // Estados
 const cursosRegulares = ref([]);
 const loading = ref(true);
