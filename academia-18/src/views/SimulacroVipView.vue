@@ -93,9 +93,9 @@
           <div class="instrucciones">
             <h3>Instrucciones VIP:</h3>
             <ul>
-              <li>Este es un simulacro exclusivo para estudiantes VIP con duración de 70 minutos.</li>
+              <li>Este es un simulacro exclusivo para estudiantes VIP con duración de {{ Math.floor(simulacro.duracion / 60) }} minutos.</li>
               <li>Consta de {{ simulacro.totalPreguntas }} preguntas de opción múltiple premium.</li>
-              <li>Cada respuesta correcta suma 4 puntos.</li>
+              <li>Cada respuesta correcta suma {{ simulacro.puntajePorPregunta }} puntos.</li>
               <li>Las respuestas incorrectas no restan puntos.</li>
               <li>Puedes alternar entre las preguntas usando los botones de navegación.</li>
               <li>Una vez finalizado el tiempo o enviado el examen, se mostrará tu calificación final.</li>
