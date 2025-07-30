@@ -37,7 +37,30 @@
                     <h2>{{ simulacro.titulo }}</h2>
                     <p>{{ resultados.length }} estudiantes han completado este simulacro</p>
                 </div>
-
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input v-model="terminoBusqueda" type="text" placeholder="Buscar estudiante por nombre..."
+                            class="search-input" />
+                        <button v-if="terminoBusqueda" @click="terminoBusqueda = ''" class="clear-search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="search-info" v-if="terminoBusqueda">
+                        <span>{{ resultadosFiltrados.length }} resultado{{ resultadosFiltrados.length !== 1 ? 's' : ''
+                        }} encontrado{{ resultadosFiltrados.length !== 1 ? 's' : '' }}</span>
+                    </div>
+                </div>
                 <!-- Tabla de ranking -->
                 <div class="tabla-ranking">
                     <table>
@@ -52,10 +75,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(resultado, index) in resultados" :key="resultado.id">
+                            <tr v-for="resultado in resultadosFiltrados" :key="resultado.id">
                                 <td class="posicion-col">
-                                    <div class="posicion-badge" :class="getPosicionClass(index + 1)">
-                                        {{ index + 1 }}
+                                    <div class="posicion-badge" :class="getPosicionClass(resultado.posicionReal)">
+                                        {{ resultado.posicionReal }}
                                     </div>
                                 </td>
                                 <td class="estudiante-col">
@@ -123,60 +146,82 @@ onMounted(async () => {
     await cargarRanking();
 });
 
+//filtrar resultados por usuario
+const terminoBusqueda = ref('');
+
+const resultadosFiltrados = computed(() => {
+    if (!terminoBusqueda.value.trim()) {
+        return resultados.value.map((resultado, index) => ({
+            ...resultado,
+            posicionReal: index + 1
+        }));
+    }
+
+    return resultados.value
+        .map((resultado, index) => ({
+            ...resultado,
+            posicionReal: index + 1
+        }))
+        .filter(resultado =>
+            resultado.userNick.toLowerCase().includes(terminoBusqueda.value.toLowerCase())
+        );
+});
+
+
 const cargarRanking = async () => {
-  loading.value = true;
-  error.value = null;
+    loading.value = true;
+    error.value = null;
 
-  try {
-    const simulacroId = route.params.id;
+    try {
+        const simulacroId = route.params.id;
 
-    // Cargar información del simulacro
-    const simulacroDoc = await getDoc(doc(db, 'simulacrosGratuitos', simulacroId));
-    if (!simulacroDoc.exists()) {
-      throw new Error('El simulacro no existe');
-    }
+        // Cargar información del simulacro
+        const simulacroDoc = await getDoc(doc(db, 'simulacrosGratuitos', simulacroId));
+        if (!simulacroDoc.exists()) {
+            throw new Error('El simulacro no existe');
+        }
 
-    simulacro.value = {
-      id: simulacroDoc.id,
-      ...simulacroDoc.data()
-    };
-
-    // NUEVO: Cargar resultados desde Firestore
-    const resultadosRef = collection(db, 'resultadosGratuitos');
-    const q = query(
-      resultadosRef,
-      where('simulacroId', '==', simulacroId),
-      orderBy('calificacion', 'desc'),
-      orderBy('tiempoUtilizado', 'asc')
-    );
-    
-    const snapshot = await getDocs(q);
-    
-    if (snapshot.empty) {
-      resultados.value = [];
-    } else {
-      const resultadosFirestore = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          userNick: data.userNick,
-          calificacion: data.calificacion,
-          correctas: data.correctas,
-          tiempoUtilizado: data.tiempoUtilizado,
-          fechaRealizacion: data.fechaRealizacion?.toDate() || new Date(data.fechaRealizacion)
+        simulacro.value = {
+            id: simulacroDoc.id,
+            ...simulacroDoc.data()
         };
-      });
-      
-      resultados.value = resultadosFirestore;
+
+        // NUEVO: Cargar resultados desde Firestore
+        const resultadosRef = collection(db, 'resultadosGratuitos');
+        const q = query(
+            resultadosRef,
+            where('simulacroId', '==', simulacroId),
+            orderBy('calificacion', 'desc'),
+            orderBy('tiempoUtilizado', 'asc')
+        );
+
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+            resultados.value = [];
+        } else {
+            const resultadosFirestore = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    userNick: data.userNick,
+                    calificacion: data.calificacion,
+                    correctas: data.correctas,
+                    tiempoUtilizado: data.tiempoUtilizado,
+                    fechaRealizacion: data.fechaRealizacion?.toDate() || new Date(data.fechaRealizacion)
+                };
+            });
+
+            resultados.value = resultadosFirestore;
+        }
+
+    } catch (err) {
+        console.error('Error al cargar el ranking:', err);
+        error.value = 'No se pudo cargar el ranking. Por favor, intenta de nuevo.';
+
+    } finally {
+        loading.value = false;
     }
-
-  } catch (err) {
-    console.error('Error al cargar el ranking:', err);
-    error.value = 'No se pudo cargar el ranking. Por favor, intenta de nuevo.';
-
-  } finally {
-    loading.value = false;
-  }
 };
 
 const obtenerResultadosLocales = (simulacroId) => {
@@ -605,6 +650,81 @@ tr.mi-fila {
 
 .btn-iniciar:hover {
     background-color: #003c8f;
+}
+
+/* Barra de búsqueda */
+.search-container {
+    margin-bottom: 2rem;
+}
+
+.search-input-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem 2.5rem 0.8rem 2.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #0052af;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(0, 82, 175, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+.clear-search {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.clear-search:hover {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+.search-info {
+    text-align: center;
+    margin-top: 0.8rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive para búsqueda */
+@media (max-width: 768px) {
+    .search-input-wrapper {
+        max-width: none;
+    }
+
+    .search-input {
+        font-size: 0.9rem;
+        padding: 0.7rem 2.2rem 0.7rem 2.2rem;
+    }
 }
 
 /* Responsive */
