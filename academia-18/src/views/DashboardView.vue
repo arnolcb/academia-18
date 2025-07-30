@@ -6,6 +6,7 @@
         <h1>Aula Virtual VIP</h1>
         <div class="user-menu">
           <span class="user-name">{{ userName }}</span>
+          <span class="user-grupo">Grupo {{ grupoUsuario }}</span>
           <!-- Badge VIP si el usuario tiene acceso -->
           <div v-if="esUsuarioVip" class="vip-badge">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -75,23 +76,29 @@
         <!-- USUARIO CON ACCESO VIP -->
         <div v-else class="vip-content-wrapper">
           <!-- Banner bienvenida VIP -->
-          <div class="vip-welcome-banner">
-            <div class="vip-welcome-content">
-              <div class="vip-welcome-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-                  </polygon>
-                </svg>
-              </div>
-              <div class="vip-welcome-text">
-                <h2>¡Bienvenido al Aula VIP!</h2>
-                <p>Accede a contenido exclusivo y materiales premium diseñados especialmente para ti.</p>
-              </div>
-            </div>
-          </div>
 
+<div v-if="gruposDisponibles.length > 1" class="grupos-switch">
+  <div class="grupos-switch-content">
+    <span class="grupos-switch-label">Cambiar Aula:</span>
+    <div class="grupos-buttons">
+      <button 
+        v-for="grupo in gruposDisponibles" 
+        :key="grupo.numero"
+        @click="cambiarGrupo(grupo.numero)"
+        :class="['grupo-btn', { 'active': grupoActual === grupo.numero, 'loading': loadingGrupos && grupoActual === grupo.numero }]"
+        :disabled="loadingGrupos"
+      >
+        <span v-if="loadingGrupos && grupoActual === grupo.numero" class="grupo-loading">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </span>
+        <span>{{ grupo.nombre }}</span>
+      </button>
+    </div>
+  </div>
+</div>
           <!-- Layout principal VIP -->
           <div class="main-content-layout">
             <!-- Grid combinado de cursos VIP y simulacro -->
@@ -252,6 +259,12 @@ const materialVipActivo = ref(null);
 // Configuración de WhatsApp
 const numeroWhatsApp = "51916963262";
 
+// Estados para grupos
+const gruposDisponibles = ref([]);
+const grupoActual = ref(1);
+const loadingGrupos = ref(false);
+const grupoUsuario = ref(1);
+
 // Verificar usuario al cargar
 onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
@@ -280,10 +293,19 @@ const verificarAccesoVip = async (userEmail) => {
     );
     const querySnapshot = await getDocs(vipQuery);
 
-    esUsuarioVip.value = !querySnapshot.empty;
-
-    if (esUsuarioVip.value) {
+    if (!querySnapshot.empty) {
+      esUsuarioVip.value = true;
+      const userData = querySnapshot.docs[0].data();
+      
+      // Obtener grupos disponibles para el usuario
+      const grupoDelUsuario = userData.grupo || 1;
+      grupoUsuario.value = grupoDelUsuario; // Guardar para mostrar en UI
+      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario);
+      grupoActual.value = 1; // Siempre iniciar en grupo 1
+      
       await cargarContenidoVip();
+    } else {
+      esUsuarioVip.value = false;
     }
   } catch (error) {
     console.error('Error al verificar acceso VIP:', error);
@@ -294,10 +316,33 @@ const verificarAccesoVip = async (userEmail) => {
   }
 };
 
+const obtenerGruposDisponibles = (grupoUsuario) => {
+  // Por ahora todos los usuarios VIP pueden ver todos los grupos disponibles
+  const grupos = [
+    {
+      numero: 1,
+      nombre: 'Grupo 1',
+      coleccionCursos: 'cursosVip',
+      coleccionMateriales: 'materialesVip'
+    },
+    {
+      numero: 2,
+      nombre: 'Grupo 2',
+      coleccionCursos: 'cursosVip2',
+      coleccionMateriales: 'materialesVip2'
+    }
+  ];
+  
+  return grupos;
+};
+
 // Cargar contenido VIP
 const cargarContenidoVip = async () => {
   try {
-    const cursosVipRef = collection(db, 'cursosVip');
+    const grupoSeleccionado = gruposDisponibles.value.find(g => g.numero === grupoActual.value);
+    if (!grupoSeleccionado) return;
+
+    const cursosVipRef = collection(db, grupoSeleccionado.coleccionCursos);
     const cursosVipSnapshot = await getDocs(cursosVipRef);
     const cursosVipArray = [];
     cursosVipSnapshot.forEach((doc) => {
@@ -306,7 +351,6 @@ const cargarContenidoVip = async () => {
         ...doc.data()
       });
     });
-    // Ordenarlos por el campo "orden"
     cursosVip.value = cursosVipArray.sort((a, b) => a.orden - b.orden);
 
     await fetchMaterialesVip();
@@ -319,12 +363,15 @@ const cargarContenidoVip = async () => {
 const fetchMaterialesVip = async () => {
   loadingMaterialesVip.value = true;
   try {
-    const materialesRef = collection(db, 'materialesVip');
+    const grupoSeleccionado = gruposDisponibles.value.find(g => g.numero === grupoActual.value);
+    if (!grupoSeleccionado) return;
+
+    const materialesRef = collection(db, grupoSeleccionado.coleccionMateriales);
     const materialesSnapshot = await getDocs(materialesRef);
 
     const materialesArray = [];
     for (const materialDoc of materialesSnapshot.docs) {
-      const itemsRef = collection(db, `materialesVip/${materialDoc.id}/items`);
+      const itemsRef = collection(db, `${grupoSeleccionado.coleccionMateriales}/${materialDoc.id}/items`);
       const itemsSnapshot = await getDocs(itemsRef);
 
       const items = itemsSnapshot.docs.map(doc => ({
@@ -344,6 +391,22 @@ const fetchMaterialesVip = async () => {
     console.error('Error al cargar materiales VIP:', err);
   } finally {
     loadingMaterialesVip.value = false;
+  }
+};
+
+const cambiarGrupo = async (numeroGrupo) => {
+  if (numeroGrupo === grupoActual.value) return;
+  
+  loadingGrupos.value = true;
+  grupoActual.value = numeroGrupo;
+  materialVipActivo.value = null; // Reset accordion
+  
+  try {
+    await cargarContenidoVip();
+  } catch (error) {
+    console.error('Error al cambiar grupo:', error);
+  } finally {
+    loadingGrupos.value = false;
   }
 };
 
@@ -1142,6 +1205,123 @@ const navegarAResultadosVip = () => {
   .simulacro-vip-especial .curso-info p,
   .simulacro-resultados .curso-info p {
     font-size: 0.8rem;
+  }
+}
+
+.grupos-switch {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.grupos-switch-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.grupos-switch-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.grupos-buttons {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.grupo-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  border: 2px solid #e0e0e0;
+  background: white;
+  color: #666;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  min-height: 44px;
+}
+
+.grupo-btn:hover:not(:disabled) {
+  border-color: #ffd700;
+  background: #fffacd;
+  color: #b8860b;
+  transform: translateY(-1px);
+}
+
+.grupo-btn.active {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  color: #333;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.grupo-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.grupo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.grupo-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grupo-loading svg {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive para switch */
+@media (max-width: 650px) {
+  .grupos-switch-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .grupos-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .grupo-btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+}.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+.user-grupo {
+  font-size: 0.8rem;
+  color: #757575;
+  font-weight: 400;
+}
+
+@media (max-width: 650px) {
+  .user-info {
+    align-items: center;
   }
 }
 </style>
