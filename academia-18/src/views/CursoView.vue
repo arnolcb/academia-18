@@ -287,6 +287,14 @@ import { doc, getDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, wh
 const router = useRouter();
 const route = useRoute();
 
+// --- NUEVO: Lógica para determinar la colección dinámicamente ---
+const coleccionCurso = computed(() => {
+  const grupo = route.params.grupo;
+  // Si el grupo es '2', usa 'cursosVip2'.
+  // Para cualquier otro caso (incluido undefined para retrocompatibilidad), usa 'cursosVip'.
+  return grupo === '2' ? 'cursosVip2' : 'cursosVip';
+});
+
 // Estados
 const curso = ref({});
 const semanas = ref([]);
@@ -368,18 +376,13 @@ const cargarCurso = async () => {
     }
 
     // Determinar colección según si es VIP o no
-    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
+     const coleccion = esVip.value ? coleccionCurso.value : 'cursos';
 
     // Obtener datos del curso
     const cursoDoc = await getDoc(doc(db, coleccion, cursoId));
-    if (!cursoDoc.exists()) {
-      throw new Error('El curso no existe');
-    }
+    if (!cursoDoc.exists()) throw new Error('El curso no existe');
 
-    curso.value = {
-      id: cursoDoc.id,
-      ...cursoDoc.data()
-    };
+    curso.value = { id: cursoDoc.id, ...cursoDoc.data() };
 
     // Obtener semanas del curso
     const semanasRef = collection(db, `${coleccion}/${cursoId}/semanas`);
@@ -497,10 +500,9 @@ const cargarRespuestaPrevia = async (recursoId) => {
 
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
-    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
+    const coleccion = coleccionCurso.value;
 
-    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);
-    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);    const q = query(respuestasRef, where('userId', '==', user.uid));
     const respuestasSnapshot = await getDocs(q);
 
     if (!respuestasSnapshot.empty) {
@@ -541,7 +543,7 @@ const enviarRespuestas = async () => {
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
     const recursoId = recursoActivo.value.id;
-    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
+    const coleccion = coleccionCurso.value;
 
     const respuestasFormateadas = respuestas.value.map((respuesta, index) => ({
       pregunta: index + 1,
@@ -639,7 +641,7 @@ const cargarSolucionario = async (recursoId) => {
   try {
     const cursoId = route.params.id;
     const semanaId = semanaActiva.value;
-    const coleccion = esVip.value ? 'cursosVip' : 'cursos';
+    const coleccion = coleccionCurso.value;
 
     const solucionariosRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/solucionarios`);
     const solucionariosSnapshot = await getDocs(solucionariosRef);

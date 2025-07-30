@@ -108,7 +108,7 @@ const router = createRouter({
     },
     // Ruta para cursos VIP
     {
-      path: '/vip/curso/:id',
+      path: '/vip/grupo/:grupo/curso/:id',
       name: 'CursoVip',
       component: () => import('@/views/CursoView.vue'),
       beforeEnter: requireAuth,

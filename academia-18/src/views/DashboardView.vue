@@ -419,7 +419,7 @@ const fetchCursos = async () => {
 };
 
 const navegarACursoVip = (cursoId) => {
-  router.push(`/vip/curso/${cursoId}`);
+  router.push(`/vip/grupo/${grupoActual.value}/curso/${cursoId}`);
 };
 
 const toggleMaterialVip = (materialId) => {
