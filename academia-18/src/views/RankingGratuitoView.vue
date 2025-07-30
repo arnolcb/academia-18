@@ -66,12 +66,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Posición</th>
-                                <th>Estudiante</th>
-                                <th>Puntuación</th>
-                                <th>Respuestas correctas</th>
-                                <th>Tiempo</th>
-                                <th>Fecha</th>
+                                <th class="posicion-header">Posición</th>
+                                <th class="estudiante-header">Estudiante</th>
+                                <th class="puntuacion-header">Puntuación</th>
+                                <th class="correctas-header">Respuestas correctas</th>
+                                <th class="tiempo-header">Tiempo</th>
+                                <th class="fecha-header">Fecha</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,8 +83,14 @@
                                 </td>
                                 <td class="estudiante-col">
                                     <div class="estudiante-info">
-                                        <div class="avatar">
-                                            {{ getInitials(resultado.userNick) }}
+                                        <div class="estudiante-info-mobile">
+                                            <div class="posicion-mobile"
+                                                :class="getPosicionClass(resultado.posicionReal)">
+                                                #{{ resultado.posicionReal }}
+                                            </div>
+                                            <div class="avatar">
+                                                {{ getInitials(resultado.userNick) }}
+                                            </div>
                                         </div>
                                         <div class="nombre">
                                             <span>{{ resultado.userNick }}</span>
@@ -765,12 +771,100 @@ tr.mi-fila {
     }
 
     .posicion-col,
-    .fecha-col {
+    .fecha-col,
+    .tiempo-col {
         display: none;
+    }
+
+    .correctas-col,
+    .tiempo-col {
+        text-align: center;
+        font-size: 0.85rem;
     }
 
     .estudiante-col {
         min-width: 150px;
+    }
+    /* Ocultar encabezados innecesarios en mobile */
+.posicion-header,
+.fecha-header {
+    display: none;
+}
+
+/* Reorganizar encabezados en mobile */
+.estudiante-header {
+    width: 50%;
+}
+
+.puntuacion-header,
+.correctas-header {
+    width: 25%;
+    text-align: center;
+}
+
+.tiempo-header {
+    display: none;
+}
+
+/* Ajustar el ancho de las columnas en mobile */
+.estudiante-col {
+    width: 50%;
+    min-width: auto;
+}
+
+.puntuacion-col,
+.correctas-col {
+    width: 25%;
+    text-align: center;
+}
+
+.tiempo-col {
+    display: none;
+}
+}
+
+/* Estilos para mobile - mostrar posición junto al nombre */
+.estudiante-info-mobile {
+    display: none;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.posicion-mobile {
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+    color: #666;
+    min-width: 35px;
+    text-align: center;
+}
+
+.posicion-mobile.primero {
+    background-color: #fff9e6;
+    color: #ffc107;
+}
+
+.posicion-mobile.segundo {
+    background-color: #f5f5f5;
+    color: #757575;
+}
+
+.posicion-mobile.tercero {
+    background-color: #f9f2ec;
+    color: #cd7f32;
+}
+
+@media (max-width: 768px) {
+    .estudiante-info-mobile {
+        display: flex;
+    }
+
+    .estudiante-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 }
 </style>
