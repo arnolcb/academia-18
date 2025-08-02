@@ -51,7 +51,7 @@
 
   // Función para abrir WhatsApp
   const abrirWhatsApp = () => {
-    const numeroWhatsApp = "51916963262"; // Número con código de país
+    const numeroWhatsApp = "51926150707"; // Número con código de país
     const mensaje = `¡Hola! 👋
 
 Me interesa conocer información sobre los ciclos y servicios de Academia18.
