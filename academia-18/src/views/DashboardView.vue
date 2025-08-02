@@ -257,7 +257,7 @@ const loadingMaterialesVip = ref(false);
 const materialVipActivo = ref(null);
 
 // Configuración de WhatsApp
-const numeroWhatsApp = "51916963262";
+const numeroWhatsApp = "51926150707";
 
 // Estados para grupos
 const gruposDisponibles = ref([]);
