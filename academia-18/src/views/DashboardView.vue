@@ -257,7 +257,7 @@ const loadingMaterialesVip = ref(false);
 const materialVipActivo = ref(null);
 
 // Configuración de WhatsApp
-const numeroWhatsApp = "519222322060"; // Número con código de país
+const numeroWhatsApp = "51926150707"; // Número con código de país
 
 // Estados para grupos
 const gruposDisponibles = ref([]);
