@@ -16,8 +16,11 @@
           <h1 class="curso-titulo">{{ curso.titulo || 'Cargando...' }}</h1>
           <!-- Badge VIP si es curso VIP -->
           <div v-if="esVip" class="curso-vip-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"></polygon>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <polygon
+                points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
+              </polygon>
             </svg>
             <span>VIP</span>
           </div>
@@ -41,7 +44,8 @@
       <!-- Contenido del curso -->
       <div v-else class="semanas-container">
         <!-- Banner del curso -->
-        <div class="curso-banner" :class="{ 'curso-banner-vip': esVip }" :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-banner.jpg'})` }">
+        <div class="curso-banner" :class="{ 'curso-banner-vip': esVip }"
+          :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-banner.jpg'})` }">
           <div class="banner-overlay"></div>
           <div class="banner-content">
             <h2>{{ curso.titulo }}</h2>
@@ -51,7 +55,8 @@
 
         <!-- Acordeón de semanas -->
         <div class="semanas-lista">
-          <div v-for="(semana, index) in semanas" :key="semana.id" class="semana-item" :class="{ 'semana-item-vip': esVip }">
+          <div v-for="(semana, index) in semanas" :key="semana.id" class="semana-item"
+            :class="{ 'semana-item-vip': esVip }">
             <div class="semana-header" @click="toggleSemana(semana.id)"
               :class="{ 'active': semanaActiva === semana.id }">
               <div class="semana-titulo">
@@ -204,10 +209,54 @@
 
                 <form @submit.prevent="enviarRespuestas" class="respuestas-form">
                   <div class="preguntas-container">
-                    <div v-for="i in 10" :key="i" class="pregunta-item">
-                      <label :for="'pregunta-' + i">Pregunta {{ i }}</label>
-                      <input :id="'pregunta-' + i" v-model="respuestas[i - 1]" type="text"
-                        placeholder="Tu respuesta" required />
+                    <div class="preguntas-dos-columnas">
+                      <div class="columna">
+                        <div v-for="i in 5" :key="i" class="pregunta-item">
+                          <label>Pregunta {{ i }}</label>
+                          <div class="custom-select" :class="{ 'open': dropdownAbierto === i }">
+                            <div class="select-trigger" @click="toggleDropdown(i)">
+                              <span class="select-value">{{ respuestas[i - 1] || 'Seleccionar' }}</span>
+                              <div class="select-arrow">
+                                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="select-options">
+                              <div v-for="opcion in ['A', 'B', 'C', 'D', 'E']" :key="opcion" class="select-option"
+                                :class="{ 'selected': respuestas[i - 1] === opcion }"
+                                @click="seleccionarOpcion(i - 1, opcion)">
+                                {{ opcion }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="columna">
+                        <div v-for="i in 5" :key="i + 5" class="pregunta-item">
+                          <label>Pregunta {{ i + 5 }}</label>
+                          <div class="custom-select" :class="{ 'open': dropdownAbierto === (i + 5) }">
+                            <div class="select-trigger" @click="toggleDropdown(i + 5)">
+                              <span class="select-value">{{ respuestas[i + 4] || 'Seleccionar' }}</span>
+                              <div class="select-arrow">
+                                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="select-options">
+                              <div v-for="opcion in ['A', 'B', 'C', 'D', 'E']" :key="opcion" class="select-option"
+                                :class="{ 'selected': respuestas[i + 4] === opcion }"
+                                @click="seleccionarOpcion(i + 4, opcion)">
+                                {{ opcion }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -278,7 +327,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { auth, db } from '@/firebase';
 import { doc, getDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, where } from 'firebase/firestore';
@@ -317,6 +366,35 @@ const enviandoRespuestas = ref(false);
 const resultadoTarea = ref(null);
 const solucionarioInfo = ref(null);
 
+
+
+const dropdownAbierto = ref(null);
+
+// Toggle dropdown
+const toggleDropdown = (index) => {
+  if (dropdownAbierto.value === index) {
+    dropdownAbierto.value = null;
+  } else {
+    dropdownAbierto.value = index;
+  }
+};
+
+// Seleccionar opción
+const seleccionarOpcion = (index, opcion) => {
+  respuestas.value[index] = opcion;
+  dropdownAbierto.value = null; // Cerrar dropdown
+};
+
+// ✅ FUNCIÓN MEJORADA
+const cerrarDropdownsAlClickFuera = (event) => {
+  // Solo cerrar si el click no fue en ningún dropdown
+  if (!event.target.closest('.custom-select')) {
+    dropdownAbierto.value = null;
+  }
+};
+
+
+
 // Toast
 const toast = ref({
   visible: false,
@@ -347,6 +425,8 @@ onMounted(async () => {
 
     await cargarCurso();
   });
+
+  document.addEventListener('click', cerrarDropdownsAlClickFuera);
 });
 
 // Verificar acceso VIP
@@ -376,7 +456,7 @@ const cargarCurso = async () => {
     }
 
     // Determinar colección según si es VIP o no
-     const coleccion = esVip.value ? coleccionCurso.value : 'cursos';
+    const coleccion = esVip.value ? coleccionCurso.value : 'cursos';
 
     // Obtener datos del curso
     const cursoDoc = await getDoc(doc(db, coleccion, cursoId));
@@ -502,7 +582,7 @@ const cargarRespuestaPrevia = async (recursoId) => {
     const semanaId = semanaActiva.value;
     const coleccion = coleccionCurso.value;
 
-    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`);    const q = query(respuestasRef, where('userId', '==', user.uid));
+    const respuestasRef = collection(db, `${coleccion}/${cursoId}/semanas/${semanaId}/recursos/${recursoId}/respuestas`); const q = query(respuestasRef, where('userId', '==', user.uid));
     const respuestasSnapshot = await getDocs(q);
 
     if (!respuestasSnapshot.empty) {
@@ -661,6 +741,10 @@ const cargarSolucionario = async (recursoId) => {
     console.error('Error al cargar solucionario:', error);
   }
 };
+
+onUnmounted(() => {
+  document.removeEventListener('click', cerrarDropdownsAlClickFuera);
+});
 </script>
 
 <style scoped>
@@ -775,8 +859,13 @@ const cargarSolucionario = async (recursoId) => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .retry-btn {
@@ -1168,8 +1257,20 @@ const cargarSolucionario = async (recursoId) => {
   color: #666;
 }
 
+.preguntas-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+}
+
 .pregunta-item {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .pregunta-item label {
@@ -1179,12 +1280,98 @@ const cargarSolucionario = async (recursoId) => {
   color: #333;
 }
 
-.pregunta-item input {
+.custom-select {
+  position: relative;
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.9rem;
+}
+
+.select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.select-trigger:hover {
+  border-color: #cbd5e1;
+}
+
+.custom-select.open .select-trigger {
+  border-color: #0052af;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 0 0 3px rgba(0, 82, 175, 0.1);
+}
+
+.select-value {
+  color: #374151;
+  font-weight: 500;
+}
+
+.select-value:empty::before {
+  content: "Seleccionar";
+  color: #9ca3af;
+  font-weight: normal;
+}
+
+.select-arrow {
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.custom-select.open .select-arrow {
+  transform: rotate(180deg);
+}
+
+.select-options {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #0052af;
+  border-top: 1px solid #e2e8f0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  /* ✅ QUITAR max-height: 0 y agregar display */
+  display: none;
+  overflow: hidden;
+}
+
+.custom-select.open .select-options {
+  display: block; /* ✅ MOSTRAR CUANDO ESTÁ ABIERTO */
+  border-top: none;
+}
+
+.select-option {
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-weight: 500;
+  color: #374151;
+}
+
+.select-option:hover {
+  background-color: #f1f5f9;
+}
+
+.select-option.selected {
+  background-color: #0052af;
+  color: white;
+}
+
+.select-option:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .submit-container {
@@ -1397,6 +1584,7 @@ const cargarSolucionario = async (recursoId) => {
     opacity: 0;
     transform: translate(-50%, 20px);
   }
+
   to {
     opacity: 0.95;
     transform: translate(-50%, 0);
@@ -1408,6 +1596,15 @@ const cargarSolucionario = async (recursoId) => {
   .curso-content {
     padding: 0 1rem;
     margin: 1rem auto;
+  }
+
+  .select-options {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .select-option {
+    padding: 1rem;
+    font-size: 1rem;
   }
 
   .header-content {
@@ -1440,6 +1637,11 @@ const cargarSolucionario = async (recursoId) => {
     width: 100%;
     max-width: calc(100vw - 4rem);
     box-sizing: border-box;
+  }
+
+  .preguntas-dos-columnas {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .recurso-acciones {
