@@ -236,13 +236,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { auth, db, authService } from '@/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const router = useRouter();
+const route = useRoute();
 
 // Estados
 const loading = ref(true);
@@ -270,14 +271,18 @@ onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       userName.value = user.email.split('@')[0];
-
-      await Promise.all([
-        verificarAccesoVip(user.email)
-      ]);
+      await verificarAccesoVip(user.email);
     } else {
       router.push('/aula-virtual');
     }
   });
+});
+
+// Watch para mantener el grupo seleccionado en localStorage
+watch(grupoActual, (nuevoGrupo) => {
+  if (esUsuarioVip.value) {
+    localStorage.setItem('grupoSeleccionado', nuevoGrupo.toString());
+  }
 });
 
 // Verificar acceso VIP
@@ -297,12 +302,28 @@ const verificarAccesoVip = async (userEmail) => {
       esUsuarioVip.value = true;
       const userData = querySnapshot.docs[0].data();
       
-      // Obtener grupos disponibles para el usuario
+      // Obtener el grupo del usuario (si no tiene grupo, usar grupo 1)
       const grupoDelUsuario = userData.grupo || 1;
-      grupoUsuario.value = grupoDelUsuario; // Guardar para mostrar en UI
-      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario);
-      grupoActual.value = 1; // Siempre iniciar en grupo 1
+      grupoUsuario.value = grupoDelUsuario;
       
+      // Obtener grupos disponibles
+      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario);
+      
+      // Determinar qué grupo mostrar inicialmente
+      const grupoGuardado = localStorage.getItem('grupoSeleccionado');
+      let grupoInicial;
+      
+      if (grupoGuardado) {
+        // Si hay un grupo guardado, verificar que esté disponible
+        const grupoGuardadoNum = parseInt(grupoGuardado);
+        const grupoDisponible = gruposDisponibles.value.find(g => g.numero === grupoGuardadoNum);
+        grupoInicial = grupoDisponible ? grupoGuardadoNum : grupoDelUsuario;
+      } else {
+        // Si no hay grupo guardado, usar el grupo del usuario
+        grupoInicial = grupoDelUsuario;
+      }
+      
+      grupoActual.value = grupoInicial;
       await cargarContenidoVip();
     } else {
       esUsuarioVip.value = false;
@@ -317,8 +338,8 @@ const verificarAccesoVip = async (userEmail) => {
 };
 
 const obtenerGruposDisponibles = (grupoUsuario) => {
-  // Por ahora todos los usuarios VIP pueden ver todos los grupos disponibles
-  const grupos = [
+  // Todos los grupos disponibles
+  const todosLosGrupos = [
     {
       numero: 1,
       nombre: 'Grupo 1',
@@ -333,7 +354,9 @@ const obtenerGruposDisponibles = (grupoUsuario) => {
     }
   ];
   
-  return grupos;
+  // Por ahora devolver todos los grupos disponibles
+  // En el futuro podrías filtrar según el grupo del usuario si es necesario
+  return todosLosGrupos;
 };
 
 // Cargar contenido VIP
@@ -419,6 +442,8 @@ const fetchCursos = async () => {
 };
 
 const navegarACursoVip = (cursoId) => {
+  // Guardar el grupo actual antes de navegar
+  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
   router.push(`/vip/grupo/${grupoActual.value}/curso/${cursoId}`);
 };
 
@@ -440,6 +465,8 @@ const descargarMaterialVip = (item) => {
 
 const logout = async () => {
   try {
+    // Limpiar el grupo guardado al cerrar sesión
+    localStorage.removeItem('grupoSeleccionado');
     await authService.logout();
     router.push('/aula-virtual');
   } catch (err) {
@@ -465,11 +492,20 @@ Mi email registrado es: ${auth.currentUser?.email}
 };
 
 const navegarASimulacroVip = () => {
-  router.push('/simulacro-vip/simulacro3'); // Cambia por el ID real de tu simulacro VIP
+  // Guardar grupo actual antes de navegar
+  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
+  router.push('/simulacro-vip/simulacro3');
 };
 
 const navegarAResultadosVip = () => {
+  // Guardar grupo actual antes de navegar
+  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
   router.push('/simulacro-vip/simulacro3/ranking');
+};
+
+// Función para obtener el texto del grupo del usuario para mostrar en la UI
+const getTextoGrupoUsuario = () => {
+  return `Grupo ${grupoUsuario.value}`;
 };
 </script>
 
