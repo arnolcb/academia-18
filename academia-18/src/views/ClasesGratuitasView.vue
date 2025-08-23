@@ -26,13 +26,13 @@
 <div v-else class="cursos-gratuitos-grid">
   <!-- Card manual para simulacro -->
   <div class="curso-gratuito-card simulacro-card" @click="navegarASimulacro">
-    <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/f_auto,q_auto/v1753567508/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_zbogvn.png')` }">
+    <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/v1755966570/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_1_qyzklo.png')` }">
       <div class="curso-overlay"></div>
-      <div class="curso-badge simulacro-badge">RESULTADOS</div>
+      <div class="curso-badge simulacro-badge">SIMULACRO GRATUITO</div>
     </div>
-    <div class="curso-info">
-      <h2>RESULTADOS</h2>
-      <p>Revisa aquí los resultados del <strong>Simulacro #1</strong></p>
+        <div class="curso-info">
+      <h2>Simulacro Gratuito</h2>
+      <p>Pon a prueba tus conocimientos con nuestro simulacro de examen gratuito. 60 preguntas, 125 minutos.</p>
       <div class="curso-meta">
         <div class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -54,7 +54,7 @@
         </div>
       </div>
       <button class="ver-curso-btn simulacro-btn">
-        <span>Ver resultados</span>
+        <span>Iniciar Simulacro</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -128,8 +128,8 @@ import { collection, getDocs } from 'firebase/firestore';
 
 const router = useRouter();
 const navegarASimulacro = () => {
-  //router.push('/simulacro-gratuito/simulacro1');
-  router.push('/simulacro-gratuito/simulacro1/ranking');
+  router.push('/simulacro-gratuito/simulacro2');
+  //router.push('/simulacro-gratuito/simulacro1/ranking');
 };
 // Estados
 const cursosRegulares = ref([]);
