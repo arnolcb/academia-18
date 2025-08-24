@@ -306,7 +306,7 @@ const getInitials = (nombre) => {
 // Navegación
 const volverASimulacro = () => {
     //router.push(`/simulacro/${simulacro.value.id}`);
-    router.push('/aula-virtual');
+    router.push('/clases-gratuitas');
 };
 
 const irASimulacro = () => {
