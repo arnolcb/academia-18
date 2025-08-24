@@ -28,11 +28,11 @@
   <div class="curso-gratuito-card simulacro-card" @click="navegarASimulacro">
     <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/v1755966570/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_1_qyzklo.png')` }">
       <div class="curso-overlay"></div>
-      <div class="curso-badge simulacro-badge">SIMULACRO GRATUITO</div>
+      <div class="curso-badge simulacro-badge">RESULTADOS #2</div>
     </div>
         <div class="curso-info">
-      <h2>Simulacro Gratuito</h2>
-      <p>Pon a prueba tus conocimientos con nuestro simulacro de examen gratuito. 60 preguntas, 125 minutos.</p>
+      <h2>RESULTADOS SIMULACRO #2</h2>
+      <p>Ingresa aquí al ranking</p>
       <div class="curso-meta">
         <div class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -128,8 +128,8 @@ import { collection, getDocs } from 'firebase/firestore';
 
 const router = useRouter();
 const navegarASimulacro = () => {
-  router.push('/simulacro-gratuito/simulacro2');
-  //router.push('/simulacro-gratuito/simulacro1/ranking');
+  //router.push('/simulacro-gratuito/simulacro2');
+  router.push('/simulacro-gratuito/simulacro2/ranking');
 };
 // Estados
 const cursosRegulares = ref([]);
