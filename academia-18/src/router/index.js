@@ -160,11 +160,13 @@ const router = createRouter({
       component: () => import("../views/NotFoundView.vue"),
     },
     // Ruta para el simulacro gratuito
+    /*
     {
       path: "/simulacro-gratuito/:id",
       name: "SimulacroGratuito",
       component: () => import("../views/SimulacroGratuitoView.vue"),
     },
+    */
     // Ruta para el ranking del simulacro gratuito
     {
       path: "/simulacro-gratuito/:id/ranking",
