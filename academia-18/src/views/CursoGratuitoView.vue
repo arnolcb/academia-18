@@ -347,7 +347,7 @@ const cargarCurso = async () => {
     }
 
     // Obtener datos del curso desde la colección regular
-    const cursoDoc = await getDoc(doc(db, 'cursos2', cursoId));
+    const cursoDoc = await getDoc(doc(db, 'cursos3', cursoId));
     if (!cursoDoc.exists()) {
       throw new Error('El curso no existe');
     }
@@ -358,7 +358,7 @@ const cargarCurso = async () => {
     };
 
     // Obtener semanas del curso
-    const semanasRef = collection(db, `cursos2/${cursoId}/semanas`);
+    const semanasRef = collection(db, `cursos3/${cursoId}/semanas`);
     const q = query(semanasRef, orderBy('orden', 'asc'));
     const semanasSnapshot = await getDocs(q);
 
@@ -366,7 +366,7 @@ const cargarCurso = async () => {
     const semanasTemp = [];
     for (const semanaDoc of semanasSnapshot.docs) {
       // Para cada semana, obtener sus recursos
-      const recursosRef = collection(db, `cursos2/${cursoId}/semanas/${semanaDoc.id}/recursos`);
+      const recursosRef = collection(db, `cursos3/${cursoId}/semanas/${semanaDoc.id}/recursos`);
       const recursosSnapshot = await getDocs(recursosRef);
 
       // Incluir todos los recursos (guías, clases y tareas)

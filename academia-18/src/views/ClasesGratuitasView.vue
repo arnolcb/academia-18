@@ -147,7 +147,7 @@ const cargarCursos = async () => {
 
   try {
     // Obtener cursos regulares de Firebase
-    const cursosRef = collection(db, 'cursos2');
+    const cursosRef = collection(db, 'cursos3');
     const querySnapshot = await getDocs(cursosRef);
 
     const cursosArray = [];
