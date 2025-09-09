@@ -339,9 +339,9 @@ const route = useRoute();
 // --- NUEVO: Lógica para determinar la colección dinámicamente ---
 const coleccionCurso = computed(() => {
   const grupo = route.params.grupo;
-  // Si el grupo es '2', usa 'cursosVip2'.
-  // Para cualquier otro caso (incluido undefined para retrocompatibilidad), usa 'cursosVip'.
-  return grupo === '2' ? 'cursosVip2' : 'cursosVip';
+  if (grupo === '2') return 'cursosVip2';
+  if (grupo === '3') return 'cursosVip3';
+  return 'cursosVip'; // Grupo 1 o caso por defecto
 });
 
 // Estados
