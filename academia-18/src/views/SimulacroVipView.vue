@@ -93,7 +93,7 @@
           <div class="instrucciones">
             <h3>Instrucciones VIP:</h3>
             <ul>
-              <li>Este es un simulacro exclusivo para estudiantes VIP con duración de {{ Math.floor(simulacro.duracion / 60) }} minutos.</li>
+               <li>Este es un simulacro exclusivo para estudiantes VIP con duración de {{ simulacro.duracion ? Math.floor(simulacro.duracion / 60) : 125 }} minutos.</li>
               <li>Consta de {{ simulacro.totalPreguntas }} preguntas de opción múltiple premium.</li>
               <li>Cada respuesta correcta suma {{ simulacro.puntajePorPregunta }} puntos.</li>
               <li>Las respuestas incorrectas no restan puntos.</li>
@@ -395,7 +395,7 @@ const cargarSimulacro = async () => {
     respuestasUsuario.value = Array(preguntas.value.length).fill(null);
 
     // Configurar tiempo
-    tiempoRestante.value = simulacro.value.duracion || 4200;
+    tiempoRestante.value = simulacro.value.duracion || 7500;
 
   } catch (err) {
     console.error('Error al cargar el simulacro VIP:', err);
