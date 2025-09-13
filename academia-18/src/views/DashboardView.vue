@@ -104,7 +104,7 @@
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-<!--
+
               <div class="curso-card curso-vip simulacro-vip-especial" @click="navegarASimulacroVip">
   <div class="curso-imagen simulacro-vip-imagen">
     <div class="curso-overlay"></div>
@@ -115,16 +115,16 @@
           points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
         </polygon>
       </svg>
-      <span>SIMULACRO VIP #2</span>
+      <span>13/09</span>
     </div>
   </div>
   <div class="curso-info">
-    <h2>RENDIR SIMULACRO #3</h2>
+    <h2>RENDIR SIMULACRO</h2>
     <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
   </div>
 </div>
--->
-<!-- VERSIÓN 2: VER RESULTADOS (COMENTADA) -->
+
+<!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)
 
 <div class="curso-card curso-vip simulacro-vip-especial simulacro-resultados" @click="navegarAResultadosVip">
   <div class="curso-imagen simulacro-resultados-imagen">
@@ -143,7 +143,7 @@
     <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
   </div>
 </div>
-
+ -->
               <!-- Las tarjetas de curso VIP existentes -->
               <div v-for="curso in cursosVip" :key="curso.id" class="curso-card curso-vip"
                 @click="navegarACursoVip(curso.id)">
@@ -500,13 +500,13 @@ Mi email registrado es: ${auth.currentUser?.email}
 const navegarASimulacroVip = () => {
   // Guardar grupo actual antes de navegar
   localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
-  router.push('/simulacro-vip/simulacro3');
+  router.push('/simulacro-vip/simulacro4');
 };
 
 const navegarAResultadosVip = () => {
   // Guardar grupo actual antes de navegar
   localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
-  router.push('/simulacro-vip/simulacro3/ranking');
+  router.push('/simulacro-vip/simulacro4/ranking');
 };
 
 // Función para obtener el texto del grupo del usuario para mostrar en la UI
