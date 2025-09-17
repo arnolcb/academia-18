@@ -279,7 +279,7 @@ const cargarRanking = async () => {
     // Convertir a array y procesar datos de usuario
     const resultadosTemp = [];
     
-    resultadosPorUsuario.forEach((data, userId) => {
+     resultadosPorUsuario.forEach((data, userId) => {
       const nombre = 'Usuario';
       const userEmail = auth.currentUser?.uid === userId ? 
         auth.currentUser.email : 
@@ -287,9 +287,18 @@ const cargarRanking = async () => {
       
       const inicial = 'U';
       
+      // Verificar y limpiar tiempoUtilizado
+      let tiempoUtilizado = data.tiempoUtilizado;
+      if (tiempoUtilizado === null || 
+          tiempoUtilizado === undefined || 
+          isNaN(tiempoUtilizado)) {
+        tiempoUtilizado = 0; // o null si prefieres mostrar '--:--'
+      }
+      
       resultadosTemp.push({
         id: data.id,
         ...data,
+        tiempoUtilizado, // usar el valor limpio
         nombre,
         email: userEmail,
         inicial,
@@ -336,8 +345,20 @@ const getPosicionClass = (posicion) => {
 };
 
 const formatearTiempo = (tiempoEnSegundos) => {
-  const minutos = Math.floor(tiempoEnSegundos / 60);
-  const segundos = tiempoEnSegundos % 60;
+  // Verificar si el tiempo es válido
+  if (tiempoEnSegundos === null || 
+      tiempoEnSegundos === undefined || 
+      isNaN(tiempoEnSegundos) || 
+      tiempoEnSegundos < 0) {
+    return '--:--';
+  }
+  
+  // Convertir a número entero
+  const tiempo = Math.floor(Number(tiempoEnSegundos));
+  
+  const minutos = Math.floor(tiempo / 60);
+  const segundos = tiempo % 60;
+  
   return `${minutos}:${segundos.toString().padStart(2, '0')}`;
 };
 

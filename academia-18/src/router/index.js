@@ -133,7 +133,7 @@ const router = createRouter({
       component: () => import("../views/SimulacroRanking.vue"),
       beforeEnter: requireAuth,
     },
-    
+    /*
     {
       path: "/simulacro-vip/:id",
       name: "SimulacroVip",
@@ -143,7 +143,7 @@ const router = createRouter({
         requiresVip: true // Opcional: para verificación VIP adicional
       }
     },
-    
+   */
     {
       path: "/simulacro-vip/:id/ranking",
       name: "RankingVip", 
@@ -153,6 +153,7 @@ const router = createRouter({
         requiresVip: true // Opcional: para verificación VIP adicional
       }
     },
+    
     // Pagina 404 para rutas no encontradas
     {
       path: "/:pathMatch(.*)*",
