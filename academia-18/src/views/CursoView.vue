@@ -341,6 +341,7 @@ const coleccionCurso = computed(() => {
   const grupo = route.params.grupo;
   if (grupo === '2') return 'cursosVip2';
   if (grupo === '3') return 'cursosVip3';
+  if (grupo === '4') return 'cursosVip4';
   return 'cursosVip'; // Grupo 1 o caso por defecto
 });
 

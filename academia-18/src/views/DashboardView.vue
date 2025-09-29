@@ -357,6 +357,12 @@ const obtenerGruposDisponibles = (grupoUsuario) => {
       nombre: 'Grupo 3',
       coleccionCursos: 'cursosVip3',
       coleccionMateriales: 'materialesVip3'
+    },
+    {
+      numero: 4,
+      nombre: 'Grupo Repaso',
+      coleccionCursos: 'cursosVip4',
+      coleccionMateriales: 'materialesVip4'
     }
   ];
   
