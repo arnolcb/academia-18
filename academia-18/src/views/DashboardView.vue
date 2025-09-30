@@ -767,10 +767,10 @@ const descargarMaterialVip = (item) => {
 const copiarCorreo = async () => {
   try {
     await navigator.clipboard.writeText(userEmail.value);
-    showToast('Correo copiado al portapapeles', 'success');
+    showToast("Correo copiado al portapapeles", "success");
   } catch (err) {
-    console.error('Error al copiar:', err);
-    showToast('No se pudo copiar el correo', 'error');
+    console.error("Error al copiar:", err);
+    showToast("No se pudo copiar el correo", "error");
   }
 };
 
@@ -863,6 +863,47 @@ const mostrarMensajeRepaso = () => {
 .user-name {
   font-weight: 500;
   color: #333;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.user-email-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 200px;
+}
+
+.copy-email-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #757575;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.copy-email-btn:hover {
+  background-color: rgba(0, 82, 175, 0.08);
+  color: #0052af;
+  opacity: 1;
+}
+
+.copy-email-btn:active {
+  transform: scale(0.95);
+}
+
+.user-grupo {
+  font-size: 0.8rem;
+  color: #757575;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
 .vip-badge {
@@ -877,6 +918,7 @@ const mostrarMensajeRepaso = () => {
   border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .logout-btn {
@@ -891,6 +933,7 @@ const mostrarMensajeRepaso = () => {
   transition: all 0.2s;
   padding: 0.5rem 0.8rem;
   border-radius: 8px;
+  white-space: nowrap;
 }
 
 .logout-btn:hover {
@@ -1351,80 +1394,6 @@ const mostrarMensajeRepaso = () => {
   color: #333;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .dashboard-main-wrapper,
-  .main-content-layout {
-    flex-direction: column;
-  }
-
-  .materiales-sidebar {
-    width: 100%;
-    max-width: 100%;
-    order: 2;
-  }
-
-  .cursos-grid {
-    max-width: 100%;
-    order: 1;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-}
-
-@media (max-width: 650px) {
-  .dashboard-content {
-    padding: 0 1rem;
-    margin: 1.5rem auto;
-  }
-
-  .cursos-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .vip-welcome-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-
-  .vip-welcome-text h2 {
-    font-size: 1.4rem;
-  }
-
-  .vip-welcome-banner {
-    padding: 1.5rem;
-  }
-
-  .vip-no-access-card {
-    padding: 2rem;
-  }
-
-  .vip-no-access-card h2 {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .vip-welcome-banner {
-    padding: 1.5rem;
-  }
-
-  .vip-no-access-card {
-    padding: 1.5rem;
-  }
-
-  .vip-no-access-full {
-    padding: 1rem;
-  }
-}
-
 /* Estilos para VERSIÓN 1: RENDIR SIMULACRO (rojo) */
 .simulacro-vip-especial .curso-imagen {
   background: linear-gradient(135deg, #f57070 0%, #a24b4f 50%, #350502 100%);
@@ -1559,19 +1528,6 @@ const mostrarMensajeRepaso = () => {
   }
 }
 
-/* Responsive para ambas versiones */
-@media (max-width: 650px) {
-  .simulacro-vip-especial .curso-info h2,
-  .simulacro-resultados .curso-info h2 {
-    font-size: 1.1rem;
-  }
-
-  .simulacro-vip-especial .curso-info p,
-  .simulacro-resultados .curso-info p {
-    font-size: 0.8rem;
-  }
-}
-
 .grupos-switch {
   background: white;
   border-radius: 12px;
@@ -1652,44 +1608,6 @@ const mostrarMensajeRepaso = () => {
   animation: spin 1s linear infinite;
 }
 
-/* Responsive para switch */
-@media (max-width: 650px) {
-  .grupos-switch-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .grupos-buttons {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .grupo-btn {
-    flex: 1;
-    min-width: 120px;
-    justify-content: center;
-  }
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.2rem;
-}
-
-.user-grupo {
-  font-size: 0.8rem;
-  color: #757575;
-  font-weight: 400;
-}
-
-@media (max-width: 650px) {
-  .user-info {
-    align-items: center;
-  }
-}
-
 .grupo-btn.grupo-restringido {
   opacity: 0.6;
   cursor: not-allowed;
@@ -1765,8 +1683,148 @@ const mostrarMensajeRepaso = () => {
   }
 }
 
-/* Responsive para toast */
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard-main-wrapper,
+  .main-content-layout {
+    flex-direction: column;
+  }
+
+  .materiales-sidebar {
+    width: 100%;
+    max-width: 100%;
+    order: 2;
+  }
+
+  .cursos-grid {
+    max-width: 100%;
+    order: 1;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
 @media (max-width: 650px) {
+  .dashboard-header {
+    padding: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .user-menu {
+    flex-wrap: nowrap;
+    gap: 0.8rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .user-email-container {
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .user-name {
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .copy-email-btn {
+    padding: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .user-grupo {
+    flex-shrink: 0;
+  }
+
+  .vip-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .logout-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .logout-btn span {
+    display: none;
+  }
+
+  .dashboard-content {
+    padding: 0 1rem;
+    margin: 1.5rem auto;
+  }
+
+  .cursos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .vip-welcome-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .vip-welcome-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .vip-welcome-banner {
+    padding: 1.5rem;
+  }
+
+  .vip-no-access-card {
+    padding: 2rem;
+  }
+
+  .vip-no-access-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .grupos-switch-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .grupos-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .grupo-btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .simulacro-vip-especial .curso-info h2,
+  .simulacro-resultados .curso-info h2 {
+    font-size: 1.1rem;
+  }
+
+  .simulacro-vip-especial .curso-info p,
+  .simulacro-resultados .curso-info p {
+    font-size: 0.8rem;
+  }
+
   .toast-container {
     width: 85%;
     padding: 0.7rem 1rem;
@@ -1774,43 +1832,25 @@ const mostrarMensajeRepaso = () => {
   }
 }
 
-.user-email-container {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.copy-email-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: #757575;
-  cursor: pointer;
-  padding: 0.3rem;
-  border-radius: 4px;
-  transition: all 0.2s;
-  opacity: 0.7;
-}
-
-.copy-email-btn:hover {
-  background-color: rgba(0, 82, 175, 0.08);
-  color: #0052af;
-  opacity: 1;
-}
-
-.copy-email-btn:active {
-  transform: scale(0.95);
-}
-
-@media (max-width: 650px) {
-  .user-email-container {
-    gap: 0.3rem;
+@media (max-width: 480px) {
+  .vip-welcome-banner {
+    padding: 1.5rem;
   }
-  
-  .copy-email-btn {
-    padding: 0.25rem;
+
+  .vip-no-access-card {
+    padding: 1.5rem;
+  }
+
+  .vip-no-access-full {
+    padding: 1rem;
+  }
+
+  .user-email-container {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    flex: 0 1 auto;
   }
 }
 </style>
