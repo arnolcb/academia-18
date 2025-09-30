@@ -5,24 +5,70 @@
       <div class="header-content">
         <h1>Aula Virtual VIP</h1>
         <div class="user-menu">
-          <span class="user-name">{{ userName }}</span>
+          <div class="user-email-container">
+            <span class="user-name">{{ userEmail }}</span>
+            <button
+              @click="copiarCorreo"
+              class="copy-email-btn"
+              :title="'Copiar ' + userEmail"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path>
+              </svg>
+            </button>
+          </div>
           <span class="user-grupo">Grupo {{ grupoUsuario }}</span>
           <!-- Badge VIP si el usuario tiene acceso -->
           <div v-if="esUsuarioVip" class="vip-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
               <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
               <path d="M4 22h16"></path>
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+              <path
+                d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+              ></path>
+              <path
+                d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+              ></path>
               <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
             </svg>
             <span>VIP</span>
           </div>
           <button @click="logout" class="logout-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
               <polyline points="16 17 21 12 16 7"></polyline>
               <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -44,7 +90,9 @@
       <!-- Error state -->
       <div v-else-if="error" class="error-container">
         <p>{{ error }}</p>
-        <button @click="fetchCursos" class="retry-btn">Intentar nuevamente</button>
+        <button @click="fetchCursos" class="retry-btn">
+          Intentar nuevamente
+        </button>
       </div>
 
       <!-- Contenido principal VIP -->
@@ -53,20 +101,39 @@
         <div v-if="!esUsuarioVip" class="vip-no-access-full">
           <div class="vip-no-access-card">
             <div class="vip-no-access-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polygon
-                  points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-                </polygon>
+                  points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
+                ></polygon>
               </svg>
             </div>
             <h2>Acceso VIP Requerido</h2>
-            <p>El Aula Virtual está disponible solo para estudiantes VIP seleccionados. Contacta con tu instructor para
-              más información sobre cómo obtener acceso a contenido exclusivo y materiales premium.</p>
+            <p>
+              El Aula Virtual está disponible solo para estudiantes VIP
+              seleccionados. Contacta con tu instructor para más información
+              sobre cómo obtener acceso a contenido exclusivo y materiales
+              premium.
+            </p>
             <button @click="solicitarAccesoVipWhatsApp" class="whatsapp-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path
-                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.525 3.488" />
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.525 3.488"
+                />
               </svg>
               <span>Solicitar Acceso VIP</span>
             </button>
@@ -77,43 +144,77 @@
         <div v-else class="vip-content-wrapper">
           <!-- Banner bienvenida VIP -->
 
-<div v-if="gruposDisponibles.length > 1" class="grupos-switch">
-  <div class="grupos-switch-content">
-    <span class="grupos-switch-label">Cambiar Aula:</span>
-    <div class="grupos-buttons">
-<button 
-  v-for="grupo in gruposDisponibles" 
-  :key="grupo.numero"
-  @click="grupo.numero === 4 && !tieneAccesoRepaso ? mostrarMensajeRepaso() : cambiarGrupo(grupo.numero)"
-  :class="['grupo-btn', { 
-    'active': grupoActual === grupo.numero, 
-    'loading': loadingGrupos && grupoActual === grupo.numero,
-    'grupo-restringido': grupo.numero === 4 && !tieneAccesoRepaso
-  }]"
-  :disabled="loadingGrupos"
->
-  <span v-if="loadingGrupos && grupoActual === grupo.numero" class="grupo-loading">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="M12 6v6l4 2"></path>
-    </svg>
-  </span>
-  <span>{{ grupo.nombre }}</span>
-  <!-- NUEVO: Icono de candado para grupo restringido -->
-  <svg v-if="grupo.numero === 4 && !tieneAccesoRepaso" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-  </svg>
-</button>
-    </div>
-  </div>
-</div>
+          <div v-if="gruposDisponibles.length > 1" class="grupos-switch">
+            <div class="grupos-switch-content">
+              <span class="grupos-switch-label">Cambiar Aula:</span>
+              <div class="grupos-buttons">
+                <button
+                  v-for="grupo in gruposDisponibles"
+                  :key="grupo.numero"
+                  @click="
+                    grupo.numero === 4 && !tieneAccesoRepaso
+                      ? mostrarMensajeRepaso()
+                      : cambiarGrupo(grupo.numero)
+                  "
+                  :class="[
+                    'grupo-btn',
+                    {
+                      active: grupoActual === grupo.numero,
+                      loading: loadingGrupos && grupoActual === grupo.numero,
+                      'grupo-restringido':
+                        grupo.numero === 4 && !tieneAccesoRepaso,
+                    },
+                  ]"
+                  :disabled="loadingGrupos"
+                >
+                  <span
+                    v-if="loadingGrupos && grupoActual === grupo.numero"
+                    class="grupo-loading"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 6v6l4 2"></path>
+                    </svg>
+                  </span>
+                  <span>{{ grupo.nombre }}</span>
+                  <!-- NUEVO: Icono de candado para grupo restringido -->
+                  <svg
+                    v-if="grupo.numero === 4 && !tieneAccesoRepaso"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect
+                      x="3"
+                      y="11"
+                      width="18"
+                      height="11"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
           <!-- Layout principal VIP -->
           <div class="main-content-layout">
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-<!--
+              <!--
               <div class="curso-card curso-vip simulacro-vip-especial" @click="navegarASimulacroVip">
   <div class="curso-imagen simulacro-vip-imagen">
     <div class="curso-overlay"></div>
@@ -133,38 +234,63 @@
   </div>
 </div>
 -->
-<!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
+              <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
 
-<div class="curso-card curso-vip simulacro-vip-especial simulacro-resultados" @click="navegarAResultadosVip">
-  <div class="curso-imagen simulacro-resultados-imagen">
-    <div class="curso-overlay"></div>
-    <div class="vip-badge-curso simulacro-resultados-badge">
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-        fill="currentColor">
-        <polygon points="6 2 18 2 22 6 22 18 18 22 6 22 2 18 2 6 6 2"></polygon>
-        <polyline points="6 12 10 16 18 8"></polyline>
-      </svg>
-      <span>RESULTADOS</span>
-    </div>
-  </div>
-  <div class="curso-info">
-    <h2>SIMULACRO #4 RESULTADOS</h2>
-    <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
-  </div>
-</div>
+              <div
+                class="curso-card curso-vip simulacro-vip-especial simulacro-resultados"
+                @click="navegarAResultadosVip"
+              >
+                <div class="curso-imagen simulacro-resultados-imagen">
+                  <div class="curso-overlay"></div>
+                  <div class="vip-badge-curso simulacro-resultados-badge">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon
+                        points="6 2 18 2 22 6 22 18 18 22 6 22 2 18 2 6 6 2"
+                      ></polygon>
+                      <polyline points="6 12 10 16 18 8"></polyline>
+                    </svg>
+                    <span>RESULTADOS</span>
+                  </div>
+                </div>
+                <div class="curso-info">
+                  <h2>SIMULACRO #4 RESULTADOS</h2>
+                  <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
+                </div>
+              </div>
 
               <!-- Las tarjetas de curso VIP existentes -->
-              <div v-for="curso in cursosVip" :key="curso.id" class="curso-card curso-vip"
-                @click="navegarACursoVip(curso.id)">
-                <div class="curso-imagen"
-                  :style="{ backgroundImage: `url(${curso.imagen || '/placeholder-curso.jpg'})` }">
+              <div
+                v-for="curso in cursosVip"
+                :key="curso.id"
+                class="curso-card curso-vip"
+                @click="navegarACursoVip(curso.id)"
+              >
+                <div
+                  class="curso-imagen"
+                  :style="{
+                    backgroundImage: `url(${
+                      curso.imagen || '/placeholder-curso.jpg'
+                    })`,
+                  }"
+                >
                   <div class="curso-overlay"></div>
                   <div class="vip-badge-curso">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                      fill="currentColor">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <polygon
-                        points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-                      </polygon>
+                        points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
+                      ></polygon>
                     </svg>
                     <span>VIP</span>
                   </div>
@@ -179,11 +305,20 @@
             <!-- Sidebar de materiales VIP -->
             <div class="materiales-sidebar materiales-vip">
               <h2 class="materiales-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
                   <polygon
-                    points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-                  </polygon>
+                    points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
+                  ></polygon>
                 </svg>
                 <span>Materiales VIP</span>
               </h2>
@@ -191,31 +326,68 @@
                 <div class="loading-spinner-small"></div>
                 <p>Cargando materiales VIP...</p>
               </div>
-              <div v-else-if="materialesVip.length === 0" class="materiales-empty">
+              <div
+                v-else-if="materialesVip.length === 0"
+                class="materiales-empty"
+              >
                 <p>No hay materiales VIP disponibles.</p>
               </div>
               <div v-else class="materiales-list">
-                <div v-for="material in materialesVip" :key="material.id" class="material-item">
-                  <div class="material-header" @click="toggleMaterialVip(material.id)"
-                    :class="{ 'active': materialVipActivo === material.id }">
+                <div
+                  v-for="material in materialesVip"
+                  :key="material.id"
+                  class="material-item"
+                >
+                  <div
+                    class="material-header"
+                    @click="toggleMaterialVip(material.id)"
+                    :class="{ active: materialVipActivo === material.id }"
+                  >
                     <span class="material-title">{{ material.titulo }}</span>
                     <div class="material-toggle">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
                     </div>
                   </div>
-                  <div v-if="materialVipActivo === material.id" class="material-items">
+                  <div
+                    v-if="materialVipActivo === material.id"
+                    class="material-items"
+                  >
                     <div v-if="material.items.length === 0" class="items-empty">
                       <p>No hay archivos disponibles.</p>
                     </div>
                     <div v-else class="items-list">
-                      <div v-for="item in material.items" :key="item.id" class="item-entry">
+                      <div
+                        v-for="item in material.items"
+                        :key="item.id"
+                        class="item-entry"
+                      >
                         <div class="item-info">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path
+                              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                            ></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
                             <line x1="16" y1="13" x2="8" y2="13"></line>
                             <line x1="16" y1="17" x2="8" y2="17"></line>
@@ -223,10 +395,24 @@
                           </svg>
                           <span>{{ item.titulo }}</span>
                         </div>
-                        <button @click="descargarMaterialVip(item)" class="material-download-btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <button
+                          @click="descargarMaterialVip(item)"
+                          class="material-download-btn"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path
+                              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            ></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                           </svg>
@@ -243,52 +429,82 @@
     </main>
   </div>
   <!-- Componente Toast -->
-<div v-if="toast.visible" class="toast-container" :class="toast.type">
-  <div class="toast-message">
-    <svg v-if="toast.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-    </svg>
-    <svg v-if="toast.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="16" x2="12" y2="12"></line>
-      <line x1="12" y1="8" x2="12.01" y2="8"></line>
-    </svg>
-    <svg v-if="toast.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-      <polyline points="22 4 12 14.01 9 11.01"></polyline>
-    </svg>
-    <span>{{ toast.message }}</span>
+  <div v-if="toast.visible" class="toast-container" :class="toast.type">
+    <div class="toast-message">
+      <svg
+        v-if="toast.type === 'error'"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <svg
+        v-if="toast.type === 'info'"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      <svg
+        v-if="toast.type === 'success'"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span>{{ toast.message }}</span>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { auth, db, authService } from '@/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { ref, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { auth, db, authService } from "@/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const router = useRouter();
 const route = useRoute();
 // Toast
 const toast = ref({
   visible: false,
-  message: '',
-  type: 'info'
+  message: "",
+  type: "info",
 });
 
 // Función para mostrar toast
-const showToast = (message, type = 'info') => {
+const showToast = (message, type = "info") => {
   toast.value = {
     visible: true,
     message,
-    type
+    type,
   };
 
   setTimeout(() => {
@@ -299,7 +515,8 @@ const showToast = (message, type = 'info') => {
 // Estados
 const loading = ref(true);
 const error = ref(null);
-const userName = ref('');
+const userName = ref("");
+const userEmail = ref("");
 const tieneAccesoRepaso = ref(false);
 
 // Estados VIP
@@ -322,10 +539,11 @@ const grupoUsuario = ref(1);
 onMounted(async () => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      userName.value = user.email.split('@')[0];
+      userEmail.value = user.email;
+      userName.value = user.email.split("@")[0];
       await verificarAccesoVip(user.email);
     } else {
-      router.push('/aula-virtual');
+      router.push("/aula-virtual");
     }
   });
 });
@@ -333,7 +551,7 @@ onMounted(async () => {
 // Watch para mantener el grupo seleccionado en localStorage
 watch(grupoActual, (nuevoGrupo) => {
   if (esUsuarioVip.value) {
-    localStorage.setItem('grupoSeleccionado', nuevoGrupo.toString());
+    localStorage.setItem("grupoSeleccionado", nuevoGrupo.toString());
   }
 });
 
@@ -344,47 +562,52 @@ const verificarAccesoVip = async (userEmail) => {
 
   try {
     const vipQuery = query(
-      collection(db, 'usuariosVip'),
-      where('email', '==', userEmail),
-      where('estado', '==', 'activo')
+      collection(db, "usuariosVip"),
+      where("email", "==", userEmail),
+      where("estado", "==", "activo")
     );
     const querySnapshot = await getDocs(vipQuery);
 
     if (!querySnapshot.empty) {
       esUsuarioVip.value = true;
       const userData = querySnapshot.docs[0].data();
-      
+
       // Obtener datos del usuario
       const grupoDelUsuario = userData.grupo || 1;
       const tieneRepaso = userData.repaso === true;
-      
+
       grupoUsuario.value = grupoDelUsuario;
       tieneAccesoRepaso.value = tieneRepaso;
-      
+
       // MODIFICADO: Pasar ambos parámetros
-      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario, tieneRepaso);
-      
+      gruposDisponibles.value = obtenerGruposDisponibles(
+        grupoDelUsuario,
+        tieneRepaso
+      );
+
       // Determinar qué grupo mostrar inicialmente
-      const grupoGuardado = localStorage.getItem('grupoSeleccionado');
+      const grupoGuardado = localStorage.getItem("grupoSeleccionado");
       let grupoInicial;
-      
+
       if (grupoGuardado) {
         const grupoGuardadoNum = parseInt(grupoGuardado);
-        const grupoDisponible = gruposDisponibles.value.find(g => g.numero === grupoGuardadoNum);
+        const grupoDisponible = gruposDisponibles.value.find(
+          (g) => g.numero === grupoGuardadoNum
+        );
         grupoInicial = grupoDisponible ? grupoGuardadoNum : grupoDelUsuario;
       } else {
         grupoInicial = grupoDelUsuario;
       }
-      
+
       grupoActual.value = grupoInicial;
       await cargarContenidoVip();
     } else {
       esUsuarioVip.value = false;
     }
   } catch (error) {
-    console.error('Error al verificar acceso VIP:', error);
+    console.error("Error al verificar acceso VIP:", error);
     esUsuarioVip.value = false;
-    error.value = 'Error al verificar tu acceso. Por favor, intenta de nuevo.';
+    error.value = "Error al verificar tu acceso. Por favor, intenta de nuevo.";
   } finally {
     loading.value = false;
   }
@@ -395,35 +618,35 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
   const todosLosGrupos = [
     {
       numero: 1,
-      nombre: 'Grupo 1',
-      coleccionCursos: 'cursosVip',
-      coleccionMateriales: 'materialesVip'
+      nombre: "Grupo 1",
+      coleccionCursos: "cursosVip",
+      coleccionMateriales: "materialesVip",
     },
     {
       numero: 2,
-      nombre: 'Grupo 2',
-      coleccionCursos: 'cursosVip2',
-      coleccionMateriales: 'materialesVip2'
+      nombre: "Grupo 2",
+      coleccionCursos: "cursosVip2",
+      coleccionMateriales: "materialesVip2",
     },
     {
       numero: 3,
-      nombre: 'Grupo 3',
-      coleccionCursos: 'cursosVip3',
-      coleccionMateriales: 'materialesVip3'
+      nombre: "Grupo 3",
+      coleccionCursos: "cursosVip3",
+      coleccionMateriales: "materialesVip3",
     },
     {
       numero: 4,
-      nombre: 'Grupo Repaso',
-      coleccionCursos: 'cursosVip4',
-      coleccionMateriales: 'materialesVip4'
-    }
+      nombre: "Grupo Repaso",
+      coleccionCursos: "cursosVip4",
+      coleccionMateriales: "materialesVip4",
+    },
   ];
-  
+
   // Si el usuario es del grupo 4, solo ver grupo 4
   if (grupoUsuario === 4) {
-    return todosLosGrupos.filter(g => g.numero === 4);
+    return todosLosGrupos.filter((g) => g.numero === 4);
   }
-  
+
   // Si el usuario es de grupo 1, 2 o 3: SIEMPRE mostrar todos los grupos
   // La restricción de acceso se maneja en el click del botón, no ocultando el botón
   return todosLosGrupos;
@@ -432,7 +655,9 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
 // Cargar contenido VIP
 const cargarContenidoVip = async () => {
   try {
-    const grupoSeleccionado = gruposDisponibles.value.find(g => g.numero === grupoActual.value);
+    const grupoSeleccionado = gruposDisponibles.value.find(
+      (g) => g.numero === grupoActual.value
+    );
     if (!grupoSeleccionado) return;
 
     const cursosVipRef = collection(db, grupoSeleccionado.coleccionCursos);
@@ -441,22 +666,25 @@ const cargarContenidoVip = async () => {
     cursosVipSnapshot.forEach((doc) => {
       cursosVipArray.push({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       });
     });
     cursosVip.value = cursosVipArray.sort((a, b) => a.orden - b.orden);
 
     await fetchMaterialesVip();
   } catch (error) {
-    console.error('Error al cargar contenido VIP:', error);
-    error.value = 'Error al cargar el contenido VIP. Por favor, intenta de nuevo.';
+    console.error("Error al cargar contenido VIP:", error);
+    error.value =
+      "Error al cargar el contenido VIP. Por favor, intenta de nuevo.";
   }
 };
 
 const fetchMaterialesVip = async () => {
   loadingMaterialesVip.value = true;
   try {
-    const grupoSeleccionado = gruposDisponibles.value.find(g => g.numero === grupoActual.value);
+    const grupoSeleccionado = gruposDisponibles.value.find(
+      (g) => g.numero === grupoActual.value
+    );
     if (!grupoSeleccionado) return;
 
     const materialesRef = collection(db, grupoSeleccionado.coleccionMateriales);
@@ -464,24 +692,27 @@ const fetchMaterialesVip = async () => {
 
     const materialesArray = [];
     for (const materialDoc of materialesSnapshot.docs) {
-      const itemsRef = collection(db, `${grupoSeleccionado.coleccionMateriales}/${materialDoc.id}/items`);
+      const itemsRef = collection(
+        db,
+        `${grupoSeleccionado.coleccionMateriales}/${materialDoc.id}/items`
+      );
       const itemsSnapshot = await getDocs(itemsRef);
 
-      const items = itemsSnapshot.docs.map(doc => ({
+      const items = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
 
       materialesArray.push({
         id: materialDoc.id,
         ...materialDoc.data(),
-        items
+        items,
       });
     }
 
     materialesVip.value = materialesArray;
   } catch (err) {
-    console.error('Error al cargar materiales VIP:', err);
+    console.error("Error al cargar materiales VIP:", err);
   } finally {
     loadingMaterialesVip.value = false;
   }
@@ -489,15 +720,15 @@ const fetchMaterialesVip = async () => {
 
 const cambiarGrupo = async (numeroGrupo) => {
   if (numeroGrupo === grupoActual.value) return;
-  
+
   loadingGrupos.value = true;
   grupoActual.value = numeroGrupo;
   materialVipActivo.value = null; // Reset accordion
-  
+
   try {
     await cargarContenidoVip();
   } catch (error) {
-    console.error('Error al cambiar grupo:', error);
+    console.error("Error al cambiar grupo:", error);
   } finally {
     loadingGrupos.value = false;
   }
@@ -513,7 +744,7 @@ const fetchCursos = async () => {
 
 const navegarACursoVip = (cursoId) => {
   // Guardar el grupo actual antes de navegar
-  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
+  localStorage.setItem("grupoSeleccionado", grupoActual.value.toString());
   router.push(`/vip/grupo/${grupoActual.value}/curso/${cursoId}`);
 };
 
@@ -526,22 +757,32 @@ const toggleMaterialVip = (materialId) => {
 };
 
 const descargarMaterialVip = (item) => {
-  if (!item.archivoUrl || item.archivoUrl.trim() === '') {
-    alert('El archivo no está disponible en este momento.');
+  if (!item.archivoUrl || item.archivoUrl.trim() === "") {
+    alert("El archivo no está disponible en este momento.");
     return;
   }
-  window.open(item.archivoUrl, '_blank');
+  window.open(item.archivoUrl, "_blank");
+};
+
+const copiarCorreo = async () => {
+  try {
+    await navigator.clipboard.writeText(userEmail.value);
+    showToast('Correo copiado al portapapeles', 'success');
+  } catch (err) {
+    console.error('Error al copiar:', err);
+    showToast('No se pudo copiar el correo', 'error');
+  }
 };
 
 const logout = async () => {
   try {
     // Limpiar el grupo guardado al cerrar sesión
-    localStorage.removeItem('grupoSeleccionado');
+    localStorage.removeItem("grupoSeleccionado");
     await authService.logout();
-    router.push('/aula-virtual');
+    router.push("/aula-virtual");
   } catch (err) {
-    console.error('Error al cerrar sesión:', err);
-    alert('No se pudo cerrar sesión. Intenta de nuevo.');
+    console.error("Error al cerrar sesión:", err);
+    alert("No se pudo cerrar sesión. Intenta de nuevo.");
   }
 };
 
@@ -558,19 +799,19 @@ Mi email registrado es: ${auth.currentUser?.email}
   const mensajeCodificado = encodeURIComponent(mensaje);
   const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
 
-  window.open(enlaceWhatsApp, '_blank');
+  window.open(enlaceWhatsApp, "_blank");
 };
 
 const navegarASimulacroVip = () => {
   // Guardar grupo actual antes de navegar
-  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
-  router.push('/simulacro-vip/simulacro4');
+  localStorage.setItem("grupoSeleccionado", grupoActual.value.toString());
+  router.push("/simulacro-vip/simulacro4");
 };
 
 const navegarAResultadosVip = () => {
   // Guardar grupo actual antes de navegar
-  localStorage.setItem('grupoSeleccionado', grupoActual.value.toString());
-  router.push('/simulacro-vip/simulacro4/ranking');
+  localStorage.setItem("grupoSeleccionado", grupoActual.value.toString());
+  router.push("/simulacro-vip/simulacro4/ranking");
 };
 
 // Función para obtener el texto del grupo del usuario para mostrar en la UI
@@ -579,9 +820,8 @@ const getTextoGrupoUsuario = () => {
 };
 
 const mostrarMensajeRepaso = () => {
-  showToast('No tienes acceso al Grupo de Repaso', 'info');
+  showToast("No tienes acceso al Grupo de Repaso", "info");
 };
-
 </script>
 
 <style scoped>
@@ -795,7 +1035,7 @@ const mostrarMensajeRepaso = () => {
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
-  background: #25D366;
+  background: #25d366;
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -809,7 +1049,7 @@ const mostrarMensajeRepaso = () => {
 }
 
 .whatsapp-btn:hover {
-  background: #20B660;
+  background: #20b660;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
 }
@@ -921,7 +1161,11 @@ const mostrarMensajeRepaso = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.5)
+  );
 }
 
 .vip-badge-curso {
@@ -1109,7 +1353,6 @@ const mostrarMensajeRepaso = () => {
 
 /* Responsive */
 @media (max-width: 900px) {
-
   .dashboard-main-wrapper,
   .main-content-layout {
     flex-direction: column;
@@ -1263,7 +1506,12 @@ const mostrarMensajeRepaso = () => {
 
 /* Estilos para VERSIÓN 2: VER RESULTADOS (verde) */
 .simulacro-resultados .curso-imagen {
-  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #065f46 100%) !important;
+  background: linear-gradient(
+    135deg,
+    #10b981 0%,
+    #059669 50%,
+    #065f46 100%
+  ) !important;
 }
 
 .simulacro-resultados .curso-imagen::before {
@@ -1302,8 +1550,13 @@ const mostrarMensajeRepaso = () => {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(10deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
 }
 
 /* Responsive para ambas versiones */
@@ -1312,7 +1565,7 @@ const mostrarMensajeRepaso = () => {
   .simulacro-resultados .curso-info h2 {
     font-size: 1.1rem;
   }
-  
+
   .simulacro-vip-especial .curso-info p,
   .simulacro-resultados .curso-info p {
     font-size: 0.8rem;
@@ -1406,18 +1659,19 @@ const mostrarMensajeRepaso = () => {
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .grupos-buttons {
     width: 100%;
     justify-content: center;
   }
-  
+
   .grupo-btn {
     flex: 1;
     min-width: 120px;
     justify-content: center;
   }
-}.user-info {
+}
+.user-info {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1517,6 +1771,46 @@ const mostrarMensajeRepaso = () => {
     width: 85%;
     padding: 0.7rem 1rem;
     bottom: 1rem;
+  }
+}
+
+.user-email-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.copy-email-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #757575;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+
+.copy-email-btn:hover {
+  background-color: rgba(0, 82, 175, 0.08);
+  color: #0052af;
+  opacity: 1;
+}
+
+.copy-email-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 650px) {
+  .user-email-container {
+    gap: 0.3rem;
+  }
+  
+  .copy-email-btn {
+    padding: 0.25rem;
   }
 }
 </style>
