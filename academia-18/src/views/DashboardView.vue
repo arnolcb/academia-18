@@ -354,14 +354,17 @@ const verificarAccesoVip = async (userEmail) => {
       esUsuarioVip.value = true;
       const userData = querySnapshot.docs[0].data();
       
-      // NUEVO: Guardar el valor de repaso
-      tieneAccesoRepaso.value = userData.repaso === true;
-      
+      // Obtener datos del usuario
       const grupoDelUsuario = userData.grupo || 1;
+      const tieneRepaso = userData.repaso === true;
+      
       grupoUsuario.value = grupoDelUsuario;
+      tieneAccesoRepaso.value = tieneRepaso;
       
-      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario);
+      // MODIFICADO: Pasar ambos parámetros
+      gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario, tieneRepaso);
       
+      // Determinar qué grupo mostrar inicialmente
       const grupoGuardado = localStorage.getItem('grupoSeleccionado');
       let grupoInicial;
       
@@ -387,8 +390,7 @@ const verificarAccesoVip = async (userEmail) => {
   }
 };
 
-
-const obtenerGruposDisponibles = (grupoUsuario) => {
+const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
   // Todos los grupos disponibles
   const todosLosGrupos = [
     {
@@ -417,9 +419,18 @@ const obtenerGruposDisponibles = (grupoUsuario) => {
     }
   ];
   
-  // Por ahora devolver todos los grupos disponibles
-  // En el futuro podrías filtrar según el grupo del usuario si es necesario
-  return todosLosGrupos;
+  // Si el usuario es del grupo 4, solo ver grupo 4
+  if (grupoUsuario === 4) {
+    return todosLosGrupos.filter(g => g.numero === 4);
+  }
+  
+  // Si el usuario es de grupo 1, 2 o 3 y tiene repaso:true, ver todos los grupos
+  if (tieneRepaso) {
+    return todosLosGrupos;
+  }
+  
+  // Si el usuario es de grupo 1, 2 o 3 y NO tiene repaso, ver solo 1, 2, 3
+  return todosLosGrupos.filter(g => g.numero !== 4);
 };
 
 // Cargar contenido VIP
