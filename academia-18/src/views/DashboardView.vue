@@ -424,13 +424,9 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
     return todosLosGrupos.filter(g => g.numero === 4);
   }
   
-  // Si el usuario es de grupo 1, 2 o 3 y tiene repaso:true, ver todos los grupos
-  if (tieneRepaso) {
-    return todosLosGrupos;
-  }
-  
-  // Si el usuario es de grupo 1, 2 o 3 y NO tiene repaso, ver solo 1, 2, 3
-  return todosLosGrupos.filter(g => g.numero !== 4);
+  // Si el usuario es de grupo 1, 2 o 3: SIEMPRE mostrar todos los grupos
+  // La restricción de acceso se maneja en el click del botón, no ocultando el botón
+  return todosLosGrupos;
 };
 
 // Cargar contenido VIP
