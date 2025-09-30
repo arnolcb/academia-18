@@ -81,21 +81,30 @@
   <div class="grupos-switch-content">
     <span class="grupos-switch-label">Cambiar Aula:</span>
     <div class="grupos-buttons">
-      <button 
-        v-for="grupo in gruposDisponibles" 
-        :key="grupo.numero"
-        @click="cambiarGrupo(grupo.numero)"
-        :class="['grupo-btn', { 'active': grupoActual === grupo.numero, 'loading': loadingGrupos && grupoActual === grupo.numero }]"
-        :disabled="loadingGrupos"
-      >
-        <span v-if="loadingGrupos && grupoActual === grupo.numero" class="grupo-loading">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
-        </span>
-        <span>{{ grupo.nombre }}</span>
-      </button>
+<button 
+  v-for="grupo in gruposDisponibles" 
+  :key="grupo.numero"
+  @click="grupo.numero === 4 && !tieneAccesoRepaso ? mostrarMensajeRepaso() : cambiarGrupo(grupo.numero)"
+  :class="['grupo-btn', { 
+    'active': grupoActual === grupo.numero, 
+    'loading': loadingGrupos && grupoActual === grupo.numero,
+    'grupo-restringido': grupo.numero === 4 && !tieneAccesoRepaso
+  }]"
+  :disabled="loadingGrupos"
+>
+  <span v-if="loadingGrupos && grupoActual === grupo.numero" class="grupo-loading">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 6v6l4 2"></path>
+    </svg>
+  </span>
+  <span>{{ grupo.nombre }}</span>
+  <!-- NUEVO: Icono de candado para grupo restringido -->
+  <svg v-if="grupo.numero === 4 && !tieneAccesoRepaso" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+  </svg>
+</button>
     </div>
   </div>
 </div>
@@ -233,6 +242,29 @@
       </div>
     </main>
   </div>
+  <!-- Componente Toast -->
+<div v-if="toast.visible" class="toast-container" :class="toast.type">
+  <div class="toast-message">
+    <svg v-if="toast.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <svg v-if="toast.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <svg v-if="toast.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>{{ toast.message }}</span>
+  </div>
+</div>
 </template>
 
 <script setup>
@@ -244,11 +276,31 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 const router = useRouter();
 const route = useRoute();
+// Toast
+const toast = ref({
+  visible: false,
+  message: '',
+  type: 'info'
+});
+
+// Función para mostrar toast
+const showToast = (message, type = 'info') => {
+  toast.value = {
+    visible: true,
+    message,
+    type
+  };
+
+  setTimeout(() => {
+    toast.value.visible = false;
+  }, 3000);
+};
 
 // Estados
 const loading = ref(true);
 const error = ref(null);
 const userName = ref('');
+const tieneAccesoRepaso = ref(false);
 
 // Estados VIP
 const esUsuarioVip = ref(false);
@@ -302,24 +354,22 @@ const verificarAccesoVip = async (userEmail) => {
       esUsuarioVip.value = true;
       const userData = querySnapshot.docs[0].data();
       
-      // Obtener el grupo del usuario (si no tiene grupo, usar grupo 1)
+      // NUEVO: Guardar el valor de repaso
+      tieneAccesoRepaso.value = userData.repaso === true;
+      
       const grupoDelUsuario = userData.grupo || 1;
       grupoUsuario.value = grupoDelUsuario;
       
-      // Obtener grupos disponibles
       gruposDisponibles.value = obtenerGruposDisponibles(grupoDelUsuario);
       
-      // Determinar qué grupo mostrar inicialmente
       const grupoGuardado = localStorage.getItem('grupoSeleccionado');
       let grupoInicial;
       
       if (grupoGuardado) {
-        // Si hay un grupo guardado, verificar que esté disponible
         const grupoGuardadoNum = parseInt(grupoGuardado);
         const grupoDisponible = gruposDisponibles.value.find(g => g.numero === grupoGuardadoNum);
         grupoInicial = grupoDisponible ? grupoGuardadoNum : grupoDelUsuario;
       } else {
-        // Si no hay grupo guardado, usar el grupo del usuario
         grupoInicial = grupoDelUsuario;
       }
       
@@ -336,6 +386,7 @@ const verificarAccesoVip = async (userEmail) => {
     loading.value = false;
   }
 };
+
 
 const obtenerGruposDisponibles = (grupoUsuario) => {
   // Todos los grupos disponibles
@@ -519,6 +570,11 @@ const navegarAResultadosVip = () => {
 const getTextoGrupoUsuario = () => {
   return `Grupo ${grupoUsuario.value}`;
 };
+
+const mostrarMensajeRepaso = () => {
+  showToast('No tienes acceso al Grupo de Repaso', 'info');
+};
+
 </script>
 
 <style scoped>
@@ -1370,6 +1426,90 @@ const getTextoGrupoUsuario = () => {
 @media (max-width: 650px) {
   .user-info {
     align-items: center;
+  }
+}
+
+.grupo-btn.grupo-restringido {
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.grupo-btn.grupo-restringido:hover {
+  transform: none;
+  border-color: #e0e0e0;
+  background: white;
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.8rem 1.5rem;
+  min-width: 250px;
+  max-width: 80%;
+  animation: fadeIn 0.3s;
+  opacity: 0.95;
+}
+
+.toast-container.error {
+  border-left: 4px solid #f44336;
+}
+
+.toast-container.info {
+  border-left: 4px solid #2196f3;
+}
+
+.toast-container.success {
+  border-left: 4px solid #4caf50;
+}
+
+.toast-message {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.toast-message svg {
+  flex-shrink: 0;
+}
+
+.toast-container.error svg {
+  color: #f44336;
+}
+
+.toast-container.info svg {
+  color: #2196f3;
+}
+
+.toast-container.success svg {
+  color: #4caf50;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+
+  to {
+    opacity: 0.95;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Responsive para toast */
+@media (max-width: 650px) {
+  .toast-container {
+    width: 85%;
+    padding: 0.7rem 1rem;
+    bottom: 1rem;
   }
 }
 </style>

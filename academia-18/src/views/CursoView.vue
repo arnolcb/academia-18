@@ -352,6 +352,7 @@ const loading = ref(true);
 const error = ref(null);
 const semanaActiva = ref(null);
 const esUsuarioVip = ref(false);
+const tieneAccesoRepaso = ref(false);
 
 // Detectar si es curso VIP por la URL
 const esVip = computed(() => {
@@ -411,14 +412,22 @@ onMounted(async () => {
       return;
     }
 
-    // Verificar acceso VIP si es curso VIP
     if (esVip.value) {
       await verificarAccesoVip(user.email);
       if (!esUsuarioVip.value) {
-        // Redirigir a dashboard si no tiene acceso VIP
         showToast('No tienes acceso a cursos VIP. Contacta con tu instructor.', 'error');
         setTimeout(() => {
           router.push('/dashboard');
+        }, 2000);
+        return;
+      }
+      
+      // NUEVO: Verificar acceso a grupo 4
+      const grupo = route.params.grupo;
+      if (grupo === '4' && !tieneAccesoRepaso.value) {
+        showToast('No tienes acceso al Grupo de Repaso', 'error');
+        setTimeout(() => {
+          router.push('/dashboard?tab=vip');
         }, 2000);
         return;
       }
@@ -429,7 +438,6 @@ onMounted(async () => {
 
   document.addEventListener('click', cerrarDropdownsAlClickFuera);
 });
-
 // Verificar acceso VIP
 const verificarAccesoVip = async (userEmail) => {
   try {
@@ -440,12 +448,18 @@ const verificarAccesoVip = async (userEmail) => {
     );
     const querySnapshot = await getDocs(vipQuery);
     esUsuarioVip.value = !querySnapshot.empty;
+    
+    // NUEVO: Guardar acceso a repaso
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      tieneAccesoRepaso.value = userData.repaso === true;
+    }
   } catch (error) {
     console.error('Error al verificar acceso VIP:', error);
     esUsuarioVip.value = false;
+    tieneAccesoRepaso.value = false;
   }
 };
-
 const cargarCurso = async () => {
   loading.value = true;
   error.value = null;
