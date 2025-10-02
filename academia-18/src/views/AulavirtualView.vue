@@ -44,9 +44,29 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="floating-input">
-                <input type="password" id="password" v-model="loginData.password" required />
+              <div class="floating-input password-input">
+                <input 
+                  :type="showPassword ? 'text' : 'password'" 
+                  id="password" 
+                  v-model="loginData.password" 
+                  required 
+                />
                 <label for="password" :class="{ 'active': loginData.password }">Contraseña</label>
+                <button 
+                  type="button" 
+                  class="toggle-password" 
+                  @click="showPassword = !showPassword"
+                  :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                >
+                  <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
               </div>
             </div>
             <div class="form-options">
@@ -96,9 +116,9 @@
             
             <!-- Contraseña para la cuenta -->
             <div class="form-group">
-              <div class="floating-input">
+              <div class="floating-input password-input">
                 <input 
-                  type="password" 
+                  :type="showRegisterPassword ? 'text' : 'password'" 
                   id="register-password" 
                   v-model="registerData.password" 
                   required 
@@ -106,13 +126,28 @@
                   @blur="validarPassword"
                 />
                 <label for="register-password" :class="{ 'active': registerData.password }">Contraseña</label>
+                <button 
+                  type="button" 
+                  class="toggle-password" 
+                  @click="showRegisterPassword = !showRegisterPassword"
+                  :aria-label="showRegisterPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                >
+                  <svg v-if="!showRegisterPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
                 <p v-if="errores.password" class="error-message">{{ errores.password }}</p>
                 <p class="input-helper">La contraseña debe tener al menos 6 caracteres</p>
               </div>
               
-              <div class="floating-input">
+              <div class="floating-input password-input">
                 <input 
-                  type="password" 
+                  :type="showConfirmPassword ? 'text' : 'password'" 
                   id="register-confirm-password" 
                   v-model="registerData.confirmPassword" 
                   required 
@@ -120,6 +155,21 @@
                   @input="validarConfirmPassword"
                 />
                 <label for="register-confirm-password" :class="{ 'active': registerData.confirmPassword }">Confirmar contraseña</label>
+                <button 
+                  type="button" 
+                  class="toggle-password" 
+                  @click="showConfirmPassword = !showConfirmPassword"
+                  :aria-label="showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                >
+                  <svg v-if="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
                 <p v-if="errores.confirmPassword" class="error-message">{{ errores.confirmPassword }}</p>
               </div>
             </div>
@@ -195,6 +245,7 @@ const activeTab = ref('login');
 // Estados para login
 const isLoading = ref(false);
 const errorMessage = ref('');
+const showPassword = ref(false);
 
 const loginData = reactive({
   usuario: '',
@@ -207,6 +258,8 @@ const isRegisterLoading = ref(false);
 const mensaje = ref('');
 const exito = ref(false);
 const modalVisible = ref(false);
+const showRegisterPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const registerData = reactive({
   email: '',
@@ -580,6 +633,10 @@ const handleRegister = async () => {
   margin-bottom: 0.5rem;
 }
 
+.floating-input.password-input {
+  position: relative;
+}
+
 .floating-input input {
   width: 100%;
   padding: 0.8rem 1rem;
@@ -591,6 +648,35 @@ const handleRegister = async () => {
   background-color: white;
   z-index: 1;
   position: relative;
+}
+
+.password-input input {
+  padding-right: 3rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 1rem;
+  top: 0.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
+  transition: color 0.3s;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+}
+
+.toggle-password:hover {
+  color: #0052af;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
 }
 
 .floating-input input:focus {
