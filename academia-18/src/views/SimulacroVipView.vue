@@ -68,7 +68,7 @@
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              <span>Duración: 2 horas y 5 minutos</span>
+              <span>Duración:{{ simulacro.duracion ? Math.floor(simulacro.duracion / 3600) : 2 }} horas</span>
             </div>
             <div class="info-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
