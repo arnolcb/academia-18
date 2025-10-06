@@ -214,28 +214,38 @@
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-              
-              <div class="curso-card curso-vip simulacro-vip-especial" @click="navegarASimulacroVip">
-  <div class="curso-imagen simulacro-vip-imagen">
-    <div class="curso-overlay"></div>
-    <div class="vip-badge-curso simulacro-vip-badge">
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-        fill="currentColor">
-        <polygon
-          points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2">
-        </polygon>
-      </svg>
-      <span>04/10</span>
-    </div>
-  </div>
-  <div class="curso-info">
-    <h2>RENDIR SIMULACRO #5</h2>
-    <p>Pon a prueba tus conocimientos con este simulacro exclusivo</p>
-  </div>
-</div>
+
+              <div
+                class="curso-card curso-vip simulacro-vip-especial"
+                @click="navegarASimulacroVip"
+              >
+                <div class="curso-imagen simulacro-vip-imagen">
+                  <div class="curso-overlay"></div>
+                  <div class="vip-badge-curso simulacro-vip-badge">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
+                      ></polygon>
+                    </svg>
+                    <span>04/10</span>
+                  </div>
+                </div>
+                <div class="curso-info">
+                  <h2>RENDIR SIMULACRO #5</h2>
+                  <p>
+                    Pon a prueba tus conocimientos con este simulacro exclusivo
+                  </p>
+                </div>
+              </div>
 
               <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
-<!--
+              <!--
               <div
                 class="curso-card curso-vip simulacro-vip-especial simulacro-resultados"
                 @click="navegarAResultadosVip"
@@ -301,9 +311,46 @@
                 </div>
               </div>
             </div>
+            <!-- Botón Reto Diario -->
 
             <!-- Sidebar de materiales VIP -->
             <div class="materiales-sidebar materiales-vip">
+              <div class="reto-diario-card">
+                <button @click="navegarARetoDiario" class="reto-diario-btn">
+                  <div class="reto-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                  <div class="reto-content">
+                    <h3>Reto Diario</h3>
+                    <p>Practica y mejora cada día</p>
+                  </div>
+                  <div class="reto-arrow">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </div>
+                </button>
+              </div>
               <h2 class="materiales-title">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -821,6 +868,10 @@ const getTextoGrupoUsuario = () => {
 
 const mostrarMensajeRepaso = () => {
   showToast("No tienes acceso al Grupo de Repaso", "info");
+};
+
+const navegarARetoDiario = () => {
+  router.push("/vip/reto-diario");
 };
 </script>
 
@@ -1851,6 +1902,70 @@ const mostrarMensajeRepaso = () => {
     gap: 0.4rem;
     min-width: 0;
     flex: 0 1 auto;
+  }
+}
+
+.reto-diario-card {
+  margin-bottom: 1.5rem;
+}
+
+.reto-diario-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.reto-diario-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.reto-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.reto-content {
+  flex: 1;
+  text-align: left;
+}
+
+.reto-content h3 {
+  margin: 0 0 0.3rem;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.reto-content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+}
+
+.reto-arrow {
+  color: white;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .reto-diario-card {
+    margin-bottom: 1rem;
   }
 }
 </style>
