@@ -334,8 +334,8 @@
                     </svg>
                   </div>
                   <div class="reto-content">
-                    <h3>Reto Diario</h3>
-                    <p>Practica y mejora cada día</p>
+                    <h3>Reto Diario RV</h3>
+                    <p>Practica y mejora en Razonamiento Verbal</p>
                   </div>
                   <div class="reto-arrow">
                     <svg
