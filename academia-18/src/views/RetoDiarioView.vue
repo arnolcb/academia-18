@@ -59,7 +59,7 @@
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                   </svg>
                   <span>TEORÍA</span>
-                  <div class="seccion-arrow">
+                  <div class="seccion-arrow" :class="{ rotated: estaAbierta(semana.id, 'teoria') }">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
@@ -67,28 +67,27 @@
                 </div>
 
                 <div v-if="estaAbierta(semana.id, 'teoria')" class="archivos-lista">
-                  <div v-if="!semana.teoria || semana.teoria.length === 0" class="archivos-empty">
-                    <p>No hay material teórico disponible</p>
-                  </div>
-                  <div v-else v-for="archivo in semana.teoria" :key="archivo.id" class="archivo-item">
-                    <div class="archivo-info">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
-                           fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                      </svg>
-                      <span>{{ archivo.titulo }}</span>
-                    </div>
-                    <button @click="descargarArchivo(archivo)" class="download-btn">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" 
-                           fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+  <div v-if="!semana.teoria || semana.teoria.length === 0" class="archivos-empty">
+    <p>No hay material teórico disponible</p>
+  </div>
+  <div v-else v-for="archivo in semana.teoria" :key="archivo.id" class="archivo-item">
+    <div class="archivo-info">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+           fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+      </svg>
+      <span>{{ archivo.titulo }}</span>
+    </div>
+    <button @click="abrirVisorTeoria(archivo)" class="view-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" 
+           fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    </button>
+  </div>
+</div>
               </div>
 
               <!-- PRÁCTICA -->
@@ -102,7 +101,7 @@
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                   </svg>
                   <span>PRÁCTICA</span>
-                  <div class="seccion-arrow">
+                  <div class="seccion-arrow" :class="{ rotated: estaAbierta(semana.id, 'practica') }">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
@@ -169,15 +168,27 @@
             <div class="tarea-instrucciones">
               <h4>Instrucciones</h4>
               <p>{{ tareaActiva.descripcion }}</p>
-              <div class="tarea-archivo">
-                <button @click="descargarDesdeModal(tareaActiva)" class="archivo-link">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
-                       fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                  </svg>
-                  <span>Ver documento de tarea</span>
-                </button>
+              
+              <!-- Visor de documento -->
+              <div class="documento-viewer">
+                <div class="viewer-toolbar">
+                  <button @click="abrirEnNuevaVentana(tareaActiva.archivoUrl)" class="toolbar-btn" title="Abrir en nueva pestaña">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+                         fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Abrir en Drive
+                  </button>
+                </div>
+                <iframe 
+                  v-if="tareaActiva.archivoUrl"
+                  :src="getPreviewUrl(tareaActiva.archivoUrl)" 
+                  class="document-iframe"
+                  frameborder="0"
+                  allowfullscreen>
+                </iframe>
               </div>
             </div>
 
@@ -248,6 +259,46 @@
     </div>
   </div>
 
+  <!-- Modal para Visor de Teoría -->
+<div v-if="modalTeoriaVisible" class="recurso-modal">
+  <div class="modal-overlay" @click="cerrarModalTeoria"></div>
+
+  <div class="modal-container modal-viewer">
+    <div class="modal-header">
+      <h3>{{ archivoTeoriaActivo.titulo }}</h3>
+      <button @click="cerrarModalTeoria" class="cerrar-modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-content-viewer">
+      <div class="documento-viewer-full">
+        <div class="viewer-toolbar">
+          <button @click="abrirEnNuevaVentana(archivoTeoriaActivo.archivoUrl)" class="toolbar-btn" title="Abrir en nueva pestaña">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Abrir en Drive
+          </button>
+        </div>
+        <iframe 
+          v-if="archivoTeoriaActivo.archivoUrl"
+          :src="getPreviewUrl(archivoTeoriaActivo.archivoUrl)" 
+          class="document-iframe-full"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
   <!-- Toast -->
   <div v-if="toast.visible" class="toast-container" :class="toast.type">
     <div class="toast-message">
@@ -274,6 +325,32 @@ import { auth, db } from '@/firebase';
 import { collection, query, getDocs, orderBy, where, addDoc, updateDoc, doc } from 'firebase/firestore';
 
 const router = useRouter();
+
+
+
+// Convertir URL de Google Drive a formato de preview
+const getPreviewUrl = (url) => {
+  if (!url) return '';
+  
+  // Extraer el ID del archivo de Google Drive
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    const fileId = match[1];
+    // Usar el visor embebido de Google Drive
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
+  
+  return url;
+};
+
+// Abrir en nueva ventana
+const abrirEnNuevaVentana = (url) => {
+  if (!url) {
+    showToast('URL no disponible', 'error');
+    return;
+  }
+  window.open(url, '_blank');
+};
 
 // Estados principales
 const loading = ref(true);
@@ -648,6 +725,22 @@ onMounted(async () => {
 onUnmounted(() => {
   document.removeEventListener('click', cerrarDropdownsAlClickFuera);
 });
+
+// Modal de teoría
+const modalTeoriaVisible = ref(false);
+const archivoTeoriaActivo = ref({});
+
+// Abrir visor de teoría
+const abrirVisorTeoria = (archivo) => {
+  archivoTeoriaActivo.value = archivo;
+  modalTeoriaVisible.value = true;
+};
+
+// Cerrar modal de teoría
+const cerrarModalTeoria = () => {
+  modalTeoriaVisible.value = false;
+  archivoTeoriaActivo.value = {};
+};
 </script>
 
 <style scoped>
@@ -910,27 +1003,27 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
-.download-btn {
+.view-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: #f8f9fa;
-  border: 1px solid #0052af;
-  color: #0052af;
+  background: #f0f9ff;
+  border: 1px solid #0284c7;
+  color: #0284c7;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
 }
 
-.download-btn:hover {
-  background: #0052af;
+.view-btn:hover {
+  background: #0284c7;
   color: white;
   transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
 }
-
 /* Tareas */
 .tarea-item {
   flex-direction: column;
@@ -1119,6 +1212,125 @@ onUnmounted(() => {
   margin-bottom: 1rem;
   color: #666;
   font-size: 0.95rem;
+}
+
+/* Visor de documento */
+.documento-viewer {
+  margin-top: 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.viewer-toolbar {
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, #f3f4f6, #ffffff);
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background: #0284c7;
+  color: white;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+}
+
+.document-iframe {
+  width: 100%;
+  height: 500px;
+  border: none;
+  background: white;
+  display: block;
+}
+
+.modal-viewer {
+  max-width: 95%;
+  width: 1200px;
+  height: 90vh; /* ← IMPORTANTE: altura fija */
+  max-height: 90vh;
+}
+
+.modal-content-viewer {
+  padding: 0;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.documento-viewer-full {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+}
+
+.documento-viewer-full .viewer-toolbar {
+  border-radius: 0;
+}
+
+.document-iframe-full {
+  width: 100%;
+  height: calc(90vh - 120px);
+  border: none;
+  background: white;
+  display: block;
+  flex: 1;
+}
+
+/* Modal viewer para teoría */
+.modal-viewer {
+  max-width: 95%;
+  width: 1200px;
+}
+
+.modal-content-viewer {
+  padding: 0;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.documento-viewer-full {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+}
+
+.documento-viewer-full .viewer-toolbar {
+  border-radius: 0;
+}
+
+.document-iframe-full {
+  width: 100%;
+  height: calc(90vh - 120px);
+  border: none;
+  background: white;
+  display: block;
+  flex: 1;
 }
 
 /* Formulario de respuestas */
@@ -1475,6 +1687,26 @@ onUnmounted(() => {
 
   .tarea-container {
     gap: 1rem;
+  }
+  .document-iframe {
+    height: 400px;
+  }
+   .document-iframe-full {
+    height: calc(100vh - 150px);
+  }
+
+  .modal-viewer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .viewer-toolbar {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .toolbar-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
 
   .resultado-completo {
