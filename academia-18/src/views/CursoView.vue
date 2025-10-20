@@ -342,6 +342,7 @@ const coleccionCurso = computed(() => {
   if (grupo === '2') return 'cursosVip2';
   if (grupo === '3') return 'cursosVip3';
   if (grupo === '4') return 'cursosVip4';
+  if (grupo === '5') return 'cursosVip5';
   return 'cursosVip'; // Grupo 1 o caso por defecto
 });
 

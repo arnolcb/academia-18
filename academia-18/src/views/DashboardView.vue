@@ -672,6 +672,12 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
       coleccionCursos: "cursosVip4",
       coleccionMateriales: "materialesVip4",
     },
+    {
+      numero: 5,
+      nombre: "Repaso final",
+      coleccionCursos: "cursosVip5",
+      coleccionMateriales: "materialesVip5",
+    },
   ];
 
   // Si el usuario es del grupo 4, solo ver grupo 4
