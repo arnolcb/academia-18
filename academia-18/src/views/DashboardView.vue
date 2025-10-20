@@ -243,9 +243,9 @@
                   </p>
                 </div>
               </div>
-<!--
+
               <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
-              
+     <!--         
               <div
                 class="curso-card curso-vip simulacro-vip-especial simulacro-resultados"
                 @click="navegarAResultadosVip"
