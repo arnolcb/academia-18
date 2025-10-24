@@ -3,7 +3,7 @@
     <div class="wave-container">
       <div class="waves"></div>
     </div>
-    <h2 class="form-title">Matrícula</h2>
+    <h2 class="form-title">Actualización de datos</h2>
     <form @submit.prevent="handleSubmit" class="form-container">
       <!-- Nombres y Apellidos -->
       <div class="form-group">
