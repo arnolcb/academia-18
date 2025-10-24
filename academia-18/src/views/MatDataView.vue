@@ -259,7 +259,7 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
 
   const url =
-    "https://script.google.com/macros/s/AKfycbyV-jKgmg5wuIJfjOISlryYN2DpEv8O9TaTeUCzDsptEYebeq2PD8wbkrQN6JpmzW2f9w/exec";
+    "https://script.google.com/macros/s/AKfycbw6Wn-SqSDvhXcn_5BMdc2NCeCvaMARkNa_ZBJ7KW8W8jYq9XQ3RnwXsNtNUBoV1Zjaxg/exec";
 
   const params = new URLSearchParams();
   params.append("nombres", formData.value.nombres);
