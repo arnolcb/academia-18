@@ -50,7 +50,7 @@ onUnmounted(() => {
       
       <nav class="desktop-menu">
         <RouterLink to="/cursos">Cursos</RouterLink>
-        <RouterLink to="/matriculate">Matricúlate</RouterLink>
+        <!--<RouterLink to="/matriculate">Matricúlate</RouterLink>-->
         <RouterLink to="/clases-gratuitas">Clases Gratuitas</RouterLink>
         <RouterLink to="/aula-virtual">Aula Virtual</RouterLink>
       </nav>

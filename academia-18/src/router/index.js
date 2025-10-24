@@ -15,6 +15,7 @@ import SimulacroVipView from "@/views/SimulacroVipView.vue";
 import RankingVipView from "@/views/RankingVipView.vue";
 import SimulacroGratuitoView from "../views/SimulacroGratuitoView.vue";
 import RankingGratuitoView from "@/views/RankingGratuitoView.vue";
+import MatDataView from "@/views/MatDataView.vue";
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -59,11 +60,13 @@ const router = createRouter({
       name: "sobre-nosotros",
       component: () => import("../views/AboutView.vue"),
     },
+    /*
     {
       path: "/matriculate",
       name: "matriculate",
       component: () => import("../views/MatriculaView.vue"),
     },
+    */
     {
       path: "/matricula-vip",
       name: "matricula-vip",
@@ -153,6 +156,12 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/matOctubre",
+      name: "MatriculaData",
+      component: MatDataView,
+    },
+
     // Pagina 404 para rutas no encontradas
     {
       path: "/:pathMatch(.*)*",
@@ -174,11 +183,17 @@ const router = createRouter({
       component: RankingGratuitoView,
     },
     {
+      path: "/tempmatricula",
+      name: "TempMatricula",
+      component: () => import("../views/MatriculaView.vue"),
+    },
+    {
       path: "/vip/reto-diario",
       name: "RetoDiario",
       component: () => import("../views/RetoDiarioView.vue"),
       meta: { requiresAuth: true },
     },
+    
   ],
 });
 
