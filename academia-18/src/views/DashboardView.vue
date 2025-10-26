@@ -676,7 +676,7 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
       numero: 5,
       nombre: "Repaso final",
       coleccionCursos: "cursosVip5",
-      coleccionMateriales: "materialesVip5",
+      coleccionMateriales: "materialesVip4",
     },
   ];
 
