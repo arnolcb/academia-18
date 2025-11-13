@@ -269,7 +269,7 @@
                   </div>
                 </div>
                 <div class="curso-info">
-                  <h2>SIMULACRO #5 RESULTADOS</h2>
+                  <h2>SIMULACRO #7 RESULTADOS</h2>
                   <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
                 </div>
               </div>
