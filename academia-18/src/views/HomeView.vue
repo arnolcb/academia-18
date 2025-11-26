@@ -5,24 +5,29 @@
       <div class="container">
         <div class="hero-content">
           <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
-            <h1>Preparación <!--<span class="accent-text">Preuniversitaria</span>--> de Excelencia</h1>
-            <p class="subtitle">Formamos a los próximos Becarios y estudiantes universitarios con metodologías probadas y docentes especializados.</p>
+            <h1>
+              Preparación
+              de Excelencia
+            </h1>
+            <p class="subtitle">
+              Formamos a los próximos Becarios y estudiantes universitarios con
+              metodologías probadas y docentes especializados.
+            </p>
             <div class="hero-buttons">
-              <router-link to="/matriculate" class="btn-primary">Matricúlate Ya</router-link>
+              <router-link to="/matriculate" class="btn-primary"
+                >Matricúlate Ya</router-link
+              >
               <a href="#video-section" class="btn-secondary">Ver Cursos</a>
             </div>
           </div>
           <div class="hero-image" data-aos="fade-left" data-aos-duration="1200">
-            <img src="@/assets/img/NuevoBanner-min.png" alt="Estudiantes Academia" />
+            <img
+              src="@/assets/img/NuevoBanner-min.png"
+              alt="Estudiantes Academia"
+            />
           </div>
         </div>
       </div>
-      <!--
-      <div class="shape-divider">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
-        </svg>
-      </div>-->
     </section>
 
     <!-- Stats Section -->
@@ -31,9 +36,21 @@
         <div class="stats-grid">
           <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
             <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                ></path>
               </svg>
             </div>
             <div class="stat-content">
@@ -41,38 +58,20 @@
               <div class="stat-label">Material exclusivo y actualizado</div>
             </div>
           </div>
-          <!--
-          <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
-            <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-              </svg>
-            </div>
-            <div class="stat-content">
-              <div class="stat-number">95%</div>
-              <div class="stat-label">Tasa de Ingreso</div>
-            </div>
-          </div>
-          
-          <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
-            <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-            </div>
-            <div class="stat-content">
-              <div class="stat-number">2,500+</div>
-              <div class="stat-label">Estudiantes</div>
-            </div>
-          </div>
--->
+
           <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
             <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
               </svg>
@@ -90,24 +89,52 @@
     <section class="ciclo-section" id="ciclo-verano">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Ciclo <span class="accent-text">VERANO</span> 2025</h2>
-          <p class="section-subtitle">Prepárate con nosotros para alcanzar tus metas</p>
+          <h2 class="section-title">
+            Ciclo <span class="accent-text">VERANO</span> 2025
+          </h2>
+          <p class="section-subtitle">
+            Prepárate con nosotros para alcanzar tus metas
+          </p>
         </div>
-        
+
         <div class="ciclo-grid">
           <div class="ciclo-info" data-aos="fade-right">
             <div class="info-header">
               <div class="info-badge">
                 <span>Dirigido a:</span>
               </div>
-              <p>Estudiantes que se encuentran cursando los últimos años de secundaria y deseen postular a <span class="highlight">COAR, Beca 18 y Beca Hijo de Docente</span> o quieran reforzar sus conocimientos y nivel académico.</p>
+              <p>
+                Estudiantes que se encuentran cursando los últimos años de
+                secundaria y deseen postular a
+                <span class="highlight"
+                  >COAR, Beca 18 y Beca Hijo de Docente</span
+                >
+                o quieran reforzar sus conocimientos y nivel académico.
+              </p>
             </div>
-            
+
             <div class="info-details">
               <div class="info-item">
                 <div class="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="3"
+                      y="4"
+                      width="18"
+                      height="18"
+                      rx="2"
+                      ry="2"
+                    ></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -118,10 +145,20 @@
                   <strong>21 de abril de 2025</strong>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
@@ -131,11 +168,23 @@
                   <strong>28 de noviembre de 2025</strong>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15.6 11.6L22 7v10l-6.4-4.5v-1zM4 5h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2z"></path>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M15.6 11.6L22 7v10l-6.4-4.5v-1zM4 5h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
@@ -143,10 +192,20 @@
                   <strong>Virtual</strong>
                 </div>
               </div>
-              
+
               <div class="info-item horarios">
                 <div class="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
@@ -154,28 +213,43 @@
                 <div>
                   <span>Horarios:</span>
                   <div class="horario-options">
-                    <div class="horario-tag">Grupo COAR → 6:30 p.m a 8:00 p.m</div>
-                    <div class="horario-tag">Grupo BECA18 y BHD → 8:00 p.m a 9:30 p.m</div>
+                    <div class="horario-tag">
+                      Grupo COAR → 6:30 p.m a 8:00 p.m
+                    </div>
+                    <div class="horario-tag">
+                      Grupo BECA18 y BHD → 8:00 p.m a 9:30 p.m
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <router-link to="/matriculate" class="ciclo-cta">Reserva Tu Vacante</router-link>
+
+            <router-link to="/matriculate" class="ciclo-cta"
+              >Reserva Tu Vacante</router-link
+            >
           </div>
-          
+
           <div class="ciclo-video" data-aos="fade-left" id="video-section">
             <div class="video-container">
-              <iframe 
-                src="https://www.youtube.com/embed/EXAMPLE" 
-                title="Video promocional de Academia 18" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-              </iframe>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/hFPHCYIcmRs?si=NQ7V9oyRt0upZtdd"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
               <div class="video-overlay">
                 <button class="play-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                   </svg>
                 </button>
@@ -192,72 +266,109 @@
 
     <!-- Cursos Section -->
     <section class="cursos-section" id="cursos">
+      <div class="wave-container">
+        <div class="waves"></div>
+      </div>
+      
       <div class="container">
         <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Nuestros <span class="accent-text">Cursos</span></h2>
-          <p class="section-subtitle">Descubre nuestra variedad de cursos diseñados para maximizar tu éxito académico</p>
+          <h2 class="section-title">
+            Nuestros <span class="accent-text">Cursos</span>
+          </h2>
+          <p class="section-subtitle">
+            Descubre nuestra variedad de cursos diseñados para maximizar tu
+            éxito académico
+          </p>
         </div>
-        
-        <div class="cursos-carousel-container" data-aos="fade-up" data-aos-delay="200">
+
+        <div
+          class="cursos-carousel-container"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
           <div class="cursos-carousel" ref="cursosCarousel">
-            <div v-for="(curso, index) in cursos" :key="index" class="curso-card">
-              <div class="curso-logo">
-                <img :src="curso.logo" :alt="curso.title" />
+            <div
+              v-for="(curso, index) in cursos"
+              :key="index"
+              class="curso-card"
+              @click="openModal(curso)"
+            >
+              <div class="curso-icon">
+                <component :is="curso.icon" />
               </div>
               <h3 class="curso-title">{{ curso.title }}</h3>
-              <router-link :to="'/cursos'" class="curso-link">Ver más</router-link>
+              <button class="curso-link">Ver más</button>
             </div>
           </div>
-          
+
           <div class="carousel-indicators">
-            <div v-for="(_, index) in Math.ceil(cursos.length / itemsVisible)" :key="index" 
-                 class="indicator" 
-                 :class="{ active: currentPage === index }"
-                 @click="goToPage(index)">
-            </div>
+            <div
+              v-for="(_, index) in Math.ceil(cursos.length / itemsVisible)"
+              :key="index"
+              class="indicator"
+              :class="{ active: currentPage === index }"
+              @click="goToPage(index)"
+            ></div>
           </div>
         </div>
       </div>
+
+      <!-- Modal -->
+      <transition name="fade">
+        <div v-if="modalOpen" class="modal-overlay" @click.self="closeModal">
+          <div class="modal-container">
+            <button class="close-btn" @click="closeModal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            
+            <h2 class="modal-title">{{ selectedCurso.title }}</h2>
+            
+            <div class="modal-video-container">
+              <iframe 
+                :src="selectedCurso.videoUrl"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
+            
+            <div class="curso-descripcion">
+              <p>{{ selectedCurso.descripcion }}</p>
+            </div>
+          </div>
+        </div>
+      </transition>
+
       <div class="shape-divider shape-bottom">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            class="shape-fill"
+          ></path>
         </svg>
       </div>
     </section>
-    
-    <!-- Testimonios Section 
-    <section class="testimonios-section">
-      <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Lo que dicen nuestros <span class="accent-text">Estudiantes</span></h2>
-          <p class="section-subtitle">Conoce las experiencias de quienes ya alcanzaron sus metas con nosotros</p>
-        </div>
-        
-        <div class="testimonios-slider" ref="testimoniosSlider" data-aos="fade-up" data-aos-delay="200">
-          <div v-for="(testimonio, index) in testimonios" :key="index" class="testimonio-card">
-            <div class="testimonio-quote">"</div>
-            <p class="testimonio-text">{{ testimonio.text }}</p>
-            <div class="testimonio-author">
-              <div class="author-avatar">
-                <img :src="testimonio.avatar" :alt="testimonio.name" />
-              </div>
-              <div class="author-info">
-                <h4>{{ testimonio.name }}</h4>
-                <p>{{ testimonio.university }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    -->
+
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="container">
         <div class="cta-content" data-aos="zoom-in">
           <h2>¿Listo para iniciar tu camino al éxito universitario?</h2>
-          <p>Únete ahora a nuestra academia y prepárate con los mejores profesores y métodos de enseñanza.</p>
-          <router-link to="/matriculate" class="cta-button">¡Matricúlate Hoy!</router-link>
+          <p>
+            Únete ahora a nuestra academia y prepárate con los mejores
+            profesores y métodos de enseñanza.
+          </p>
+          <router-link to="/matriculate" class="cta-button"
+            >¡Matricúlate Hoy!</router-link
+          >
         </div>
       </div>
       <div class="cta-shape"></div>
@@ -266,187 +377,280 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, defineComponent, h } from "vue";
+
+// Componentes SVG para los iconos
+const VerbalIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M12 20h9' }),
+      h('path', { d: 'M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z' })
+    ]);
+  }
+});
+
+const MathReasoningIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('circle', { cx: '12', cy: '12', r: '10' }),
+      h('line', { x1: '8', y1: '12', x2: '16', y2: '12' }),
+      h('line', { x1: '12', y1: '8', x2: '12', y2: '16' })
+    ]);
+  }
+});
+
+const ArithmeticIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('line', { x1: '5', y1: '12', x2: '19', y2: '12' }),
+      h('polyline', { points: '12 5 19 12 12 19' })
+    ]);
+  }
+});
+
+const AlgebraIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z' })
+    ]);
+  }
+});
+
+const GeometryIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('rect', { x: '3', y: '3', width: '18', height: '18', rx: '2', ry: '2' }),
+      h('line', { x1: '3', y1: '9', x2: '21', y2: '9' }),
+      h('line', { x1: '9', y1: '21', x2: '9', y2: '9' })
+    ]);
+  }
+});
+
+const TrigonometryIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M3 20h18L12 4z' })
+    ]);
+  }
+});
+
+const PhysicsIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('circle', { cx: '12', cy: '12', r: '2' }),
+      h('path', { d: 'M12 2v4' }),
+      h('path', { d: 'M12 18v4' }),
+      h('path', { d: 'm4.93 4.93 2.83 2.83' }),
+      h('path', { d: 'm16.24 16.24 2.83 2.83' }),
+      h('path', { d: 'M2 12h4' }),
+      h('path', { d: 'M18 12h4' }),
+      h('path', { d: 'm4.93 19.07 2.83-2.83' }),
+      h('path', { d: 'm16.24 7.76 2.83-2.83' })
+    ]);
+  }
+});
+
+const ChemistryIcon = defineComponent({
+  render() {
+    return h('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '40',
+      height: '40',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M10 2v7.31' }),
+      h('path', { d: 'M14 9.3V2' }),
+      h('path', { d: 'M8.5 2h7' }),
+      h('path', { d: 'M14 9.3a6.5 6.5 0 1 1-4 0' }),
+      h('path', { d: 'M5.52 16h12.96' })
+    ]);
+  }
+});
 
 // Datos de cursos
 const cursos = ref([
-  { title: 'Razonamiento Matemático', logo: '/icons/math-reasoning.svg' },
-  { title: 'Razonamiento Verbal', logo: '/icons/verbal.svg' },
-  { title: 'Aritmética', logo: '/icons/arithmetic.svg' },
-  { title: 'Álgebra', logo: '/icons/algebra.svg' },
-  { title: 'Geometría', logo: '/icons/geometry.svg' },
-  { title: 'Trigonometría', logo: '/icons/trigonometry.svg' },
-  { title: 'Física', logo: '/icons/physics-chemistry.svg' },
-  { title: 'Química', logo: '/icons/chemistry.svg' }
-]);
-
-// Datos de testimonios
-const testimonios = ref([
   {
-    text: 'La metodología de enseñanza es excepcional, los profesores explican de manera clara y didáctica. Gracias a su apoyo, logré ingresar a la carrera de mis sueños.',
-    name: 'María Fernández',
-    university: 'Universidad Nacional de Ingeniería',
-    avatar: '/img/testimonials/student1.jpg'
+    title: 'Razonamiento Verbal',
+    icon: VerbalIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_1',
+    descripcion: 'Curso diseñado para desarrollar habilidades de comprensión lectora, análisis de textos, vocabulario y razonamiento crítico. Ideal para preparación de exámenes de admisión y desarrollo académico.'
   },
   {
-    text: 'El material educativo y los simulacros de examen fueron clave para mi preparación. La academia me brindó todas las herramientas necesarias para superar el examen de admisión.',
-    name: 'Carlos Mendoza',
-    university: 'Universidad Nacional Mayor de San Marcos',
-    avatar: '/img/testimonials/student2.jpg'
+    title: 'Razonamiento Matemático',
+    icon: MathReasoningIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_2',
+    descripcion: 'Enfocado en desarrollar el pensamiento lógico-matemático para resolver problemas de manera eficiente. Incluye estrategias para series, analogías numéricas, problemas de lógica y razonamiento espacial.'
   },
   {
-    text: 'Estudiar en esta academia fue definitivamente la mejor decisión. Los profesores tienen una forma única de hacer que temas complejos sean fáciles de entender.',
-    name: 'Ana Rodríguez',
-    university: 'Universidad Peruana Cayetano Heredia',
-    avatar: '/img/testimonials/student3.jpg'
+    title: 'Aritmética',
+    icon: ArithmeticIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_3',
+    descripcion: 'Curso fundamental que abarca operaciones básicas, números naturales, enteros, racionales, decimales, proporcionalidad, porcentajes y aplicaciones prácticas para resolver problemas cotidianos.'
+  },
+  {
+    title: 'Álgebra',
+    icon: AlgebraIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_4',
+    descripcion: 'Estudio de ecuaciones, polinomios, factorización y funciones algebraicas. Este curso proporciona las bases para el análisis matemático avanzado y es esencial en la preparación preuniversitaria.'
+  },
+  {
+    title: 'Geometría',
+    icon: GeometryIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_5',
+    descripcion: 'Exploración de propiedades y relaciones de figuras en el plano y el espacio. Incluye geometría plana, del espacio, analítica y transformacional con enfoque en demostración de teoremas y resolución de problemas.'
+  },
+  {
+    title: 'Trigonometría',
+    icon: TrigonometryIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_6',
+    descripcion: 'Estudio de las relaciones entre ángulos y lados de triángulos. Abarca funciones trigonométricas, identidades, ecuaciones y aplicaciones en diversos campos como física, ingeniería y navegación.'
+  },
+  {
+    title: 'Física',
+    icon: PhysicsIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_7',
+    descripcion: 'Curso integrado que aborda principios fundamentales de física (mecánica, termodinámica, electricidad). Enfocado en aplicaciones prácticas y preparación para estudios superiores.'
+  },
+  {
+    title: 'Química',
+    icon: ChemistryIcon,
+    videoUrl: 'https://www.youtube.com/embed/VIDEO_ID_8',
+    descripcion: 'Estudio de la estructura, propiedades y transformaciones de la materia. Abarca química orgánica, inorgánica, analítica y fisicoquímica con enfoque en experimentación y resolución de problemas.'
   }
 ]);
 
-// Referencias para los carruseles
-const cursosCarousel = ref(null);
-const testimoniosSlider = ref(null);
-
-// Variables para el carrusel de cursos
+const modalOpen = ref(false);
+const selectedCurso = ref({});
 const currentPage = ref(0);
 const itemsVisible = ref(4);
-const isDragging = ref(false);
-const startPos = ref(0);
-const currentTranslate = ref(0);
-const prevTranslate = ref(0);
-const animationID = ref(null);
+const cursosCarousel = ref(null);
 
 // Responsive items visible
 const updateItemsVisible = () => {
-  if (window.innerWidth < 600) {
+  const width = window.innerWidth;
+  if (width < 576) {
     itemsVisible.value = 1;
-  } else if (window.innerWidth < 900) {
+  } else if (width < 768) {
     itemsVisible.value = 2;
-  } else if (window.innerWidth < 1200) {
+  } else if (width < 992) {
     itemsVisible.value = 3;
   } else {
     itemsVisible.value = 4;
   }
 };
 
-// Cálculo de páginas totales
-const totalPages = computed(() => {
-  return Math.ceil(cursos.value.length / itemsVisible.value);
-});
-
-// Función para ir a una página específica
-const goToPage = (pageIndex) => {
-  if (pageIndex >= 0 && pageIndex < totalPages.value) {
-    currentPage.value = pageIndex;
-    updateCarouselPosition();
+const goToPage = (page) => {
+  currentPage.value = page;
+  if (cursosCarousel.value) {
+    const cardWidth = cursosCarousel.value.querySelector('.curso-card').offsetWidth;
+    const gap = 32;
+    const scrollAmount = (cardWidth + gap) * itemsVisible.value * page;
+    cursosCarousel.value.style.transform = `translateX(-${scrollAmount}px)`;
   }
 };
 
-// Actualizar posición del carrusel
-const updateCarouselPosition = () => {
-  if (!cursosCarousel.value) return;
-  
-  const cardWidth = cursosCarousel.value.querySelector('.curso-card').offsetWidth;
-  const gap = parseInt(getComputedStyle(cursosCarousel.value).columnGap);
-  const offset = currentPage.value * (cardWidth * itemsVisible.value + gap * (itemsVisible.value - 1));
-  
-  prevTranslate.value = -offset;
-  currentTranslate.value = -offset;
-  
-  setSliderPosition();
+const openModal = (curso) => {
+  selectedCurso.value = curso;
+  modalOpen.value = true;
+  document.body.style.overflow = 'hidden';
 };
 
-// Set position for slider
-const setSliderPosition = () => {
-  if (!cursosCarousel.value) return;
-  cursosCarousel.value.style.transform = `translateX(${currentTranslate.value}px)`;
+const closeModal = () => {
+  modalOpen.value = false;
+  document.body.style.overflow = 'auto';
 };
 
-// Touch events for cursos carousel
-const touchStart = (e) => {
-  if (!cursosCarousel.value) return;
-  
-  const touch = e.type === 'touchstart' ? e.touches[0] : e;
-  isDragging.value = true;
-  startPos.value = touch.clientX;
-  
-  cancelAnimationFrame(animationID.value);
-  
-  document.addEventListener('touchmove', touchMove, { passive: false });
-  document.addEventListener('touchend', touchEnd);
-  document.addEventListener('mousemove', touchMove);
-  document.addEventListener('mouseup', touchEnd);
-};
-
-const touchMove = (e) => {
-  if (!isDragging.value) return;
-  
-  const touch = e.type === 'touchmove' ? e.touches[0] : e;
-  const currentPosition = touch.clientX;
-  const movedBy = currentPosition - startPos.value;
-  
-  currentTranslate.value = prevTranslate.value + movedBy;
-  setSliderPosition();
-  
-  // Prevent page scroll
-  if (e.type === 'touchmove') {
-    e.preventDefault();
-  }
-};
-
-const touchEnd = () => {
-  isDragging.value = false;
-  const movedBy = currentTranslate.value - prevTranslate.value;
-  
-  // Determine if slide changed
-  if (movedBy < -100 && currentPage.value < totalPages.value - 1) {
-    currentPage.value += 1;
-  } else if (movedBy > 100 && currentPage.value > 0) {
-    currentPage.value -= 1;
-  }
-  
-  updateCarouselPosition();
-  
-  document.removeEventListener('touchmove', touchMove);
-  document.removeEventListener('touchend', touchEnd);
-  document.removeEventListener('mousemove', touchMove);
-  document.removeEventListener('mouseup', touchEnd);
-};
-
-// Inicialización y limpieza
 onMounted(() => {
-  // Inicializar AOS (simulado, deberías importar AOS)
-  if (typeof AOS !== 'undefined') {
+  if (typeof AOS !== "undefined") {
     AOS.init({ duration: 800, once: true });
   }
-  
-  // Configurar para responsive
+
   updateItemsVisible();
-  window.addEventListener('resize', () => {
-    updateItemsVisible();
-    updateCarouselPosition();
-  });
-  
-  // Set up touch events for carousel
-  if (cursosCarousel.value) {
-    cursosCarousel.value.addEventListener('touchstart', touchStart, { passive: true });
-    cursosCarousel.value.addEventListener('mousedown', touchStart);
-    cursosCarousel.value.addEventListener('dragstart', (e) => e.preventDefault());
-  }
-  
-  // Configurar slider de testimonios (simulado, usa una librería como Swiper en producción)
-  if (testimoniosSlider.value) {
-    // Aquí se configuraría Swiper u otra librería de sliders
-  }
-  
-  // Video overlay click handler
-  const playButton = document.querySelector('.play-button');
-  const videoOverlay = document.querySelector('.video-overlay');
-  
+  window.addEventListener('resize', updateItemsVisible);
+
+  const playButton = document.querySelector(".play-button");
+  const videoOverlay = document.querySelector(".video-overlay");
+
   if (playButton && videoOverlay) {
-    playButton.addEventListener('click', () => {
-      videoOverlay.style.opacity = '0';
+    playButton.addEventListener("click", () => {
+      videoOverlay.style.opacity = "0";
       setTimeout(() => {
-        videoOverlay.style.display = 'none';
+        videoOverlay.style.display = "none";
       }, 500);
     });
   }
@@ -454,25 +658,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateItemsVisible);
-  
-  if (cursosCarousel.value) {
-    cursosCarousel.value.removeEventListener('touchstart', touchStart);
-    cursosCarousel.value.removeEventListener('mousedown', touchStart);
-  }
-  
-  document.removeEventListener('touchmove', touchMove);
-  document.removeEventListener('touchend', touchEnd);
-  document.removeEventListener('mousemove', touchMove);
-  document.removeEventListener('mouseup', touchEnd);
-  
-  cancelAnimationFrame(animationID.value);
 });
 </script>
 
 <style scoped>
 /* Base Styles */
 .home-view {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
   overflow-x: hidden;
 }
@@ -582,10 +774,6 @@ onUnmounted(() => {
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-}
-
-.hero-text .accent-text {
-  color: #8ffb8f;
 }
 
 .hero-text .subtitle {
@@ -897,12 +1085,36 @@ onUnmounted(() => {
 .cursos-section {
   padding: 6rem 0;
   position: relative;
+  background-color: rgba(0, 82, 175, 0.02);
+}
+
+.wave-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.waves {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230052af08' fill-opacity='1' d='M0,224L60,208C120,192,240,160,360,149.3C480,139,600,149,720,176C840,203,960,245,1080,250.7C1200,256,1320,224,1380,208L1440,192L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3C/svg%3E") repeat-x;
+  background-size: 1440px 320px;
+  opacity: 1;
 }
 
 .cursos-carousel-container {
   position: relative;
   margin-top: 3rem;
   padding: 1rem 0;
+  overflow: hidden;
 }
 
 .cursos-carousel {
@@ -920,28 +1132,35 @@ onUnmounted(() => {
   text-align: center;
   transition: all 0.3s ease;
   border-bottom: 4px solid transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .curso-card:hover {
-  
   border-bottom: 4px solid #0052af;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
 }
 
-.curso-logo {
-  width: 80px;
-  height: 80px;
-  background-color: rgba(0, 82, 175, 0.1);
+.curso-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto 1.5rem;
+  color: #0052af;
+  transition: all 0.3s ease;
 }
 
-.curso-logo img {
-  width: 40px;
-  height: 40px;
+.curso-card:hover .curso-icon {
+  background: linear-gradient(135deg, #0052af 0%, #003d80 100%);
+  color: white;
+  transform: scale(1.1);
 }
 
 .curso-title {
@@ -957,10 +1176,16 @@ onUnmounted(() => {
   font-weight: 600;
   text-decoration: none;
   position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  font-family: inherit;
 }
 
 .curso-link::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 2px;
@@ -999,82 +1224,105 @@ onUnmounted(() => {
   border-radius: 10px;
 }
 
-/* Testimonios Section */
-.testimonios-section {
-  padding: 6rem 0;
-  background-color: #fff;
-}
-
-.testimonios-slider {
-  display: flex;
-  gap: 2rem;
-  overflow-x: scroll;
-  padding: 2rem 0;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Firefox */
-}
-
-.testimonios-slider::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.testimonio-card {
-  min-width: 350px;
-  flex: 0 0 350px;
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  position: relative;
-  scroll-snap-align: center;
-}
-
-.testimonio-quote {
-  font-size: 5rem;
-  color: #0052af;
-  opacity: 0.2;
-  position: absolute;
+/* Modal */
+.modal-overlay {
+  position: fixed;
   top: 0;
-  left: 1rem;
-  line-height: 1;
-}
-
-.testimonio-text {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.testimonio-author {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
 }
 
-.author-avatar {
-  width: 60px;
-  height: 60px;
+.modal-container {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0.75rem;
   border-radius: 50%;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
 }
 
-.author-avatar img {
+.close-btn:hover {
+  background: rgba(0, 82, 175, 0.1);
+  color: #0052af;
+  transform: rotate(90deg);
+}
+
+.modal-title {
+  color: #0052af;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  padding-right: 2rem;
+}
+
+.modal-video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  border: none;
 }
 
-.author-info h4 {
+.curso-descripcion {
   font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 0.3rem;
+  line-height: 1.8;
+  color: #555;
+  text-align: left;
 }
 
-.author-info p {
-  font-size: 0.9rem;
-  color: #777;
+.curso-descripcion p {
+  margin: 0;
+}
+
+/* Animaciones */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* CTA Section */
@@ -1139,7 +1387,7 @@ onUnmounted(() => {
   .hero-text h1 {
     font-size: 3rem;
   }
-  
+
   .curso-card {
     min-width: calc(33.333% - 1.33rem);
   }
@@ -1149,20 +1397,25 @@ onUnmounted(() => {
   .hero-content {
     flex-direction: column;
   }
-  
+
   .hero-text {
     text-align: center;
     margin-bottom: 2rem;
   }
-  
+
   .hero-buttons {
     justify-content: center;
   }
-  
+
   .curso-card {
-    min-width: calc(50% - 1rem);
+    min-width: calc(33.333% - 1.33rem);
   }
-  
+
+  .curso-icon {
+    width: 90px;
+    height: 90px;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1172,20 +1425,37 @@ onUnmounted(() => {
   .hero-text h1 {
     font-size: 2.5rem;
   }
-  
+
   .section-title {
     font-size: 2rem;
   }
-  
+
+  .cursos-section {
+    padding: 4rem 0;
+  }
+
   .curso-card {
-    min-width: 100%;
+    min-width: calc(50% - 1rem);
   }
-  
-  .testimonio-card {
-    min-width: 300px;
-    flex: 0 0 300px;
+
+  .curso-icon {
+    width: 80px;
+    height: 80px;
   }
-  
+
+  .curso-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-title {
+    font-size: 1.6rem;
+    padding-right: 3rem;
+  }
+
+  .modal-container {
+    padding: 2rem;
+  }
+
   .cta-content h2 {
     font-size: 2rem;
   }
@@ -1195,20 +1465,43 @@ onUnmounted(() => {
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .hero-text h1 {
     font-size: 2rem;
   }
-  
+
   .section-title {
     font-size: 1.8rem;
   }
-  
+
+  .curso-card {
+    min-width: 100%;
+    padding: 2rem;
+  }
+
+  .cursos-section {
+    padding: 3rem 0;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+
+  .curso-descripcion {
+    font-size: 1rem;
+  }
+
   .cta-content h2 {
     font-size: 1.8rem;
   }
-  
+
   .cta-button {
     width: 100%;
   }
-}</style>
+}
+</style>
