@@ -245,7 +245,7 @@
               </div>
 -->
               <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
-              
+<!--
               <div
                 class="curso-card curso-vip simulacro-vip-especial simulacro-resultados"
                 @click="navegarAResultadosVip"
@@ -273,7 +273,7 @@
                   <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
                 </div>
               </div>
-
+            -->
               <!-- Las tarjetas de curso VIP existentes -->
               <div
                 v-for="curso in cursosVip"
@@ -678,6 +678,12 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
       coleccionCursos: "cursosVip5",
       coleccionMateriales: "materialesVip4",
     },
+    {
+      numero: 6,
+      nombre: "Grupo PRE",
+      coleccionCursos: "cursosVip6",
+      coleccionMateriales: "materialesVip6",
+    }
   ];
 
   // Si el usuario es del grupo 4, solo ver grupo 4
