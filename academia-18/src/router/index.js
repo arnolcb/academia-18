@@ -16,6 +16,7 @@ import RankingVipView from "@/views/RankingVipView.vue";
 import SimulacroGratuitoView from "../views/SimulacroGratuitoView.vue";
 import RankingGratuitoView from "@/views/RankingGratuitoView.vue";
 import MatDataView from "@/views/MatDataView.vue";
+import MatriculaFree2026View from "@/views/MatriculaFree2026View.vue";
 
 // Verificación de autenticación solo para dashboard y curso view
 const requireAuth = (to, from, next) => {
@@ -162,6 +163,11 @@ const router = createRouter({
       component: MatDataView,
     },
 
+    {
+      path: "/MatriculaFree2026",
+      name: "MatriculaDataFebrero",
+      component: MatriculaFree2026View
+    },
     // Pagina 404 para rutas no encontradas
     {
       path: "/:pathMatch(.*)*",
