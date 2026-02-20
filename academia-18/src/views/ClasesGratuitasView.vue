@@ -23,8 +23,10 @@
 
       <!-- Grid de cursos -->
       <!-- Grid de cursos -->
-<div v-else class="cursos-gratuitos-grid">
+<div v-else class="cursos-layout">
+  <div class="cursos-gratuitos-grid">
   <!-- Card manual para simulacro -->
+   <!--
   <div class="curso-gratuito-card simulacro-card" @click="navegarASimulacro">
     <div class="curso-imagen" :style="{ backgroundImage: `url('https://res.cloudinary.com/dn2tpyyz4/image/upload/v1755966570/Copia_de_Post_para_Instagram_horario_de_atenci%C3%B3n_moderno_azul_1_qyzklo.png')` }">
       <div class="curso-overlay"></div>
@@ -63,7 +65,7 @@
       </button>
     </div>
   </div>
-
+-->
   <!-- Cards de cursos existentes -->
   <div v-for="curso in cursosRegulares" :key="curso.id" class="curso-gratuito-card"
     @click="navegarACurso(curso.id)">
@@ -103,8 +105,70 @@
       </button>
     </div>
   </div>
-</div>
+</div> <!-- cierre cursos-gratuitos-grid -->
 
+  <!-- Sidebar de materiales -->
+  <div class="materiales-sidebar">
+    <h2 class="materiales-title">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+      </svg>
+      <span>Materiales</span>
+    </h2>
+
+    <div v-if="loadingMateriales" class="materiales-loading">
+      <div class="loading-spinner-small"></div>
+      <p>Cargando materiales...</p>
+    </div>
+    <div v-else-if="materiales.length === 0" class="materiales-empty">
+      <p>No hay materiales disponibles.</p>
+    </div>
+    <div v-else class="materiales-list">
+      <div v-for="material in materiales" :key="material.id" class="material-item">
+        <div class="material-header" @click="toggleMaterial(material.id)"
+          :class="{ active: materialActivo === material.id }">
+          <span class="material-title">{{ material.titulo }}</span>
+          <div class="material-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+        <div v-if="materialActivo === material.id" class="material-items">
+          <div v-if="material.items.length === 0" class="items-empty">
+            <p>No hay archivos disponibles.</p>
+          </div>
+          <div v-else class="items-list">
+            <div v-for="item in material.items" :key="item.id" class="item-entry">
+              <div class="item-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span>{{ item.titulo }}</span>
+              </div>
+              <button @click="descargarMaterial(item)" class="material-download-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- cierre cursos-layout -->
       <!-- CTA Section para invitar a matricularse -->
       <section class="cta-matricula">
         <div class="cta-content">
@@ -139,6 +203,7 @@ const error = ref(null);
 // Cargar cursos al montar el componente
 onMounted(() => {
   cargarCursos();
+  cargarMateriales();
 });
 
 const cargarCursos = async () => {
@@ -147,7 +212,7 @@ const cargarCursos = async () => {
 
   try {
     // Obtener cursos regulares de Firebase
-    const cursosRef = collection(db, 'cursos3');
+    const cursosRef = collection(db, 'cursos4');
     const querySnapshot = await getDocs(cursosRef);
 
     const cursosArray = [];
@@ -170,6 +235,48 @@ const cargarCursos = async () => {
 const navegarACurso = (cursoId) => {
   // Navegar al curso sin autenticación requerida
   router.push(`/clase-gratuita/${cursoId}`);
+};
+
+const materiales = ref([]);
+const loadingMateriales = ref(false);
+const materialActivo = ref(null);
+
+const toggleMaterial = (materialId) => {
+  materialActivo.value = materialActivo.value === materialId ? null : materialId;
+};
+
+const descargarMaterial = (item) => {
+  if (!item.archivoUrl || item.archivoUrl.trim() === '') {
+    alert('El archivo no está disponible en este momento.');
+    return;
+  }
+  window.open(item.archivoUrl, '_blank');
+};
+
+const cargarMateriales = async () => {
+  loadingMateriales.value = true;
+  try {
+    const materialesRef = collection(db, 'materialesVip4'); // ajusta el nombre de tu colección
+    const materialesSnapshot = await getDocs(materialesRef);
+
+    const materialesArray = [];
+    for (const materialDoc of materialesSnapshot.docs) {
+      const itemsRef = collection(db, `materialesVip4/${materialDoc.id}/items`);
+      const itemsSnapshot = await getDocs(itemsRef);
+      const items = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      materialesArray.push({
+        id: materialDoc.id,
+        ...materialDoc.data(),
+        items
+      });
+    }
+    materiales.value = materialesArray;
+  } catch (err) {
+    console.error('Error al cargar materiales:', err);
+  } finally {
+    loadingMateriales.value = false;
+  }
 };
 </script>
 
@@ -594,6 +701,167 @@ const navegarACurso = (cursoId) => {
 
   .curso-info p {
     font-size: 0.8rem;
+  }
+}
+
+.cursos-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.cursos-layout .cursos-gratuitos-grid {
+  flex: 1;
+  min-width: 0;
+}
+
+.materiales-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  align-self: flex-start;
+  position: sticky;
+  top: 1rem;
+  border: 1px solid #e0e0e0;
+}
+
+.materiales-title {
+  color: #333;
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.materiales-title svg { color: #0052af; }
+
+.materiales-loading,
+.materiales-empty {
+  text-align: center;
+  padding: 1rem;
+  color: #757575;
+  font-size: 0.9rem;
+}
+
+.loading-spinner-small {
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(0, 82, 175, 0.1);
+  border-top: 2px solid #0052af;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 0.5rem;
+}
+
+.materiales-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.material-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.material-header {
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.material-header:hover,
+.material-header.active { background-color: #e8f0fe; }
+
+.material-title { font-weight: 500; color: #333; font-size: 0.9rem; }
+
+.material-toggle svg { transition: transform 0.3s; }
+.material-header.active .material-toggle svg { transform: rotate(180deg); }
+
+.material-items { padding: 0.8rem; }
+
+.items-empty {
+  text-align: center;
+  padding: 0.5rem;
+  color: #757575;
+  font-size: 0.85rem;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  transition: all 0.2s;
+}
+
+.item-entry:hover { background-color: #e3f2fd; }
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #333;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-info svg { color: #0052af; flex-shrink: 0; }
+
+.material-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #f8f9fa;
+  border: 1px solid #0052af;
+  color: #0052af;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.material-download-btn:hover {
+  background-color: #0052af;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .cursos-layout {
+    flex-direction: column;
+  }
+  .materiales-sidebar {
+    width: 100%;
+    position: static;
   }
 }
 </style>
