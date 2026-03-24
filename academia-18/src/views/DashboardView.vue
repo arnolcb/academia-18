@@ -648,6 +648,7 @@ const verificarAccesoVip = async (userEmail) => {
 const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
   // Todos los grupos disponibles
   const todosLosGrupos = [
+    /*
     {
       numero: 1,
       nombre: "Grupo 1",
@@ -678,11 +679,18 @@ const obtenerGruposDisponibles = (grupoUsuario, tieneRepaso) => {
       coleccionCursos: "cursosVip5",
       coleccionMateriales: "materialesVip4",
     },
+    */
     {
       numero: 6,
       nombre: "Grupo PRE",
       coleccionCursos: "cursosVip6",
       coleccionMateriales: "materialesVip6",
+    },
+    {
+      numero: 7,
+      nombre: "Grupo BECA 18",
+      coleccionCursos: "cursosVip7",
+      coleccionMateriales: "materialesVip7",
     }
   ];
 
