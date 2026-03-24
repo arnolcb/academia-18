@@ -158,7 +158,7 @@ const router = createRouter({
     },
 
     {
-      path: "/formOctubre",
+      path: "/matricula-marzo-2026",
       name: "MatriculaData",
       component: MatDataView,
     },

@@ -50,6 +50,7 @@
       </div>
 
       <!-- Correos -->
+      <!-- CAMBIO 1a: "Correo del meet" → "Correo electrónico" -->
       <div class="form-group">
         <div class="floating-input">
           <input
@@ -58,18 +59,19 @@
             v-model="formData.correoMeet"
             required
           />
-          <label for="correoMeet" :class="{ active: formData.correoMeet }">Correo del meet</label>
+          <label for="correoMeet" :class="{ active: formData.correoMeet }">Correo electrónico</label>
         </div>
       </div>
+      <!-- CAMBIO 1b: "Correo aula virtual" → desplegable "¿Postularás a beca 18?" (campo correoAula intacto) -->
       <div class="form-group">
-        <div class="floating-input">
-          <input
-            type="email"
-            id="correoAula"
-            v-model="formData.correoAula"
-            required
-          />
-          <label for="correoAula" :class="{ active: formData.correoAula }">Correo aula virtual</label>
+        <div class="floating-input floating-select">
+          <select id="correoAula" v-model="formData.correoAula" required>
+            <option value="" disabled selected></option>
+            <option value="SI">SI</option>
+            <option value="NO">NO</option>
+            <option value="AUN NO SÉ">AUN NO LO SÉ</option>
+          </select>
+          <label for="correoAula" :class="{ active: formData.correoAula }">¿Postularás a Beca 18 2027?</label>
         </div>
       </div>
 
@@ -150,7 +152,7 @@
         </div>
       </div>
 
-      <!-- Universidad Opción 1 -->
+      <!-- CAMBIO 2: Solo universidad opción 1, sin mencionar "Opción 1", eliminada opción 2 -->
       <div class="form-group">
         <div class="floating-input">
           <input
@@ -159,20 +161,7 @@
             v-model="formData.universidad1"
             required
           />
-          <label for="universidad1" :class="{ active: formData.universidad1 }">¿A qué universidad? (Opción 1)</label>
-        </div>
-      </div>
-
-      <!-- Universidad Opción 2 -->
-      <div class="form-group">
-        <div class="floating-input">
-          <input
-            type="text"
-            id="universidad2"
-            v-model="formData.universidad2"
-            required
-          />
-          <label for="universidad2" :class="{ active: formData.universidad2 }">¿A qué universidad? (Opción 2)</label>
+          <label for="universidad1" :class="{ active: formData.universidad1 }">¿A qué universidad postularás?</label>
         </div>
       </div>
 
@@ -226,13 +215,13 @@ const formData = ref({
   dni: "",
   celular: "",
   correoMeet: "",
-  correoAula: "",
+  correoAula: "",   // ahora guarda SI/NO de beca 18, pero sigue mapeando a la misma columna del sheet
   departamento: "",
   grado: "",
   turno: "",
   carrera: "",
   universidad1: "",
-  universidad2: "",
+  universidad2: "", // se mantiene en el objeto para no romper el envío al sheet
 });
 
 const isSubmitting = ref(false);
@@ -273,7 +262,7 @@ const handleSubmit = async () => {
   params.append("turno", formData.value.turno);
   params.append("carrera", formData.value.carrera);
   params.append("universidad1", formData.value.universidad1);
-  params.append("universidad2", formData.value.universidad2);
+  params.append("universidad2", formData.value.universidad2); // envía vacío, columna queda en blanco
 
   try {
     const response = await fetch(url, {
