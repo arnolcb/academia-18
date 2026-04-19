@@ -214,7 +214,7 @@
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-<!--
+
               <div
                 class="curso-card curso-vip simulacro-vip-especial"
                 @click="navegarASimulacroVip"
@@ -233,17 +233,16 @@
                         points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
                       ></polygon>
                     </svg>
-                    <span>09/11</span>
+                    <span>19/04</span>
                   </div>
                 </div>
                 <div class="curso-info">
-                  <h2>RENDIR SIMULACRO #7</h2>
+                  <h2>RENDIR SIMULACRO #1</h2>
                   <p>
                     Pon a prueba tus conocimientos con este simulacro exclusivo
                   </p>
                 </div>
               </div>
--->
               <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
 <!--
               <div
@@ -857,13 +856,13 @@ Mi email registrado es: ${auth.currentUser?.email}
 const navegarASimulacroVip = () => {
   // Guardar grupo actual antes de navegar
   localStorage.setItem("grupoSeleccionado", grupoActual.value.toString());
-  router.push("/simulacro-vip/simulacro7");
+  router.push("/simulacro-vip/simulacro1");
 };
 
 const navegarAResultadosVip = () => {
   // Guardar grupo actual antes de navegar
   localStorage.setItem("grupoSeleccionado", grupoActual.value.toString());
-  router.push("/simulacro-vip/simulacro7/ranking");
+  router.push("/simulacro-vip/simulacro1/ranking");
 };
 
 // Función para obtener el texto del grupo del usuario para mostrar en la UI
