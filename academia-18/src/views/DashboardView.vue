@@ -214,7 +214,7 @@
             <!-- Grid combinado de cursos VIP y simulacro -->
             <div class="cursos-grid">
               <!-- VERSIÓN 1: RENDIR SIMULACRO (ACTIVA) -->
-
+<!--
               <div
                 class="curso-card curso-vip simulacro-vip-especial"
                 @click="navegarASimulacroVip"
@@ -243,8 +243,9 @@
                   </p>
                 </div>
               </div>
+            -->
               <!-- VERSIÓN 2: VER RESULTADOS (COMENTADA)-->
-<!--
+
               <div
                 class="curso-card curso-vip simulacro-vip-especial simulacro-resultados"
                 @click="navegarAResultadosVip"
@@ -268,11 +269,11 @@
                   </div>
                 </div>
                 <div class="curso-info">
-                  <h2>SIMULACRO #7 RESULTADOS</h2>
+                  <h2>SIMULACRO #1 RESULTADOS</h2>
                   <p>Consulta tu ranking y desempeño en el simulacro VIP</p>
                 </div>
               </div>
-            -->
+            
               <!-- Las tarjetas de curso VIP existentes -->
               <div
                 v-for="curso in cursosVip"

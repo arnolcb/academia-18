@@ -1,6 +1,5 @@
 <template>
   <div class="ranking-container">
-    <!-- Header minimalista -->
     <header class="ranking-header">
       <div class="header-content">
         <button @click="volverAAulaVirtual" class="back-btn">
@@ -23,29 +22,23 @@
       </div>
     </header>
 
-    <!-- Contenido principal -->
     <main class="ranking-content">
-      <!-- Loading state -->
       <div v-if="loading" class="estado-container">
         <div class="loading-spinner"></div>
         <p>Cargando ranking...</p>
       </div>
 
-      <!-- Error state -->
       <div v-else-if="error" class="estado-container error-container">
         <p>{{ error }}</p>
         <button @click="cargarRanking" class="retry-btn">Intentar nuevamente</button>
       </div>
 
-      <!-- Ranking content -->
       <div v-else class="ranking-main-content">
-        <!-- Info del simulacro -->
         <div class="simulacro-info">
           <h2>{{ simulacroTitulo }}</h2>
           <p>{{ totalParticipantes }} estudiantes han completado este simulacro</p>
         </div>
 
-        <!-- Tu resultado (si existe) -->
         <div v-if="tuPosicion" class="tu-resultado">
           <div class="resultado-header">
             <h3>Tu resultado</h3>
@@ -61,7 +54,7 @@
             </div>
             <div class="resultado-item">
               <span class="label">CORRECTAS</span>
-              <span class="valor">{{ tuPosicion.correctas }}/60</span>
+              <span class="valor">{{ tuPosicion.correctas }}/{{ totalPreguntas }}</span>
             </div>
             <div class="resultado-item">
               <span class="label">TIEMPO</span>
@@ -70,9 +63,7 @@
           </div>
         </div>
 
-        <!-- Tabla de ranking limpia -->
         <div class="ranking-table-container">
-          <!-- Vista Desktop -->
           <div class="desktop-view">
             <div class="table-header">
               <div class="header-col pos-col">Pos</div>
@@ -115,7 +106,7 @@
                 </div>
                 
                 <div class="table-col correct-col">
-                  <span class="correct">{{ resultado.correctas }}/60</span>
+                  <span class="correct">{{ resultado.correctas }}/{{ totalPreguntas }}</span>
                 </div>
                 
                 <div class="table-col time-col">
@@ -129,7 +120,6 @@
             </div>
           </div>
 
-          <!-- Vista Mobile -->
           <div class="mobile-view">
             <div v-for="(resultado, index) in resultados" :key="resultado.id" 
                  :class="{ 
@@ -165,7 +155,7 @@
                   </div>
                   <div class="data-item">
                     <span class="data-label">Correctas</span>
-                    <span class="data-value">{{ resultado.correctas }}/60</span>
+                    <span class="data-value">{{ resultado.correctas }}/{{ totalPreguntas }}</span>
                   </div>
                 </div>
                 <div class="data-row">
@@ -181,9 +171,9 @@
               </div>
             </div>
           </div>
+
         </div>
 
-        <!-- Estado vacío -->
         <div v-if="resultados.length === 0" class="empty-state">
           <div class="empty-icon">📊</div>
           <h3>No hay resultados aún</h3>
@@ -216,6 +206,7 @@ const loading = ref(true);
 const error = ref(null);
 const resultados = ref([]);
 const simulacroTitulo = ref('Simulacro #1');
+const totalPreguntas = ref(30); // Estado añadido para el total de preguntas
 
 // Cargar datos al montar
 onMounted(async () => {
@@ -237,8 +228,11 @@ const cargarRanking = async () => {
     
     // Obtener información del simulacro
     const simulacroDoc = await getDoc(doc(db, 'simulacrosVip', simulacroId));
+    
     if (simulacroDoc.exists()) {
-      simulacroTitulo.value = simulacroDoc.data().titulo || 'Simulacro #1';
+      const data = simulacroDoc.data();
+      simulacroTitulo.value = data.titulo || 'Simulacro #1';
+      totalPreguntas.value = data.totalPreguntas || 30; // Extrae dinámicamente el valor
     }
 
     // Obtener todos los resultados del simulacro
@@ -247,7 +241,6 @@ const cargarRanking = async () => {
       resultadosRef,
       where('simulacroId', '==', simulacroId)
     );
-
     const querySnapshot = await getDocs(q);
     
     // Agrupar por usuario manteniendo solo el primer intento
@@ -279,7 +272,7 @@ const cargarRanking = async () => {
     // Convertir a array y procesar datos de usuario
     const resultadosTemp = [];
     
-     resultadosPorUsuario.forEach((data, userId) => {
+    resultadosPorUsuario.forEach((data, userId) => {
       const nombre = 'Usuario';
       const userEmail = auth.currentUser?.uid === userId ? 
         auth.currentUser.email : 

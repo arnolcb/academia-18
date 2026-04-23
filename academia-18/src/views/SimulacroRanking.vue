@@ -165,7 +165,7 @@ const cargarRanking = async () => {
     const simulacroId = route.params.id;
     
     // Obtener datos del simulacro
-    const simulacroDoc = await getDoc(doc(db, 'simulacros', simulacroId));
+    const simulacroDoc = await getDoc(doc(db, 'simulacrosVip', simulacroId));
     if (!simulacroDoc.exists()) {
       throw new Error('El simulacro no existe');
     }
