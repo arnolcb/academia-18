@@ -86,7 +86,7 @@ const semanaIdActiva = ref(null);
 // --- Estado para el Toast ---
 const toast = ref({ visible: false, message: '', type: 'info' });
 
-const coleccionRetos = 'retoDiario'; // Reemplaza si es necesario
+const coleccionRetos = 'retoDiario2'; // Reemplaza si es necesario
 
 // --- Funciones de Lógica ---
 const verificarAccesoVip = async (userEmail) => {
