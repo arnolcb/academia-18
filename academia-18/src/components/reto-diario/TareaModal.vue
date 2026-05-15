@@ -97,7 +97,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'tareaCompletada']);
 
-const coleccionRetos = 'retoDiario';
+const coleccionRetos = 'retoDiario2';
 
 // --- Estado interno del modal ---
 const respuestas = ref(Array(5).fill(''));
