@@ -215,9 +215,41 @@ onMounted(async () => {
       router.push('/aula-virtual');
       return;
     }
+    
+    // Verificar si el usuario tiene acceso (VIP o simulacro=1)
+    const tieneAcceso = await verificarAccesoAuxRanking(user.email);
+    if (!tieneAcceso) {
+      router.push('/dashboard');
+      return;
+    }
+    
     await cargarRanking();
   });
 });
+
+// Función para verificar acceso al ranking (VIP o simulacro=1)
+const verificarAccesoAuxRanking = async (userEmail) => {
+  try {
+    const vipQuery = query(
+      collection(db, "usuariosVip"),
+      where("email", "==", userEmail)
+    );
+    const querySnapshot = await getDocs(vipQuery);
+
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      const esVip = userData.estado === "activo";
+      const tieneSimulacro = userData.simulacro === 1;
+      
+      return esVip || tieneSimulacro;
+    }
+    
+    return false;
+  } catch (err) {
+    console.error('Error al verificar acceso:', err);
+    return false;
+  }
+};
 
 const cargarRanking = async () => {
   loading.value = true;

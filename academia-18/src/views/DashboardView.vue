@@ -97,8 +97,8 @@
 
       <!-- Contenido principal VIP -->
       <div v-else class="dashboard-main-wrapper">
-        <!-- USUARIO SIN ACCESO VIP -->
-        <div v-if="!esUsuarioVip" class="vip-no-access-full">
+        <!-- USUARIO SIN ACCESO (ni VIP ni simulacro) -->
+        <div v-if="!esUsuarioVip && !puedeVerSimulacro" class="vip-no-access-full">
           <div class="vip-no-access-card">
             <div class="vip-no-access-icon">
               <svg
@@ -137,11 +137,57 @@
               </svg>
               <span>Solicitar Acceso VIP</span>
             </button>
-          </div>
-        </div>
+           </div>
+         </div>
 
-        <!-- USUARIO CON ACCESO VIP -->
-        <div v-else class="vip-content-wrapper">
+         <!-- USUARIO FREE CON ACCESO SIMULACRO -->
+         <div v-else-if="!esUsuarioVip && puedeVerSimulacro" class="simulacro-free-wrapper">
+           <div class="simulacro-free-container">
+             <div class="simulacro-free-header">
+               <div class="simulacro-free-icon">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                   <polygon points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"></polygon>
+                 </svg>
+               </div>
+               <h2>Simulacro Disponible</h2>
+               <p>¡Bienvenido! Tienes acceso al simulacro para practicar</p>
+             </div>
+             
+             <div class="cursos-grid simulacro-free-grid">
+               <div
+                 class="curso-card curso-vip simulacro-vip-especial"
+                 @click="navegarASimulacroVip"
+               >
+                 <div class="curso-imagen simulacro-vip-imagen">
+                   <div class="curso-overlay"></div>
+                   <div class="vip-badge-curso simulacro-vip-badge">
+                     <svg
+                       xmlns="http://www.w3.org/2000/svg"
+                       width="12"
+                       height="12"
+                       viewBox="0 0 24 24"
+                       fill="currentColor"
+                     >
+                       <polygon
+                         points="12 2 15.09 8.26 22 9 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9 8.91 8.26 12 2"
+                       ></polygon>
+                     </svg>
+                     <span>16/05</span>
+                   </div>
+                 </div>
+                 <div class="curso-info">
+                   <h2>RENDIR SIMULACRO #2</h2>
+                   <p>
+                     Pon a prueba tus conocimientos con este simulacro exclusivo
+                   </p>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+
+         <!-- USUARIO CON ACCESO VIP -->
+         <div v-else class="vip-content-wrapper">
           <!-- Banner bienvenida VIP -->
 
           <div v-if="gruposDisponibles.length > 1" class="grupos-switch">
@@ -553,6 +599,7 @@ const tieneAccesoRepaso = ref(false);
 
 // Estados VIP
 const esUsuarioVip = ref(false);
+const puedeVerSimulacro = ref(false);
 const cursosVip = ref([]);
 const materialesVip = ref([]);
 const loadingMaterialesVip = ref(false);
@@ -595,50 +642,66 @@ const verificarAccesoVip = async (userEmail) => {
   try {
     const vipQuery = query(
       collection(db, "usuariosVip"),
-      where("email", "==", userEmail),
-      where("estado", "==", "activo")
+      where("email", "==", userEmail)
     );
     const querySnapshot = await getDocs(vipQuery);
 
     if (!querySnapshot.empty) {
-      esUsuarioVip.value = true;
       const userData = querySnapshot.docs[0].data();
+      const esVip = userData.estado === "activo";
+      const tieneSimulacro = userData.simulacro === 1;
 
-      // Obtener datos del usuario
-      const grupoDelUsuario = userData.grupo || 1;
-      const tieneRepaso = userData.repaso === true;
+      if (esVip) {
+        // Usuario VIP: acceso completo
+        esUsuarioVip.value = true;
+        puedeVerSimulacro.value = true;
 
-      grupoUsuario.value = grupoDelUsuario;
-      tieneAccesoRepaso.value = tieneRepaso;
+        // Obtener datos del usuario
+        const grupoDelUsuario = userData.grupo || 1;
+        const tieneRepaso = userData.repaso === true;
 
-      // MODIFICADO: Pasar ambos parámetros
-      gruposDisponibles.value = obtenerGruposDisponibles(
-        grupoDelUsuario,
-        tieneRepaso
-      );
+        grupoUsuario.value = grupoDelUsuario;
+        tieneAccesoRepaso.value = tieneRepaso;
 
-      // Determinar qué grupo mostrar inicialmente
-      const grupoGuardado = localStorage.getItem("grupoSeleccionado");
-      let grupoInicial;
-
-      if (grupoGuardado) {
-        const grupoGuardadoNum = parseInt(grupoGuardado);
-        const grupoDisponible = gruposDisponibles.value.find(
-          (g) => g.numero === grupoGuardadoNum
+        // MODIFICADO: Pasar ambos parámetros
+        gruposDisponibles.value = obtenerGruposDisponibles(
+          grupoDelUsuario,
+          tieneRepaso
         );
-        grupoInicial = grupoDisponible ? grupoGuardadoNum : grupoDelUsuario;
-      } else {
-        grupoInicial = grupoDelUsuario;
-      }
 
-      grupoActual.value = grupoInicial;
-      await cargarContenidoVip();
+        // Determinar qué grupo mostrar inicialmente
+        const grupoGuardado = localStorage.getItem("grupoSeleccionado");
+        let grupoInicial;
+
+        if (grupoGuardado) {
+          const grupoGuardadoNum = parseInt(grupoGuardado);
+          const grupoDisponible = gruposDisponibles.value.find(
+            (g) => g.numero === grupoGuardadoNum
+          );
+          grupoInicial = grupoDisponible ? grupoGuardadoNum : grupoDelUsuario;
+        } else {
+          grupoInicial = grupoDelUsuario;
+        }
+
+        grupoActual.value = grupoInicial;
+        await cargarContenidoVip();
+      } else if (tieneSimulacro) {
+        // Usuario free con acceso a simulacro: solo puede ver simulacro
+        esUsuarioVip.value = false;
+        puedeVerSimulacro.value = true;
+      } else {
+        // Usuario sin acceso
+        esUsuarioVip.value = false;
+        puedeVerSimulacro.value = false;
+      }
     } else {
       esUsuarioVip.value = false;
+      puedeVerSimulacro.value = false;
     }
   } catch (error) {
     console.error("Error al verificar acceso VIP:", error);
     esUsuarioVip.value = false;
+    puedeVerSimulacro.value = false;
     error.value = "Error al verificar tu acceso. Por favor, intenta de nuevo.";
   } finally {
     loading.value = false;
@@ -1151,6 +1214,57 @@ const navegarARetoDiario = () => {
   background: #20b660;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+/* FREE USER CON SIMULACRO - VISTA ESPECIAL */
+.simulacro-free-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.simulacro-free-container {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.simulacro-free-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #ffd700;
+}
+
+.simulacro-free-icon {
+  color: #ffd700;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.simulacro-free-header h2 {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.simulacro-free-header p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.simulacro-free-grid {
+  display: flex;
+  justify-content: center;
 }
 
 /* VIP SECTION - CON ACCESO */

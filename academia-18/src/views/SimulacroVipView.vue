@@ -341,6 +341,13 @@ onMounted(async () => {
       return;
     }
 
+    // Verificar si el usuario tiene acceso (VIP o simulacro=1)
+    const tieneAcceso = await verificarAccesoAuxSimulacro(user.email);
+    if (!tieneAcceso) {
+      router.push('/dashboard');
+      return;
+    }
+
     await cargarSimulacro();
   });
 });
@@ -351,6 +358,30 @@ onUnmounted(() => {
     clearInterval(intervalId.value);
   }
 });
+
+// Función para verificar acceso (VIP o simulacro=1)
+const verificarAccesoAuxSimulacro = async (userEmail) => {
+  try {
+    const vipQuery = query(
+      collection(db, "usuariosVip"),
+      where("email", "==", userEmail)
+    );
+    const querySnapshot = await getDocs(vipQuery);
+
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      const esVip = userData.estado === "activo";
+      const tieneSimulacro = userData.simulacro === 1;
+      
+      return esVip || tieneSimulacro;
+    }
+    
+    return false;
+  } catch (err) {
+    console.error('Error al verificar acceso:', err);
+    return false;
+  }
+};
 
 // Cargar simulacro y preguntas VIP
 const cargarSimulacro = async () => {
